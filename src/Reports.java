@@ -1,3 +1,6 @@
+
+import Dao.ReportDao;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -60,6 +63,11 @@ public class Reports extends javax.swing.JFrame {
 
         generateButton.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         generateButton.setText("Generate the Report");
+        generateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generateButtonActionPerformed(evt);
+            }
+        });
 
         reptypeCombobox.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         reptypeCombobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Inventory Report", "Monthly Profit Report", "Yearly Profit Report", "Sales Representatives' Report" }));
@@ -119,6 +127,12 @@ public class Reports extends javax.swing.JFrame {
         homepage h=new homepage();
         h.setVisible(true);
     }//GEN-LAST:event_backButtonActionPerformed
+
+    private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
+ReportDao report = new ReportDao();
+report.PdfDaocreate();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_generateButtonActionPerformed
 
     /**
      * @param args the command line arguments

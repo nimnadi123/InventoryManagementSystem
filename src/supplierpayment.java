@@ -1,20 +1,41 @@
+
+import DTO.SupplierPaymentDTO;
+import Dao.SupplierPaymentsDao;
+import Models.PaymentPaid;
+import Models.PaymentReceived;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author user
  */
 public class supplierpayment extends javax.swing.JFrame {
 
+    SupplierPaymentDTO SupplyPaymentsDetails = new SupplierPaymentDTO();
+    SupplierPaymentsDao supplierPayment = new SupplierPaymentsDao();
+
     /**
      * Creates new form supplierpayment
      */
     public supplierpayment() {
         initComponents();
+        loadSupplyDetails();
+        generateId();
+        loadPaymentReceivedDetails();
+        loadPayableDetails();
     }
 
     /**
@@ -32,7 +53,7 @@ public class supplierpayment extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        customernamefield = new javax.swing.JTextField();
+        supplierName = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         totalpayment = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
@@ -43,20 +64,20 @@ public class supplierpayment extends javax.swing.JFrame {
         resetbutton = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         Date = new com.toedter.calendar.JDateChooser();
-        orderNo = new javax.swing.JComboBox<>();
+        supplyNo = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
-        paymentReceivableId = new javax.swing.JTextField();
+        paymentPaidId = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         searchorderField = new javax.swing.JTextField();
         searchOrNoButton = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        payementTable = new javax.swing.JTable();
+        paymentPaid = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        paymentstable2 = new javax.swing.JTable();
+        payable = new javax.swing.JTable();
         payableserchbutton1 = new javax.swing.JButton();
         payableserchField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
@@ -102,18 +123,18 @@ public class supplierpayment extends javax.swing.JFrame {
 
         jLabel9.setText("Date");
 
-        orderNo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        orderNo.addActionListener(new java.awt.event.ActionListener() {
+        supplyNo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        supplyNo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                orderNoActionPerformed(evt);
+                supplyNoActionPerformed(evt);
             }
         });
 
         jLabel8.setText("Payment Paid Id");
 
-        paymentReceivableId.addActionListener(new java.awt.event.ActionListener() {
+        paymentPaidId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                paymentReceivableIdActionPerformed(evt);
+                paymentPaidIdActionPerformed(evt);
             }
         });
 
@@ -133,9 +154,9 @@ public class supplierpayment extends javax.swing.JFrame {
                     .addComponent(jLabel8))
                 .addGap(29, 29, 29)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(paymentReceivableId, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
+                    .addComponent(paymentPaidId, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(customernamefield, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(supplierName, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(totalpayment, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(netpaymentfield, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
                         .addComponent(discountfield, javax.swing.GroupLayout.Alignment.LEADING)
@@ -144,7 +165,7 @@ public class supplierpayment extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(submitbutton))
                         .addComponent(Date, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(orderNo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(supplyNo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(359, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
@@ -153,15 +174,15 @@ public class supplierpayment extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(orderNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(supplyNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(paymentReceivableId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(paymentPaidId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
-                    .addComponent(customernamefield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(supplierName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(totalpayment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -240,8 +261,8 @@ public class supplierpayment extends javax.swing.JFrame {
         jLabel5.setIcon(new javax.swing.ImageIcon("D:\\Academic\\IMGT 3+34\\stock-photo-sri-lanka-money-rupee-banknote-lkr-396939025.jpg")); // NOI18N
         jLabel5.setText("jLabel5");
 
-        payementTable.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        payementTable.setModel(new javax.swing.table.DefaultTableModel(
+        paymentPaid.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        paymentPaid.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -249,7 +270,7 @@ public class supplierpayment extends javax.swing.JFrame {
                 "Supply No", "Supplier Name", "Total Amount", "Discount", "Net Amount", "Paid Date"
             }
         ));
-        jScrollPane1.setViewportView(payementTable);
+        jScrollPane1.setViewportView(paymentPaid);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -310,7 +331,7 @@ public class supplierpayment extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("View of Paid Payment", jPanel2);
 
-        paymentstable2.setModel(new javax.swing.table.DefaultTableModel(
+        payable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -318,7 +339,7 @@ public class supplierpayment extends javax.swing.JFrame {
                 "Supply No", "Supplier ID", "Supplier Name", "Total Payment (Rs)"
             }
         ));
-        jScrollPane4.setViewportView(paymentstable2);
+        jScrollPane4.setViewportView(payable);
 
         payableserchbutton1.setText("Search Order No");
 
@@ -413,18 +434,19 @@ public class supplierpayment extends javax.swing.JFrame {
     }//GEN-LAST:event_netpaymentfieldActionPerformed
 
     private void submitbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitbuttonActionPerformed
+        submitPaymentPaidDetails();
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_submitbuttonActionPerformed
 
-    private void orderNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderNoActionPerformed
-        
+    private void supplyNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplyNoActionPerformed
+        getSupplierNameAndAmountBySupplyId();
         // TODO add your handling code here:
-    }//GEN-LAST:event_orderNoActionPerformed
+    }//GEN-LAST:event_supplyNoActionPerformed
 
-    private void paymentReceivableIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paymentReceivableIdActionPerformed
+    private void paymentPaidIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paymentPaidIdActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_paymentReceivableIdActionPerformed
+    }//GEN-LAST:event_paymentPaidIdActionPerformed
 
     /**
      * @param args the command line arguments
@@ -461,9 +483,143 @@ public class supplierpayment extends javax.swing.JFrame {
         });
     }
 
+    public void loadSupplyDetails() {
+
+        SupplyPaymentsDetails = supplierPayment.getSupplyDetails();
+
+        DefaultComboBoxModel supplierIdModel = new DefaultComboBoxModel(SupplyPaymentsDetails.supplyIds.toArray());
+        supplyNo.setModel(supplierIdModel);
+    }
+
+    public void submitPaymentPaidDetails() {
+
+        String supplyId = (String) supplyNo.getSelectedItem();
+        String PaidId = paymentPaidId.getText();
+        Date PaidDate = Date.getDate();
+        Double totalAmount = Double.parseDouble(totalpayment.getText());
+        Double discount = Double.parseDouble(discountfield.getText());
+        Double netAmount = Double.parseDouble(netpaymentfield.getText());
+
+        PaymentPaid paidDetail = new PaymentPaid();
+        paidDetail.setSupplyId(supplyId);
+        paidDetail.setDiscount(discount);
+        paidDetail.setPaidDate(PaidDate);
+        paidDetail.setPaymentPaidId(PaidId);
+        paidDetail.setTotalAmount(totalAmount);
+        paidDetail.setPaidAmount(netAmount);
+        try {
+            boolean res = supplierPayment.addpaymentPaid(paidDetail);
+            if (res == true) {
+                JOptionPane.showMessageDialog(this, "Payment Paid added sucessfully");
+                ClearFields();
+                loadSupplyDetails();
+                generateId();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error occur in adding Paid payment");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void getSupplierNameAndAmountBySupplyId() {
+
+        String supplyId = (String) supplyNo.getSelectedItem();
+        String supplierNameToBeSet = FindSupplierNameBySupplyId(supplyId);
+        String totalAmountToBeSet = FindTotalAmountBySupplyId(supplyId);
+        supplierName.setText(supplierNameToBeSet);
+        totalpayment.setText(totalAmountToBeSet);
+    }
+
+    public String FindSupplierNameBySupplyId(String searchId) {
+        String Name = "";
+        for (int i = 0; i < SupplyPaymentsDetails.supplyDetails.size(); i++) {
+            List a = (List) SupplyPaymentsDetails.supplyDetails.get(i);
+            String id = a.get(0).toString();
+            if (searchId.equals(id)) {
+                Name = a.get(1).toString();
+            }
+        }
+        return Name;
+    }
+
+    public String FindTotalAmountBySupplyId(String searchId) {
+        String TotalAmount = "";
+        for (int i = 0; i < SupplyPaymentsDetails.supplyDetails.size(); i++) {
+            List a = (List) SupplyPaymentsDetails.supplyDetails.get(i);
+            String id = a.get(0).toString();
+            if (searchId.equals(id)) {
+                TotalAmount = a.get(2).toString();
+            }
+        }
+        return TotalAmount;
+    }
+
+    public void generateId() {
+        String id = supplierPayment.nextPaymentPaidId();
+        paymentPaidId.setText(id);
+    }
+
+    public void loadPaymentReceivedDetails() {
+
+        List<List<String>> res = supplierPayment.ViewPaymentPaid();
+        addRowToJTable(res);
+    }
+
+    public void addRowToJTable(List res) {
+        paymentPaid.setShowGrid(true);
+        DefaultTableModel model = (DefaultTableModel) paymentPaid.getModel();
+        model.setRowCount(0);
+        Object rowData[] = new Object[6];
+        for (Iterator it = res.iterator(); it.hasNext();) {
+            List<String> innerList = (List<String>) it.next();
+            rowData[0] = innerList.get(0);
+            rowData[1] = innerList.get(1);
+            rowData[2] = innerList.get(2);
+            rowData[3] = innerList.get(3);
+            rowData[4] = innerList.get(4);
+            rowData[5] = innerList.get(5);
+
+            model.addRow(rowData);
+
+        }
+    }
+
+    public void loadPayableDetails() {
+
+        List<List<String>> res = supplierPayment.ViewPaymentPayable();
+        addRowToJTablePayable(res);
+    }
+
+    public void addRowToJTablePayable(List res) {
+        payable.setShowGrid(true);
+        DefaultTableModel model = (DefaultTableModel) payable.getModel();
+        model.setRowCount(0);
+        Object rowData[] = new Object[4];
+        for (Iterator it = res.iterator(); it.hasNext();) {
+            List<String> innerList = (List<String>) it.next();
+            rowData[0] = innerList.get(0);
+            rowData[1] = innerList.get(1);
+            rowData[2] = innerList.get(2);
+            rowData[3] = innerList.get(3);
+
+            model.addRow(rowData);
+
+        }
+    }
+
+    public void ClearFields() {
+        supplyNo.setSelectedItem(1);
+        paymentPaidId.setText(null);
+        Date.setDate(null);
+        totalpayment.setText(null);
+        discountfield.setText(null);
+        netpaymentfield.setText(null);
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser Date;
-    private javax.swing.JTextField customernamefield;
     private javax.swing.JTextField discountfield;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -485,16 +641,17 @@ public class supplierpayment extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField netpaymentfield;
-    private javax.swing.JComboBox<String> orderNo;
+    private javax.swing.JTable payable;
     private javax.swing.JTextField payableserchField1;
     private javax.swing.JButton payableserchbutton1;
-    private javax.swing.JTable payementTable;
-    private javax.swing.JTextField paymentReceivableId;
-    private javax.swing.JTable paymentstable2;
+    private javax.swing.JTable paymentPaid;
+    private javax.swing.JTextField paymentPaidId;
     private javax.swing.JButton resetbutton;
     private javax.swing.JButton searchOrNoButton;
     private javax.swing.JTextField searchorderField;
     private javax.swing.JButton submitbutton;
+    private javax.swing.JTextField supplierName;
+    private javax.swing.JComboBox<String> supplyNo;
     private javax.swing.JTextField totalpayment;
     // End of variables declaration//GEN-END:variables
 }

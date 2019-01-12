@@ -25,11 +25,12 @@ public class PurchaseAddViewDTO {
     private Date dueDate;
     private String customerName;
     private String itemName;
+    private int isHold;
     
     public PurchaseAddViewDTO(){}
     public PurchaseAddViewDTO(String purchaseId,Double unitValue,int soldQuantity,String itemId,String customerId,
              Date orderedDate,String paymentReceivableId,Double receivableAmount, String paymentId,
-            int isOutStanding,Date dueDate, String customerName,String itemName){
+            int isOutStanding,Date dueDate, String customerName,String itemName, int isHold){
         this.purchaseId = purchaseId;
         this.unitValue = unitValue;
         this.soldQuantity = soldQuantity;
@@ -44,6 +45,7 @@ public class PurchaseAddViewDTO {
         this.dueDate = dueDate;
         this.customerName =customerName;
         this.itemName = itemName;
+        this.isHold =isHold;
     }
 
     /**
@@ -226,6 +228,20 @@ public class PurchaseAddViewDTO {
      */
     public void setItemName(String itemName) {
         this.itemName = itemName;
+    }
+
+    /**
+     * @return the isHold
+     */
+    public int getIsHold() {
+        return isHold;
+    }
+
+    /**
+     * @param isHold the isHold to set
+     */
+    public void setIsHold(int isHold) {
+        this.isHold = isHold;
     }
     
 }

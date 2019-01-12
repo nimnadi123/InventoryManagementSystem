@@ -356,9 +356,12 @@ public class customerdetails extends javax.swing.JFrame {
     private void resetbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetbuttonActionPerformed
         // TODO add your handling code here:
         ClearFields();
+        loadCustomerDetails();
+               generateId();
     }//GEN-LAST:event_resetbuttonActionPerformed
 
     private void backbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backbuttonActionPerformed
+         this.setVisible(false);
         homepage h=new homepage();
         h.setVisible(true);
     }//GEN-LAST:event_backbuttonActionPerformed

@@ -308,7 +308,7 @@ public class Employeedetails extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(genderField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel26))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -357,7 +357,7 @@ public class Employeedetails extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(0, 231, Short.MAX_VALUE))
+                .addGap(0, 240, Short.MAX_VALUE))
         );
 
         viewEmployeePanel.addTab("Add a new Employee", jPanel1);
@@ -456,6 +456,7 @@ public class Employeedetails extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+         this.setVisible(false);
         homepage h = new homepage();
         h.setVisible(true);
     }//GEN-LAST:event_jButton5ActionPerformed
@@ -498,6 +499,23 @@ public class Employeedetails extends javax.swing.JFrame {
 
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
         // TODO add your handling code here:
+        String Tele =teleNoField.getText();
+        boolean validatednull = true;
+        boolean validated =true;
+         if(employeeNameField.getText().equals("")||personalAddressField.getText().equals("")||nicField.getText().equals("")||dateOfBirthField.getDate().equals(null)||departmentField.getText().equals(null)||positionField.getText().equals(null)||hiredDateField.getDate().equals("")||employeeIdField.getText().equals("")||passwordField.getPassword().equals("")||
+              mailAddressField.getText().equals("")  ){
+              validatednull = false;
+            JOptionPane.showMessageDialog(this, "Please fill up all the Fields ");
+            
+        }
+          if((Tele.matches("[0-9]+")==false)|| (Tele.length()!=10)){
+                 JOptionPane.showMessageDialog(this,"Telephone Number should be numbers without spaces and should have at least 10 numbers<br>");
+                validated = false;
+                 }
+
+         if(validatednull==true && validated==true)
+         {
+      
         String employeeName = employeeNameField.getText();
         int teleNo = Integer.parseInt(teleNoField.getText());
         String personalAddress = personalAddressField.getText();
@@ -511,8 +529,53 @@ public class Employeedetails extends javax.swing.JFrame {
         String employeeId = employeeIdField.getText();
         String password = new String((passwordField.getPassword()));
         String mailAddress = mailAddressField.getText();
-
-        EmployeeDetails emp = new EmployeeDetails();
+        
+         Date date = new Date();
+         
+        
+            if ( employeeName.length() > 60 || personalAddress.length() > 60|| department.length() > 60 || position.length() > 60) {
+                validated = false;
+              JOptionPane.showMessageDialog(this, "Maximum length exceeds allows less than 60 characters");
+         }
+         
+            if(password.length()<6){
+                JOptionPane.showMessageDialog(this,"Password should equal or more than 6 characters<br>");
+                 validated = false;
+            } 
+            
+            if(-1!=password.indexOf(" ")){
+               JOptionPane.showMessageDialog(this,"Password cannot have spaces<br>");   
+                validated = false;
+            } 
+              
+                 if((nic.length()<12)){
+                 JOptionPane.showMessageDialog(this,"nic should have at least 10 numbers<br>");
+                validated = false;
+                 }
+               
+                                
+                if((-1!=mailAddress.indexOf(" "))||(-1==mailAddress.indexOf("@"))){
+                JOptionPane.showMessageDialog(this,"Enter a valid email address without spaces");
+                validated = false;
+            }
+    
+                if(!date.after(dateOfBirth)  ){
+                JOptionPane.showMessageDialog(this,"Date of birth is not valid");
+                validated = false;
+            }
+                
+                if(!date.after(hiredDate) ){
+                   JOptionPane.showMessageDialog(this,"Hired Date is not valid");
+                validated = false;
+                }
+                
+                if(password.length()<6){
+                JOptionPane.showMessageDialog(this,"Password should equal or more than 6 characters");
+                 validated = false;
+         }
+        if(validated == true)
+        {
+            EmployeeDetails emp = new EmployeeDetails();
         emp.setEmployeeName(employeeName);
         emp.setAge(age);
         emp.setDateOfBirth(dateOfBirth);
@@ -544,8 +607,13 @@ public class Employeedetails extends javax.swing.JFrame {
         } catch (ParseException ex) {
             Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
         }
+        }
+                
+        
     }//GEN-LAST:event_submitButtonActionPerformed
 
+    }
+    
     private void ClearFields() {
         employeeNameField.setText(null);
         teleNoField.setText(null);

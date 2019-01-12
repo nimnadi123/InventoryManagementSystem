@@ -134,6 +134,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Generate the Report"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="generateButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="reptypeCombobox">
       <Properties>

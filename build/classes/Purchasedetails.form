@@ -111,12 +111,8 @@
                                   </Group>
                                   <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="availableoutsCheckbox" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="32767" attributes="0"/>
-                                          <Component id="holdButton" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Component id="dateField" max="32767" attributes="0"/>
+                                      <Component id="availableoutsCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="dateField" pref="249" max="32767" attributes="0"/>
                                       <Component id="customerIdComboBox1" max="32767" attributes="0"/>
                                       <Component id="customerNameCombo" max="32767" attributes="0"/>
                                   </Group>
@@ -150,14 +146,11 @@
                               <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                               <Component id="dateField" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="availableoutsCheckbox" min="-2" max="-2" attributes="0"/>
-                              <Component id="holdButton" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                          <Component id="availableoutsCheckbox" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="17" max="32767" attributes="0"/>
+                          <EmptySpace pref="18" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -206,17 +199,6 @@
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="ordernoField">
-                </Component>
-                <Component class="javax.swing.JButton" name="holdButton">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Times New Roman" size="14" style="0"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="Hold"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="holdButtonActionPerformed"/>
-                  </Events>
                 </Component>
                 <Component class="com.toedter.calendar.JDateChooser" name="dateField">
                 </Component>
@@ -379,8 +361,11 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Times New Roman" size="14" style="0"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="ADD"/>
+                        <Property name="text" type="java.lang.String" value="Reset"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addButtonActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="okButton">
                       <Properties>

@@ -57,7 +57,6 @@ public class Purchasedetails extends javax.swing.JFrame {
         availableoutsCheckbox = new java.awt.Checkbox();
         jLabel6 = new javax.swing.JLabel();
         ordernoField = new javax.swing.JTextField();
-        holdButton = new javax.swing.JButton();
         dateField = new com.toedter.calendar.JDateChooser();
         jPanel5 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -115,14 +114,6 @@ public class Purchasedetails extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel6.setText("Order No");
 
-        holdButton.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        holdButton.setText("Hold");
-        holdButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                holdButtonActionPerformed(evt);
-            }
-        });
-
         jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel9.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
@@ -156,7 +147,12 @@ public class Purchasedetails extends javax.swing.JFrame {
         jLabel13.setText("Due Date");
 
         addButton.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        addButton.setText("ADD");
+        addButton.setText("Reset");
+        addButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addButtonActionPerformed(evt);
+            }
+        });
 
         okButton.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         okButton.setText("OK");
@@ -275,11 +271,8 @@ public class Purchasedetails extends javax.swing.JFrame {
                             .addComponent(jLabel4))
                         .addGap(69, 69, 69)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(availableoutsCheckbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(holdButton))
-                            .addComponent(dateField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(availableoutsCheckbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dateField, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
                             .addComponent(customerIdComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(customerNameCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(55, 55, 55)
@@ -305,13 +298,11 @@ public class Purchasedetails extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel4)
                     .addComponent(dateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(availableoutsCheckbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(holdButton))
+                .addGap(10, 10, 10)
+                .addComponent(availableoutsCheckbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         jLabel8.setIcon(new javax.swing.ImageIcon("D:\\Academic\\IMGT 3+34\\orders.jpg")); // NOI18N
@@ -513,18 +504,15 @@ public class Purchasedetails extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+         this.setVisible(false);
         homepage h = new homepage();
         h.setVisible(true);
+        
     }//GEN-LAST:event_backButtonActionPerformed
 
     private void jTextField8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField8ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField8ActionPerformed
-
-    private void holdButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_holdButtonActionPerformed
-        hold h = new hold();
-        h.setVisible(true);
-    }//GEN-LAST:event_holdButtonActionPerformed
 
     private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
         // TODO add your handling code here:
@@ -564,6 +552,13 @@ public class Purchasedetails extends javax.swing.JFrame {
         SubmitPurchaseDetailAdd();
         // TODO add your handling code here:
     }//GEN-LAST:event_okButtonActionPerformed
+
+    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
+        ClearFields();
+        loadPurchaseDetails();
+                generateId();
+// TODO add your handling code here:
+    }//GEN-LAST:event_addButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -615,6 +610,16 @@ public class Purchasedetails extends javax.swing.JFrame {
         DefaultComboBoxModel itemNameModel = new DefaultComboBoxModel(purchase.itemDetails.itemNames.toArray());
         itemNameCombo.setModel(itemNameModel);
     }
+    
+    public void IsPaymentOutstanding(String customerId ) {
+        Boolean IsOutstanding = purchaseDetails.IsPaymentOutstanding(customerId);
+        if(IsOutstanding){
+            availableoutsCheckbox.setState(true);
+        
+    }
+    }
+    
+    
 
     public void getItemNameByItemId() {
 
@@ -680,6 +685,7 @@ public class Purchasedetails extends javax.swing.JFrame {
             if (searchId.equals(id)) {
                 Name = a.get(1).toString();
             }
+            IsPaymentOutstanding(searchId);
         }
         return Name;
     }
@@ -692,6 +698,7 @@ public class Purchasedetails extends javax.swing.JFrame {
             if (searchName.equals(name)) {
                 Id = a.get(0).toString();
             }
+             IsPaymentOutstanding(Id);
         }
         return Id;
     }
@@ -704,6 +711,7 @@ public class Purchasedetails extends javax.swing.JFrame {
 
     public void SubmitPurchaseDetailAdd() {
         int isOutStanding = 0;
+        int isHold =0;
         String customerId = (String) customerIdComboBox1.getSelectedItem();
 
         String customerName = (String) customerNameCombo.getSelectedItem();
@@ -711,7 +719,7 @@ public class Purchasedetails extends javax.swing.JFrame {
 
         Boolean result = availableoutsCheckbox.getState();
         if (result == true) {
-            isOutStanding = 1;
+            isHold = 1;
         }
         int quantity = Integer.parseInt(quantityField.getText());
         Double unitPrice = Double.parseDouble(unitpriceField.getText());
@@ -733,12 +741,13 @@ public class Purchasedetails extends javax.swing.JFrame {
         purchaseItem.setUnitValue(unitPrice);
         purchaseItem.setCustomerName(customerName);
         purchaseItem.setItemName(itemName);
+        purchaseItem.setIsHold(isHold);
 
         try {
             boolean res = purchaseDetails.addNewInventory(purchaseItem);
             if (res == true) {
                 JOptionPane.showMessageDialog(this, "Order added sucessfully");
-                //ClearFields();
+                ClearFields();
                 loadPurchaseDetails();
                 generateId();
             } else {
@@ -808,7 +817,18 @@ public class Purchasedetails extends javax.swing.JFrame {
 
         }
     }
-
+private void ClearFields() {
+        quantityField.setText(null);
+        unitpriceField.setText(null);
+        duedate.setDate(null);
+        itemIdCombo.setSelectedItem(1);
+        itemNameCombo.setSelectedItem(1);
+        ordernoField.setText(null);
+        customerIdComboBox1.setSelectedItem(1);
+        customerNameCombo.setSelectedItem(1);
+        dateField.setDate(null);
+        availableoutsCheckbox.setState(false);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
@@ -822,7 +842,6 @@ public class Purchasedetails extends javax.swing.JFrame {
     private javax.swing.JRadioButton dateRadbutton;
     private javax.swing.JRadioButton dateradioButton;
     private com.toedter.calendar.JDateChooser duedate;
-    private javax.swing.JButton holdButton;
     private javax.swing.JTable holdordTable;
     private javax.swing.JComboBox<String> itemIdCombo;
     private javax.swing.JComboBox<String> itemNameCombo;

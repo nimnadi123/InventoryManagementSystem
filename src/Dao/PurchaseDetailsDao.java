@@ -161,6 +161,7 @@ public class PurchaseDetailsDao {
         Date dueDate = purchaseDetail.getDueDate();
         int isOutstanding = purchaseDetail.getIsOutStanding();
         String paymentReceivableId = nextPaymentReceivableId();
+        int isHold = purchaseDetail.getIsHold();
         
 
         Connection connection = null;
@@ -181,7 +182,7 @@ public class PurchaseDetailsDao {
              stmpurchase.setObject(4, itemId);
             stmpurchase.setObject(5, customerId);
             stmpurchase.setObject(6, orderedDate);
-            stmpurchase.setObject(7, null);
+            stmpurchase.setObject(7, isHold);
 
            String sqlPaymentReceivable = "insert into Payment_receivable values(?,?,?,?,?,?)";
           PreparedStatement stmPaymentReceivable = connection.prepareStatement(sqlPaymentReceivable);
@@ -266,7 +267,7 @@ public class PurchaseDetailsDao {
         { 
             
             
-            String sql = "select o.Purchase_id,cust.Customer_name,i.item_name,o.Item_id, o.Unit_value, p.Receivable_amount, o.Quantity, o.Orderd_date, p.Due_date  from Items i, Customer cust, Purchase_details o,Payment_receivable p where i.Item_id = o.Item_id and o.Customer_id =cust.Customer_id and o.Purchase_id = p.Purchase_id and p.isOutstanding =0";
+            String sql = "select o.Purchase_id,cust.Customer_name,i.item_name,o.Item_id, o.Unit_value, p.Receivable_amount, o.Quantity, o.Orderd_date, p.Due_date  from Items i, Customer cust, Purchase_details o,Payment_receivable p where i.Item_id = o.Item_id and o.Customer_id =cust.Customer_id and o.Purchase_id = p.Purchase_id and o.IsHold =0";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
             rst = stm.executeQuery(); 
@@ -310,7 +311,7 @@ public class PurchaseDetailsDao {
         { 
             
             
-            String sql = "select o.Purchase_id,cust.Customer_name,i.item_name,o.Item_id, o.Unit_value, p.Receivable_amount, o.Quantity, o.Orderd_date from Items i, Customer cust, Purchase_details o,Payment_receivable p where i.Item_id = o.Item_id and o.Customer_id =cust.Customer_id and o.Purchase_id = p.Purchase_id and p.isOutstanding =1";
+            String sql = "select o.Purchase_id,cust.Customer_name,i.item_name,o.Item_id, o.Unit_value, p.Receivable_amount, o.Quantity, o.Orderd_date from Items i, Customer cust, Purchase_details o,Payment_receivable p where i.Item_id = o.Item_id and o.Customer_id =cust.Customer_id and o.Purchase_id = p.Purchase_id and o.IsHold =1";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
             rst = stm.executeQuery(); 
@@ -341,5 +342,40 @@ public class PurchaseDetailsDao {
        return ListofHoldPurchaseDetailsList;
     } 
    
-   
+   public Boolean IsPaymentOutstanding(String customerId) {
+        Connection con = null;
+        PreparedStatement  stm = null;
+        ResultSet rst = null;
+        int last=0;
+        
+       try{
+            String sql = "select Pr.Isoutstanding from Payment_receivable Pr, Purchase_details o, Customer cust where cust.Customer_id = o.Customer_id and o.Purchase_id=Pr.Purchase_id and cust.Customer_id = ?";
+            Connection connection = DBConnection.getDBConnection().getConnection();
+            
+            stm = connection.prepareStatement(sql);
+        stm.setObject(1, customerId);
+            rst = stm.executeQuery(); 
+            Boolean Isoutstanding = false;
+           
+            while(rst.next())
+            {  
+                 for (int i = 1; i < 2; i++){
+                            
+                       if(Integer.parseInt(rst.getString(i))==1)     
+                       {
+                       Isoutstanding = true;
+                       }
+                    }
+            }
+   return true;
+       }
+       catch(SQLException e)
+        {
+            System.out.println("error@ " + e.getMessage());
+        e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+         e.printStackTrace();  
+        }
+       return true;
+   }
 }

@@ -83,17 +83,16 @@ public class CustomerPaymentsDao {
 
             int finalRes = 0;
 
-            String sqlPaymentReceived = "insert into Payment_Received values(?,?,?,?,?,?)";
+            String sqlPaymentReceived = "insert into Payment_Received values(?,?,?,?,?)";
             PreparedStatement stmpaymentreceived = connection.prepareStatement(sqlPaymentReceived);
             
             
 
             stmpaymentreceived.setObject(1, paymentReceivedId);
             stmpaymentreceived.setObject(2, netAmount);
-            stmpaymentreceived.setObject(3, ReceivedDate);
-             stmpaymentreceived.setObject(4, null);
-            stmpaymentreceived.setObject(5, totalAmount);
-            stmpaymentreceived.setObject(6, discount);
+            stmpaymentreceived.setObject(3, ReceivedDate);           
+            stmpaymentreceived.setObject(4, totalAmount);
+            stmpaymentreceived.setObject(5, discount);
             
 
            String sqlupdate = "update Payment_receivable set Payment_received_id = ? where Purchase_id=?";

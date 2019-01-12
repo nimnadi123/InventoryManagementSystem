@@ -33,18 +33,18 @@ import javax.swing.table.DefaultTableModel;
  * @author user
  */
 public class inventorydetails extends javax.swing.JFrame {
-    
+
     InventoryDetailsDTO inventory = new InventoryDetailsDTO();
     InventoryDetailsDao inventoryDetails = new InventoryDetailsDao();
     SearchDao search = new SearchDao();
-    String selectedRadio ="";
+    String selectedRadio = "";
 
     /**
      * Creates new form inventorydetails
      */
     public inventorydetails() {
         initComponents();
-        
+
         getInventoryDetails();
         generateId();
         loadInventoryDetails();
@@ -769,6 +769,11 @@ public class inventorydetails extends javax.swing.JFrame {
 
         resetButton.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         resetButton.setText("RESET");
+        resetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetButtonActionPerformed(evt);
+            }
+        });
 
         SubmitButtonadd.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         SubmitButtonadd.setText("Submit");
@@ -1421,6 +1426,7 @@ public class inventorydetails extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        this.setVisible(false);
         homepage h = new homepage();
         h.setVisible(true);
     }//GEN-LAST:event_backButtonActionPerformed
@@ -1466,7 +1472,7 @@ public class inventorydetails extends javax.swing.JFrame {
     }//GEN-LAST:event_unitpriceFieldActionPerformed
 
     private void supplierIDComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierIDComboActionPerformed
-        
+
         getSupplierNameBySupplierId(1);        // TODO add your handling code here:
     }//GEN-LAST:event_supplierIDComboActionPerformed
 
@@ -1480,8 +1486,8 @@ public class inventorydetails extends javax.swing.JFrame {
     }//GEN-LAST:event_supplierIDCombo1ActionPerformed
 
     private void searchRadiobuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchRadiobuttonActionPerformed
-      String SearchId = searchField.getText();
-         List<List<String>> res = SearchInventory(SearchId);
+        String SearchId = searchField.getText();
+        List<List<String>> res = SearchInventory(SearchId);
         addRowToJTable(res);
         // TODO add your handling code here:
     }//GEN-LAST:event_searchRadiobuttonActionPerformed
@@ -1501,7 +1507,7 @@ public class inventorydetails extends javax.swing.JFrame {
     }//GEN-LAST:event_supplierIDCombo2ActionPerformed
 
     private void categoryIdComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoryIdComboActionPerformed
-        
+
         getCategoryNameByCategoryId(1);       // TODO add your handling code here:
     }//GEN-LAST:event_categoryIdComboActionPerformed
 
@@ -1521,7 +1527,7 @@ public class inventorydetails extends javax.swing.JFrame {
     }//GEN-LAST:event_updateItemIdComboActionPerformed
 
     private void updateItemNameComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateItemNameComboActionPerformed
-        
+
         getItemIdByItemName(2);       // TODO add your handling code here:
     }//GEN-LAST:event_updateItemNameComboActionPerformed
 
@@ -1531,7 +1537,7 @@ public class inventorydetails extends javax.swing.JFrame {
     }//GEN-LAST:event_categoryNameComboActionPerformed
 
     private void SubmitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitButtonActionPerformed
-UpdateInventory();
+        UpdateInventory();
         // TODO add your handling code here:
     }//GEN-LAST:event_SubmitButtonActionPerformed
 
@@ -1565,7 +1571,7 @@ UpdateInventory();
     private void netamountField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_netamountField2ActionPerformed
         double unitPrice = Double.parseDouble(unitpriceField2.getText());
         int quantity = Integer.parseInt(quantityField2.getText());
-        
+
         netamountField2.setText(getNetAmount(unitPrice, quantity));        // TODO add your handling code here:
     }//GEN-LAST:event_netamountField2ActionPerformed
 
@@ -1587,14 +1593,14 @@ UpdateInventory();
     private void netamountField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_netamountField1ActionPerformed
         double unitPrice = Double.parseDouble(unitpriceField1.getText());
         int quantity = Integer.parseInt(quantityField1.getText());
-        
+
         netamountField1.setText(getNetAmount(unitPrice, quantity));// TODO add your handling code here:
     }//GEN-LAST:event_netamountField1ActionPerformed
 
     private void SubmitButtonaddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitButtonaddActionPerformed
         // TODO add your handling code here:
         SubmitInventoryAdd();
-        
+
     }//GEN-LAST:event_SubmitButtonaddActionPerformed
 
     private void cancelButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButton2ActionPerformed
@@ -1603,10 +1609,17 @@ UpdateInventory();
     }//GEN-LAST:event_cancelButton2ActionPerformed
 
     private void itemIDRadiobuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemIDRadiobuttonActionPerformed
-         selectedRadio ="itemId";
-        
+        selectedRadio = "itemId";
+
         // TODO add your handling code here:
     }//GEN-LAST:event_itemIDRadiobuttonActionPerformed
+
+    private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
+        ClearFields();
+        loadInventoryDetails();
+        generateId();
+// TODO add your handling code here:
+    }//GEN-LAST:event_resetButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1641,11 +1654,11 @@ UpdateInventory();
                 new inventorydetails().setVisible(true);
             }
         });
-        
+
     }
-    
+
     public void getInventoryDetails() {
-        
+
         inventory = inventoryDetails.getInventoryDetails();
         List<String> supIdList = inventory.supplierDetails.supplierIds;
 
@@ -1660,12 +1673,12 @@ UpdateInventory();
         supplierIDCombo2.setModel(supplierIdCategoryExist);
         DefaultComboBoxModel SupplierNameCategoryExist = new DefaultComboBoxModel(inventory.supplierDetails.supplierNames.toArray());
         suppliernameCombo2.setModel(SupplierNameCategoryExist);
-        
+
         DefaultComboBoxModel categoryId = new DefaultComboBoxModel(inventory.categoryDetails.categoryIds.toArray());
         categoryIdCombo.setModel(categoryId);
         DefaultComboBoxModel categoryName = new DefaultComboBoxModel(inventory.categoryDetails.categoryNames.toArray());
         categoryNameCombo.setModel(categoryName);
-        
+
         DefaultComboBoxModel itemIdCategoryExist = new DefaultComboBoxModel(inventory.itemDetails.itemIds.toArray());
         //itemIdCombo.setModel(itemIdCategoryExist);
         DefaultComboBoxModel itemNameCategoryExist = new DefaultComboBoxModel(inventory.itemDetails.itemNames.toArray());
@@ -1676,18 +1689,18 @@ UpdateInventory();
         supplierIDCombo1.setModel(supplierIdInUpdate);
         DefaultComboBoxModel SupplierNameInUpdate = new DefaultComboBoxModel(inventory.supplierDetails.supplierNames.toArray());
         suppliernameCombo1.setModel(SupplierNameInUpdate);
-        
+
         DefaultComboBoxModel categoryIdInUpdate = new DefaultComboBoxModel(inventory.categoryDetails.categoryIds.toArray());
         updateCateogryIdCombo.setModel(categoryIdInUpdate);
         DefaultComboBoxModel categoryNameInUpdate = new DefaultComboBoxModel(inventory.categoryDetails.categoryNames.toArray());
         updateCategoryNameCombo.setModel(categoryNameInUpdate);
-        
+
         DefaultComboBoxModel itemIdInUpdate = new DefaultComboBoxModel(inventory.itemDetails.itemIds.toArray());
         updateItemIdCombo.setModel(itemIdInUpdate);
         DefaultComboBoxModel itemNameInUpdate = new DefaultComboBoxModel(inventory.itemDetails.itemNames.toArray());
         updateItemNameCombo.setModel(itemNameInUpdate);
     }
-    
+
     public void getItemNameByItemId(int val) {
         if (val == 1) {
             //String itemId = (String) itemIdCombo.getSelectedItem();
@@ -1699,11 +1712,11 @@ UpdateInventory();
             String itemId = (String) updateItemIdCombo.getSelectedItem();
             String nameToBeSet = FindItemNameById(itemId);
             updateItemNameCombo.setSelectedItem(nameToBeSet);
-            
+
         }
-        
+
     }
-    
+
     public void getItemIdByItemName(int val) {
         if (val == 1) {
             //String itemName = (String) itemNameCombo.getSelectedItem();
@@ -1715,85 +1728,85 @@ UpdateInventory();
             String itemName = (String) updateItemNameCombo.getSelectedItem();
             String idToBeSet = FindItemIdByName(itemName);
             updateItemIdCombo.setSelectedItem(idToBeSet);
-            
+
         }
-        
+
     }
-    
+
     public void getCategoryNameByCategoryId(int val) {
         if (val == 1) {
             String categoryId = (String) categoryIdCombo.getSelectedItem();
             String nameToBeSet = FindCategoryNameById(categoryId);
             categoryNameCombo.setSelectedItem(nameToBeSet);
-            
+
         }
         if (val == 2) {
             String categoryId = (String) updateCateogryIdCombo.getSelectedItem();
             String nameToBeSet = FindCategoryNameById(categoryId);
             updateCategoryNameCombo.setSelectedItem(nameToBeSet);
-            
+
         }
-        
+
     }
-    
+
     public void getCategoryIdByCategoryName(int val) {
         if (val == 1) {
             String categoryName = (String) categoryNameCombo.getSelectedItem();
             String idToBeSet = FindCategoryIdByName(categoryName);
             categoryIdCombo.setSelectedItem(idToBeSet);
-            
+
         }
         if (val == 2) {
             String categoryName = (String) updateCategoryNameCombo.getSelectedItem();
             String idToBeSet = FindCategoryIdByName(categoryName);
             updateCateogryIdCombo.setSelectedItem(idToBeSet);
-            
+
         }
-        
+
     }
-    
+
     public void getSupplierNameBySupplierId(int val) {
         if (val == 1) {
             String supplierId = (String) supplierIDCombo.getSelectedItem();
             String nameToBeSet = FindSupplierNameById(supplierId);
             suppliernameCombo.setSelectedItem(nameToBeSet);
-            
+
         }
         if (val == 2) {
             String supplierId = (String) supplierIDCombo2.getSelectedItem();
             String nameToBeSet = FindSupplierNameById(supplierId);
             suppliernameCombo2.setSelectedItem(nameToBeSet);
-            
+
         }
         if (val == 3) {
             String supplierId = (String) supplierIDCombo1.getSelectedItem();
             String nameToBeSet = FindSupplierNameById(supplierId);
             suppliernameCombo1.setSelectedItem(nameToBeSet);
         }
-        
+
     }
-    
+
     public void getSupplierIdBySupplierName(int val) {
         if (val == 1) {
             String supplierName = (String) suppliernameCombo.getSelectedItem();
             String idToBeSet = FindSupplierIdByName(supplierName);
             supplierIDCombo.setSelectedItem(idToBeSet);
-            
+
         }
         if (val == 2) {
             String supplierName = (String) suppliernameCombo2.getSelectedItem();
             String idToBeSet = FindSupplierIdByName(supplierName);
             supplierIDCombo2.setSelectedItem(idToBeSet);
-            
+
         }
         if (val == 3) {
             String supplierName = (String) suppliernameCombo1.getSelectedItem();
             String idToBeSet = FindSupplierIdByName(supplierName);
             supplierIDCombo1.setSelectedItem(idToBeSet);
         }
-        
+
     }
-    
+
     public String FindSupplierNameById(String searchId) {
         String Name = "";
         for (int i = 0; i < inventory.supplierDetails.supplierDetails.size(); i++) {
@@ -1805,7 +1818,7 @@ UpdateInventory();
         }
         return Name;
     }
-    
+
     public String FindSupplierIdByName(String searchName) {
         String Id = "";
         for (int i = 0; i < inventory.supplierDetails.supplierDetails.size(); i++) {
@@ -1817,7 +1830,7 @@ UpdateInventory();
         }
         return Id;
     }
-    
+
     public String FindCategoryNameById(String searchId) {
         String Name = "";
         for (int i = 0; i < inventory.categoryDetails.categoryDetails.size(); i++) {
@@ -1829,7 +1842,7 @@ UpdateInventory();
         }
         return Name;
     }
-    
+
     public String FindCategoryIdByName(String searchName) {
         String Id = "";
         for (int i = 0; i < inventory.categoryDetails.categoryDetails.size(); i++) {
@@ -1841,7 +1854,7 @@ UpdateInventory();
         }
         return Id;
     }
-    
+
     public String FindItemNameById(String searchId) {
         String Name = "";
         for (int i = 0; i < inventory.itemDetails.itemDetails.size(); i++) {
@@ -1853,7 +1866,7 @@ UpdateInventory();
         }
         return Name;
     }
-    
+
     public String FindItemIdByName(String searchName) {
         String Id = "";
         for (int i = 0; i < inventory.itemDetails.itemDetails.size(); i++) {
@@ -1865,9 +1878,9 @@ UpdateInventory();
         }
         return Id;
     }
-    
+
     public void generateId() {
-        
+
         String item_id = inventoryDetails.nextItemId();
         String category_id = inventoryDetails.nextCategoryId();
         String supply_id = inventoryDetails.nextInventoryId();
@@ -1877,18 +1890,18 @@ UpdateInventory();
         inventoryIdField.setText(supply_id);
         inventoryIdField1.setText(supply_id);
         inventoryIdField2.setText(supply_id);
-        
+
     }
-    
+
     public String getNetAmount(double unitPrice, int quantity) {
         String netAmount = Double.toString(unitPrice * quantity);
         return netAmount;
-        
+
     }
-    
+
     public void SubmitInventoryAdd() {
         String itemId = itemIDfield.getText();
-        
+
         String itemName = itemnameField.getText();
         String categoryId = categoryIDField.getText();
         String categoryName = categoryNameTextField.getText();
@@ -1898,7 +1911,7 @@ UpdateInventory();
         String supplierId = (String) supplierIDCombo.getSelectedItem();
         String supplierName = (String) suppliernameCombo.getSelectedItem();
         String inventoryId = inventoryIdField.getText();
-        
+
         InventoryAddViewDTO inventory_item = new InventoryAddViewDTO();
         inventory_item.setItemId(itemId);
         inventory_item.setItemName(itemName);
@@ -1907,11 +1920,11 @@ UpdateInventory();
         inventory_item.setUnitPrice(unitPrice);
         inventory_item.setSupplierId(supplierId);
         inventory_item.setSupplierName(supplierName);
-         inventory_item.setNetAmount(Double.toString(unitPrice*quantity));
-         inventory_item.setSupplyId(inventoryId);
-         inventory_item.setCategoryName(categoryName);
-         inventory_item.setNewInventoryDate(itemAddedDate);
-        
+        inventory_item.setNetAmount(Double.toString(unitPrice * quantity));
+        inventory_item.setSupplyId(inventoryId);
+        inventory_item.setCategoryName(categoryName);
+        inventory_item.setNewInventoryDate(itemAddedDate);
+
         try {
             boolean res = inventoryDetails.addNewInventory(inventory_item, 1);
             if (res == true) {
@@ -1927,22 +1940,22 @@ UpdateInventory();
         } catch (ParseException ex) {
             Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
-public void SubmitInventoryAddExisitingCategory() {
+    public void SubmitInventoryAddExisitingCategory() {
         String itemId = itemid.getText();
-        
+
         String itemName = itemname.getText();
-        String categoryId = (String)categoryIdCombo.getSelectedItem();
-        String categoryName = (String)categoryNameCombo.getSelectedItem();
+        String categoryId = (String) categoryIdCombo.getSelectedItem();
+        String categoryName = (String) categoryNameCombo.getSelectedItem();
         int quantity = Integer.parseInt(quantityField2.getText());
         Double unitPrice = Double.parseDouble(unitpriceField2.getText());
         Date itemAddedDate = date2.getDate();
         String supplierId = (String) supplierIDCombo2.getSelectedItem();
         String supplierName = (String) suppliernameCombo2.getSelectedItem();
         String inventoryId = inventoryIdField1.getText();
-        
+
         InventoryAddViewDTO inventory_item = new InventoryAddViewDTO();
         inventory_item.setItemId(itemId);
         inventory_item.setItemName(itemName);
@@ -1951,13 +1964,13 @@ public void SubmitInventoryAddExisitingCategory() {
         inventory_item.setUnitPrice(unitPrice);
         inventory_item.setSupplierId(supplierId);
         inventory_item.setSupplierName(supplierName);
-         inventory_item.setNetAmount(Double.toString(unitPrice*quantity));
-         inventory_item.setSupplyId(inventoryId);
-         inventory_item.setCategoryId(categoryId);
-         inventory_item.setNewInventoryDate(itemAddedDate);
-        
+        inventory_item.setNetAmount(Double.toString(unitPrice * quantity));
+        inventory_item.setSupplyId(inventoryId);
+        inventory_item.setCategoryId(categoryId);
+        inventory_item.setNewInventoryDate(itemAddedDate);
+
         try {
-            boolean res = inventoryDetails.addNewInventory(inventory_item,2);
+            boolean res = inventoryDetails.addNewInventory(inventory_item, 2);
             if (res == true) {
                 JOptionPane.showMessageDialog(this, "Inventory added sucessfully");
                 //ClearFields();
@@ -1971,22 +1984,22 @@ public void SubmitInventoryAddExisitingCategory() {
         } catch (ParseException ex) {
             Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
-public void UpdateInventory() {
-        String itemId = (String)updateItemIdCombo.getSelectedItem();
-        
-        String itemName = (String)updateItemNameCombo.getSelectedItem();
-        String categoryId = (String)updateCateogryIdCombo.getSelectedItem();
-        String categoryName = (String)updateCategoryNameCombo.getSelectedItem();
+    public void UpdateInventory() {
+        String itemId = (String) updateItemIdCombo.getSelectedItem();
+
+        String itemName = (String) updateItemNameCombo.getSelectedItem();
+        String categoryId = (String) updateCateogryIdCombo.getSelectedItem();
+        String categoryName = (String) updateCategoryNameCombo.getSelectedItem();
         int quantity = Integer.parseInt(quantityField1.getText());
         Double unitPrice = Double.parseDouble(unitpriceField1.getText());
         Date itemAddedDate = date1.getDate();
         String supplierId = (String) supplierIDCombo1.getSelectedItem();
         String supplierName = (String) suppliernameCombo1.getSelectedItem();
         String inventoryId = inventoryIdField2.getText();
-        
+
         InventoryAddViewDTO inventory_item = new InventoryAddViewDTO();
         inventory_item.setItemId(itemId);
         inventory_item.setItemName(itemName);
@@ -1995,16 +2008,16 @@ public void UpdateInventory() {
         inventory_item.setUnitPrice(unitPrice);
         inventory_item.setSupplierId(supplierId);
         inventory_item.setSupplierName(supplierName);
-         inventory_item.setNetAmount(Double.toString(unitPrice*quantity));
-         inventory_item.setSupplyId(inventoryId);
-         inventory_item.setCategoryId(categoryId);
-         inventory_item.setNewInventoryDate(itemAddedDate);
-        
+        inventory_item.setNetAmount(Double.toString(unitPrice * quantity));
+        inventory_item.setSupplyId(inventoryId);
+        inventory_item.setCategoryId(categoryId);
+        inventory_item.setNewInventoryDate(itemAddedDate);
+
         try {
-            boolean res = inventoryDetails.addNewInventory(inventory_item,3);
+            boolean res = inventoryDetails.addNewInventory(inventory_item, 3);
             if (res == true) {
                 JOptionPane.showMessageDialog(this, "Inventory added sucessfully");
-                //ClearFields();
+                ClearFields();
                 loadInventoryDetails();
                 generateId();
             } else {
@@ -2015,15 +2028,15 @@ public void UpdateInventory() {
         } catch (ParseException ex) {
             Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
         }
-}
+    }
 
- public void loadInventoryDetails(){
-        
+    public void loadInventoryDetails() {
+
         List<List<String>> res = inventoryDetails.ViewInventoryDetails();
         addRowToJTable(res);
     }
-     public void addRowToJTable(List res)
-    {
+
+    public void addRowToJTable(List res) {
         inventorytable.setShowGrid(true);
         DefaultTableModel model = (DefaultTableModel) inventorytable.getModel();
         model.setRowCount(0);
@@ -2038,27 +2051,36 @@ public void UpdateInventory() {
             rowData[5] = innerList.get(5);
             rowData[6] = innerList.get(6);
             rowData[7] = innerList.get(7);
-           
-            
-            
-           
-           
+
             model.addRow(rowData);
-        
+
         }
     }
-     
-     public List<List<String>> SearchInventory(String SearchId){
-         List<List<String>> res = new ArrayList<List<String>>();
-        
-     if( selectedRadio.equals("itemId")){ 
-         
-        res = search.InventorySearchByItemId(SearchId);
-        
-     }
-     return res;
-     }
-     
+
+    public List<List<String>> SearchInventory(String SearchId) {
+        List<List<String>> res = new ArrayList<List<String>>();
+
+        if (selectedRadio.equals("itemId")) {
+
+            res = search.InventorySearchByItemId(SearchId);
+
+        }
+        return res;
+    }
+
+    public void ClearFields() {
+        itemIDfield.setText(null);
+
+        itemnameField.setText(null);
+        categoryIDField.setText(null);
+        categoryNameTextField.setText(null);
+        quantityField.setText(null);
+        unitpriceField.setText(null);
+        date.setDate(null);
+        supplierIDCombo.setSelectedItem(1);
+        suppliernameCombo.setSelectedItem(1);
+        inventoryIdField.setText(null);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton SubmitButton;

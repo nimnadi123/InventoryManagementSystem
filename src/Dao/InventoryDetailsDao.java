@@ -388,7 +388,8 @@ public class InventoryDetailsDao {
         { 
             
             
-            String sql = "select i.item_name,i.Item_id,sup.Supplier_name, c.Category_id,c.Category_name, s.Unit_price, s.Quantity from Items i, Category c, Supply_details s, Supplier sup where i.Item_id = s.Item_id and i.Category_id =c.Category_id and sup.Supplier_id = s.Supplier_id";
+            String sql = "select i.item_name,i.Item_id,sup.Supplier_name, c.Category_id,c.Category_name, s.Unit_price,Sum(s.Quantity)-Sum(o.Quantity) from Items i, Category c, Supply_details s, Supplier sup, Purchase_details o where i.Item_id = s.Item_id and i.Category_id =c.Category_id and sup.Supplier_id = s.Supplier_id and o.Item_id = i.Item_id group by i.Item_id,"
+                    +"sup.Supplier_name,c.Category_id,c.Category_name, s.Unit_price,i.item_name,s.Supplier_id";          
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
             rst = stm.executeQuery(); 

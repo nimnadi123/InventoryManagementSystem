@@ -123,6 +123,11 @@ public class customerpayment extends javax.swing.JFrame {
         });
 
         resetbutton.setText("RESET");
+        resetbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetbuttonActionPerformed(evt);
+            }
+        });
 
         jLabel9.setText("Date");
 
@@ -371,24 +376,33 @@ public class customerpayment extends javax.swing.JFrame {
         jTabbedPane1.addTab("Payment Receivable", jPanel3);
 
         jButton1.setText("BACK");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addGap(55, 55, 55))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane1)
+                .addGap(219, 219, 219))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 11, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(70, 70, 70)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(46, 46, 46))
         );
 
         pack();
@@ -423,6 +437,19 @@ public class customerpayment extends javax.swing.JFrame {
     private void paymentReceivableIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paymentReceivableIdActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_paymentReceivableIdActionPerformed
+
+    private void resetbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetbuttonActionPerformed
+        ClearFields();
+        loadOrderDetails();
+        generateId();
+// TODO add your handling code here:
+    }//GEN-LAST:event_resetbuttonActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.setVisible(false);
+        homepage h = new homepage();
+        h.setVisible(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -466,16 +493,15 @@ public class customerpayment extends javax.swing.JFrame {
         DefaultComboBoxModel orderIdModel = new DefaultComboBoxModel(paymentOrderDetails.orderIds.toArray());
         orderNo.setModel(orderIdModel);
     }
-    
-    public void submitPaymentReceivedDetails(){
-        
+
+    public void submitPaymentReceivedDetails() {
+
         String orderid = (String) orderNo.getSelectedItem();
         String paymentReceivedId = paymentReceivableId.getText();
         Date ReceivedDate = Date.getDate();
         Double totalAmount = Double.parseDouble(totalpayment.getText());
         Double discount = Double.parseDouble(discountfield.getText());
         Double netAmount = Double.parseDouble(netpaymentfield.getText());
-        
 
         PaymentReceived PaymentReceived = new PaymentReceived();
         PaymentReceived.setOrderId(orderid);
@@ -484,21 +510,20 @@ public class customerpayment extends javax.swing.JFrame {
         PaymentReceived.setReceivedAmount(netAmount);
         PaymentReceived.setTotalAmount(totalAmount);
         PaymentReceived.setReceivedDate(ReceivedDate);
-       try{
-        boolean res = customerPayment.addpaymentReceived(PaymentReceived);
-        if (res == true) {
-            JOptionPane.showMessageDialog(this, "Payment Received added sucessfully");
-            //ClearFields();
-            //loadEmployeeDetails();
-            //generateId();
-        } else {
-            JOptionPane.showMessageDialog(this, "Error occur in adding received payment");
-        }
-       }catch (SQLException ex) {
+        try {
+            boolean res = customerPayment.addpaymentReceived(PaymentReceived);
+            if (res == true) {
+                JOptionPane.showMessageDialog(this, "Payment Received added sucessfully");
+                ClearFields();
+                loadOrderDetails();
+                generateId();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error occur in adding received payment");
+            }
+        } catch (SQLException ex) {
             Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
-        } }
-
-    
+        }
+    }
 
     public void getCustomerNameAndAmountByOrderId() {
 
@@ -532,12 +557,13 @@ public class customerpayment extends javax.swing.JFrame {
         }
         return TotalAmount;
     }
-    public void generateId(){
-        String id =customerPayment.nextPaymentReceivedId();
-          paymentReceivableId.setText(id);
-}
-    
-     public void loadPaymentReceivedDetails() {
+
+    public void generateId() {
+        String id = customerPayment.nextPaymentReceivedId();
+        paymentReceivableId.setText(id);
+    }
+
+    public void loadPaymentReceivedDetails() {
 
         List<List<String>> res = customerPayment.ViewPaymentReceived();
         addRowToJTable(res);
@@ -557,15 +583,12 @@ public class customerpayment extends javax.swing.JFrame {
             rowData[4] = innerList.get(4);
             rowData[5] = innerList.get(5);
             rowData[6] = innerList.get(6);
-            
-            
 
             model.addRow(rowData);
 
         }
     }
-    
-    
+
     public void loadPaymentReceiveableDetails() {
 
         List<List<String>> res = customerPayment.ViewPaymentReceivable();
@@ -585,18 +608,21 @@ public class customerpayment extends javax.swing.JFrame {
             rowData[3] = innerList.get(3);
             rowData[4] = innerList.get(4);
             rowData[5] = innerList.get(5);
-            
-            
-            
 
             model.addRow(rowData);
 
         }
     }
-    
-    
-    
-          
+
+    public void ClearFields() {
+        orderNo.setSelectedItem(1);
+        paymentReceivableId.setText(null);
+        Date.setDate(null);
+        totalpayment.setText(null);
+        discountfield.setText(null);
+        netpaymentfield.setText(null);
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser Date;

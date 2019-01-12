@@ -1,20 +1,51 @@
+
+import DTO.CustomerPaymentDTO;
+import DTO.SupplierPaymentDTO;
+import Dao.PaymentReturnsDao;
+import Dao.CustomerPaymentsDao;
+import Dao.SupplierPaymentsDao;
+import Models.CustomerPaymentReturned;
+import Models.SupplierPaymentReturned;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author user
  */
 public class returns extends javax.swing.JFrame {
 
+    CustomerPaymentDTO paymentOrderDetails = new CustomerPaymentDTO();
+    CustomerPaymentsDao customerPayment = new CustomerPaymentsDao();
+    PaymentReturnsDao customerReturns = new PaymentReturnsDao();
+    SupplierPaymentDTO SupplyPaymentsDetails = new SupplierPaymentDTO();
+    SupplierPaymentsDao supplierPayment = new SupplierPaymentsDao();
+
     /**
      * Creates new form returns
      */
     public returns() {
         initComponents();
+        loadOrderDetails();
+
+        generateId();
+        loadCustomerPaymentReturnedDetails();
+        generateSupplyId();
+        loadSupplyDetails();
+        getSupplierNameBySupplyId();
+        loadSupplierPaymentReturnedDetails();
     }
 
     /**
@@ -26,26 +57,30 @@ public class returns extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jCheckBox2 = new javax.swing.JCheckBox();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
-        jPanel3 = new javax.swing.JPanel();
+        ReturnNo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        CustomerReturnAmount = new javax.swing.JTextField();
+        CustomerReturnedDate = new com.toedter.calendar.JDateChooser();
         jLabel4 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
+        Customer = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
+        OrderNoCombo = new javax.swing.JComboBox<>();
+        ReturnId = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        ReturnedQuantity = new javax.swing.JTextField();
+        PaymentAlreadyReceived = new java.awt.Checkbox();
+        receivable = new java.awt.Checkbox();
         jPanel4 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        paymentstable2 = new javax.swing.JTable();
+        customerpaymentreturnedtable = new javax.swing.JTable();
         payableserchbutton1 = new javax.swing.JButton();
         payableserchField1 = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
@@ -55,22 +90,27 @@ public class returns extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        SupplierPaymentReturnAmount = new javax.swing.JTextField();
+        SupplierReturnedDate = new com.toedter.calendar.JDateChooser();
         jLabel10 = new javax.swing.JLabel();
-        jTextField8 = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
+        Supplyreturnid = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
-        jTextField9 = new javax.swing.JTextField();
-        jTextField10 = new javax.swing.JTextField();
+        SupplierName = new javax.swing.JTextField();
+        SupplyId = new javax.swing.JComboBox<>();
+        jButton3 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        Quantity = new javax.swing.JTextField();
+        PaymentPaid = new java.awt.Checkbox();
+        Payable = new java.awt.Checkbox();
         jPanel6 = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        paymentstable3 = new javax.swing.JTable();
+        supplierpaymentreturntab = new javax.swing.JTable();
         payableserchbutton2 = new javax.swing.JButton();
         payableserchField2 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+
+        jCheckBox2.setText("jCheckBox2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,100 +120,134 @@ public class returns extends javax.swing.JFrame {
 
         jLabel3.setText("Returned Date");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        CustomerReturnAmount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                CustomerReturnAmountActionPerformed(evt);
             }
         });
 
         jLabel4.setText("Return No");
 
-        jLabel5.setText("Customer ID");
-
         jLabel6.setText("Customer Name");
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
-                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(jPanel3Layout.createSequentialGroup()
+        Customer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CustomerActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Submit");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        OrderNoCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        OrderNoCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OrderNoComboActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setText("Returned Quantity");
+
+        ReturnedQuantity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ReturnedQuantityActionPerformed(evt);
+            }
+        });
+
+        PaymentAlreadyReceived.setLabel("Payment Alreay Received");
+
+        receivable.setLabel("Payment Receivable");
+
+        javax.swing.GroupLayout ReturnNoLayout = new javax.swing.GroupLayout(ReturnNo);
+        ReturnNo.setLayout(ReturnNoLayout);
+        ReturnNoLayout.setHorizontalGroup(
+            ReturnNoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ReturnNoLayout.createSequentialGroup()
+                .addGroup(ReturnNoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(ReturnNoLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(ReturnNoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel3)
+                            .addGroup(ReturnNoLayout.createSequentialGroup()
                                 .addComponent(jLabel1)
-                                .addComponent(jLabel5)
-                                .addComponent(jLabel6))
-                            .addGap(47, 47, 47)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
-                                .addComponent(jTextField4)
-                                .addComponent(jTextField5)))))
-                .addGap(102, 102, 102)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(168, Short.MAX_VALUE))
+                                .addGap(399, 399, 399)
+                                .addComponent(jLabel4)
+                                .addGap(18, 18, 18)
+                                .addComponent(ReturnId, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(ReturnNoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(ReturnNoLayout.createSequentialGroup()
+                                    .addGap(133, 133, 133)
+                                    .addComponent(OrderNoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ReturnNoLayout.createSequentialGroup()
+                                    .addComponent(jLabel11)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(ReturnNoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(ReturnedQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jButton2)
+                                        .addComponent(CustomerReturnedDate, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(Customer, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(CustomerReturnAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                    .addGroup(ReturnNoLayout.createSequentialGroup()
+                        .addGap(59, 59, 59)
+                        .addGroup(ReturnNoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(receivable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(PaymentAlreadyReceived, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(132, Short.MAX_VALUE))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        ReturnNoLayout.setVerticalGroup(
+            ReturnNoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ReturnNoLayout.createSequentialGroup()
                 .addGap(31, 31, 31)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(ReturnNoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(OrderNoCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ReturnId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addComponent(receivable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(PaymentAlreadyReceived, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(ReturnNoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(ReturnNoLayout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(jLabel6)
+                        .addGap(21, 21, 21))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ReturnNoLayout.createSequentialGroup()
+                        .addComponent(Customer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)))
+                .addGroup(ReturnNoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(CustomerReturnAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(ReturnNoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(172, Short.MAX_VALUE))
+                    .addComponent(CustomerReturnedDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(ReturnNoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ReturnedQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11))
+                .addGap(18, 18, 18)
+                .addComponent(jButton2)
+                .addContainerGap())
         );
 
-        jTabbedPane2.addTab("Add a Payment Return", jPanel3);
+        jTabbedPane2.addTab("Add a Payment Return", ReturnNo);
 
-        paymentstable2.setModel(new javax.swing.table.DefaultTableModel(
+        customerpaymentreturnedtable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
-                "Order No", "Customer ID", "Customer Name", "Total Payment (Rs)", "Discount (Rs)", "Net Amount (Rs)", "Due Date"
+                "Order No", "Customer ID", "Customer Name", "Company Name", "Returned Amount (Rs)", "Returned Date", "Quantity"
             }
         ));
-        jScrollPane4.setViewportView(paymentstable2);
+        jScrollPane4.setViewportView(customerpaymentreturnedtable);
 
         payableserchbutton1.setText("Search Order No");
 
@@ -207,7 +281,7 @@ public class returns extends javax.swing.JFrame {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 707, Short.MAX_VALUE)
+            .addGap(0, 739, Short.MAX_VALUE)
             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -230,7 +304,7 @@ public class returns extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 704, Short.MAX_VALUE)
+            .addComponent(jTabbedPane2)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -239,53 +313,75 @@ public class returns extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Customer Returns", jPanel1);
 
-        jLabel7.setText("Order No");
+        jLabel7.setText("Supply Id");
 
         jLabel8.setText("Net Amount (Rs)");
 
         jLabel9.setText("Returned Date");
 
-        jTextField6.addActionListener(new java.awt.event.ActionListener() {
+        jLabel10.setText("Return No");
+
+        jLabel12.setText("Supplier Name");
+
+        SupplyId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        SupplyId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField6ActionPerformed(evt);
+                SupplyIdActionPerformed(evt);
             }
         });
 
-        jLabel10.setText("Return No");
+        jButton3.setText("Submit");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
-        jLabel11.setText("Supplier ID");
+        jLabel5.setText("Returned Quantity");
 
-        jLabel12.setText("Supplier Name");
+        PaymentPaid.setLabel("Payment paid");
+
+        Payable.setLabel("Payable");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
-                        .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
-                        .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(263, 263, 263)
+                        .addComponent(jButton3))
                     .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel12))
-                        .addGap(47, 47, 47)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
-                            .addComponent(jTextField9)
-                            .addComponent(jTextField10))))
-                .addGap(102, 102, 102)
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9)
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel7Layout.createSequentialGroup()
+                                        .addComponent(jLabel8)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
+                                        .addComponent(SupplierPaymentReturnAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel7Layout.createSequentialGroup()
+                                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(SupplyId, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(18, 18, 18)
+                                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(SupplierReturnedDate, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+                                            .addComponent(Quantity)))
+                                    .addGroup(jPanel7Layout.createSequentialGroup()
+                                        .addComponent(jLabel12)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(SupplierName, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(102, 102, 102)
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(Supplyreturnid, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(PaymentPaid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Payable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(168, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
@@ -294,33 +390,39 @@ public class returns extends javax.swing.JFrame {
                 .addGap(31, 31, 31)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Supplyreturnid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SupplyId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(PaymentPaid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6)
+                .addComponent(Payable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel12)
-                    .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(SupplierName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel8)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(SupplierPaymentReturnAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel9)
-                    .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(172, Short.MAX_VALUE))
+                    .addComponent(SupplierReturnedDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Quantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, 18)
+                .addComponent(jButton3)
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 699, Short.MAX_VALUE)
+            .addGap(0, 739, Short.MAX_VALUE)
             .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel5Layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -339,26 +441,15 @@ public class returns extends javax.swing.JFrame {
 
         jTabbedPane3.addTab("Add a Payment Return", jPanel5);
 
-        paymentstable3.setModel(new javax.swing.table.DefaultTableModel(
+        supplierpaymentreturntab.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
-                "Order No", "Supplier ID", "Supplier Name", "Total Payment (Rs)", "Discount (Rs)", "Net Amount (Rs)", "Due Date"
+                "Supply No", "Supplier ID", "Supplier Name", "Returned amount", "Returned Date", "Quantity"
             }
         ));
-        jScrollPane5.setViewportView(paymentstable3);
+        jScrollPane5.setViewportView(supplierpaymentreturntab);
 
         payableserchbutton2.setText("Search Order No");
 
@@ -392,7 +483,7 @@ public class returns extends javax.swing.JFrame {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 699, Short.MAX_VALUE)
+            .addGap(0, 739, Short.MAX_VALUE)
             .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel6Layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -449,13 +540,210 @@ public class returns extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+        boolean validatednull = true;
+        boolean validated = true;
+        int paymentpaid = 0;
+        int paymentpayable = 0;
 
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
+        if (SupplierPaymentReturnAmount.getText().equals("") || SupplierReturnedDate.getDate() == null||Quantity.getText().equals("")) {
+
+            validatednull = false;
+            JOptionPane.showMessageDialog(this, "Please fill up all the Fields ");
+
+        }
+
+        if (validatednull == true) {
+            String supplyId = (String) SupplyId.getSelectedItem();
+            String supplierReturnId = Supplyreturnid.getText();
+            Date supplierPaymentReturnedDate = SupplierReturnedDate.getDate();
+            String supplierReturnAmount = SupplierPaymentReturnAmount.getText();
+            String quantity = Quantity.getText();
+            Date date = new Date();
+
+            if ((supplierReturnAmount.matches("[0-9]+") == false)) {
+                JOptionPane.showMessageDialog(this, "Amount cannot be includede letters");
+                validated = false;
+            }
+
+            if (supplierReturnAmount.length() > 15) {
+                validated = false;
+                JOptionPane.showMessageDialog(this, "Maximum length exceeds allows less than 15 characters");
+            }
+            if (-1 != supplierReturnAmount.indexOf(" ")) {
+                JOptionPane.showMessageDialog(this, "Amount cannot have spaces");
+                validated = false;
+            }
+
+            if (!date.after(supplierPaymentReturnedDate)) {
+                JOptionPane.showMessageDialog(this, "Payment returned date is not valid");
+                validated = false;
+            }
+            
+            if ((quantity.matches("[0-9]+") == false)) {
+                JOptionPane.showMessageDialog(this, "Returned quantity cannot be includede letters");
+                validated = false;
+            }
+
+            if (-1 != quantity.indexOf(" ")) {
+                JOptionPane.showMessageDialog(this, "Returned quantity cannot have spaces");
+                validated = false;
+            }
+            
+            
+            if (validated == true) {
+                
+             Boolean result = PaymentPaid.getState();
+                if (result == true) {
+                    paymentpaid = 1;
+
+                } else {
+                    paymentpayable = 1;
+                }
+
+                SupplierPaymentReturned s_paymentReturn = new SupplierPaymentReturned();
+                s_paymentReturn.setSupplyId(supplyId);
+                s_paymentReturn.setPaymentReturnedId(supplierReturnId);
+                s_paymentReturn.setReturnedAmount(Double.parseDouble(supplierReturnAmount));
+                s_paymentReturn.setReturnedDate(supplierPaymentReturnedDate);
+                s_paymentReturn.setQuantity(Integer.parseInt(quantity));
+                s_paymentReturn.setPaymentPayable(paymentpayable);
+                s_paymentReturn.setPaymentPaid(paymentpaid);
+
+                try {
+                    boolean res = customerReturns.AddSupplierpaymentReturn(s_paymentReturn);
+                    if (res == true) {
+                        JOptionPane.showMessageDialog(this, " Supplier Payment return added sucessfully");
+                        ClearFields();
+                        loadSupplyDetails();
+                        generateId();
+                        loadSupplierPaymentReturnedDetails();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Error occur in adding Supplier Payment return");
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
+
+                }
+
+            }
+        }
+
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void ReturnedQuantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReturnedQuantityActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField6ActionPerformed
+    }//GEN-LAST:event_ReturnedQuantityActionPerformed
+
+    private void OrderNoComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderNoComboActionPerformed
+        getCustomerNameByOrderId();
+        IsPaymentReceived();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_OrderNoComboActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        boolean validatednull = true;
+        boolean validated = true;
+        int paymentreceived = 0;
+        int paymentreceivable = 0;
+
+        if (CustomerReturnAmount.getText().equals("") || CustomerReturnedDate.getDate() == null || ReturnedQuantity.getText().equals("")) {
+
+            validatednull = false;
+            JOptionPane.showMessageDialog(this, "Please fill up all the Fields ");
+
+        }
+
+        if (validatednull == true) {
+            String orderId = (String) OrderNoCombo.getSelectedItem();
+            String customerReturnId = ReturnId.getText();
+            Date customerPaymentReturnedDate = CustomerReturnedDate.getDate();
+            String customerReturnAmount = CustomerReturnAmount.getText();
+            String quantity = ReturnedQuantity.getText();
+
+            Date date = new Date();
+
+            if ((customerReturnAmount.matches("[0-9]+") == false)) {
+                JOptionPane.showMessageDialog(this, "Amount cannot be includede letters");
+                validated = false;
+            }
+
+            if (customerReturnAmount.length() > 15) {
+                validated = false;
+                JOptionPane.showMessageDialog(this, "Maximum length exceeds allows less than 15 characters");
+            }
+            if (-1 != customerReturnAmount.indexOf(" ")) {
+                JOptionPane.showMessageDialog(this, "Amount cannot have spaces");
+                validated = false;
+            }
+
+            if (!date.after(customerPaymentReturnedDate)) {
+                JOptionPane.showMessageDialog(this, "Payment returned date is not valid");
+                validated = false;
+            }
+            if ((quantity.matches("[0-9]+") == false)) {
+                JOptionPane.showMessageDialog(this, "Returned quantity cannot be includede letters");
+                validated = false;
+            }
+
+            if (-1 != quantity.indexOf(" ")) {
+                JOptionPane.showMessageDialog(this, "Returned quantity cannot have spaces");
+                validated = false;
+            }
+
+            if (validated == true) {
+                Boolean result = PaymentAlreadyReceived.getState();
+                if (result == true) {
+                    paymentreceived = 1;
+
+                } else {
+                    paymentreceivable = 1;
+                }
+                CustomerPaymentReturned c_paymentReturn = new CustomerPaymentReturned();
+                c_paymentReturn.setOrderId(orderId);
+                c_paymentReturn.setPaymentReturnedId(customerReturnId);
+                c_paymentReturn.setReturnedAmount(Double.parseDouble(customerReturnAmount));
+                c_paymentReturn.setReturnedDate(date);
+                c_paymentReturn.setPaymentReceivable(paymentreceivable);
+                c_paymentReturn.setPaymentReceived(paymentreceived);
+                c_paymentReturn.setReturnedQuantity(Integer.parseInt(quantity));
+
+                try {
+                    boolean res = customerReturns.AddCustomerpaymentReturn(c_paymentReturn);
+                    if (res == true) {
+                        JOptionPane.showMessageDialog(this, "Payment return added sucessfully");
+                        ClearFields();
+                        loadOrderDetails();
+                        generateId();
+                        loadCustomerPaymentReturnedDetails();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Error occur in adding Payment return");
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
+
+                }
+
+            }
+        }
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void CustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CustomerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CustomerActionPerformed
+
+    private void CustomerReturnAmountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CustomerReturnAmountActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CustomerReturnAmountActionPerformed
+
+    private void SupplyIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SupplyIdActionPerformed
+        IsPaymentPaid();
+        getSupplierNameBySupplyId();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SupplyIdActionPerformed
 
     /**
      * @param args the command line arguments
@@ -492,10 +780,182 @@ public class returns extends javax.swing.JFrame {
         });
     }
 
+    public void loadOrderDetails() {
+
+        paymentOrderDetails = customerPayment.getOrderDetails();
+
+        DefaultComboBoxModel orderIdModel = new DefaultComboBoxModel(paymentOrderDetails.orderIds.toArray());
+        OrderNoCombo.setModel(orderIdModel);
+    }
+
+    public void getCustomerNameByOrderId() {
+
+        String orderId = (String) OrderNoCombo.getSelectedItem();
+        String customerNameToBeSet = FindCustomerNameByOrderId(orderId);
+
+        Customer.setText(customerNameToBeSet);
+
+    }
+
+    public String FindCustomerNameByOrderId(String searchId) {
+        String Name = "";
+        for (int i = 0; i < paymentOrderDetails.OrderDetails.size(); i++) {
+            List a = (List) paymentOrderDetails.OrderDetails.get(i);
+            String id = a.get(0).toString();
+            if (searchId.equals(id)) {
+                Name = a.get(1).toString();
+            }
+        }
+        return Name;
+    }
+
+    public void generateId() {
+        String crid = customerReturns.nextPaymentReturnId();
+        ReturnId.setText(crid);
+    }
+
+    public void loadSupplyDetails() {
+
+        SupplyPaymentsDetails = supplierPayment.getSupplyDetails();
+
+        DefaultComboBoxModel supplierIdModel = new DefaultComboBoxModel(SupplyPaymentsDetails.supplyIds.toArray());
+        SupplyId.setModel(supplierIdModel);
+    }
+
+    public void getSupplierNameBySupplyId() {
+
+        String supplyId = (String) SupplyId.getSelectedItem();
+        String supplierNameToBeSet = FindSupplierNameBySupplyId(supplyId);
+
+        SupplierName.setText(supplierNameToBeSet);
+
+    }
+
+    public String FindSupplierNameBySupplyId(String searchId) {
+        String Name = "";
+        for (int i = 0; i < SupplyPaymentsDetails.supplyDetails.size(); i++) {
+            List a = (List) SupplyPaymentsDetails.supplyDetails.get(i);
+            String id = a.get(0).toString();
+            if (searchId.equals(id)) {
+                Name = a.get(1).toString();
+            }
+        }
+        return Name;
+    }
+
+    public void generateSupplyId() {
+        String id = customerReturns.nextSupplierPaymentReturnId();
+        Supplyreturnid.setText(id);
+    }
+
+    public void IsPaymentReceived() {
+        String orderId = (String) OrderNoCombo.getSelectedItem();
+        boolean isPaymentReceived = customerReturns.isPaymentReceived(orderId);
+
+        if (isPaymentReceived) {
+            receivable.setState(false);
+            PaymentAlreadyReceived.setState(true);
+        } else {
+            PaymentAlreadyReceived.setState(false);
+            receivable.setState(true);
+        }
+    }
+
+    public void IsPaymentPaid() {
+        String supplyId = (String) SupplyId.getSelectedItem();
+        boolean isPaymentPaid = customerReturns.isPaymentReceivable(supplyId);
+
+        if (isPaymentPaid) {
+            Payable.setState(false);
+            PaymentPaid.setState(true);
+        } else {
+            PaymentPaid.setState(false);
+            Payable.setState(true);
+        }
+    }
+
+    public void ClearFields() {
+        OrderNoCombo.setSelectedItem(1);
+        ReturnId.setText(null);
+        CustomerReturnedDate.setDate(null);
+        CustomerReturnAmount.setText(null);
+        loadOrderDetails();
+        generateId();
+    }
+
+    public void loadCustomerPaymentReturnedDetails() {
+
+        List<List<String>> res = customerReturns.ViewCustomerPaymentReturned();
+        addRowToJTableHold(res);
+    }
+
+    public void addRowToJTableHold(List res) {
+        customerpaymentreturnedtable.setShowGrid(true);
+        DefaultTableModel model = (DefaultTableModel) customerpaymentreturnedtable.getModel();
+        model.setRowCount(0);
+        Object rowData[] = new Object[7];
+        for (Iterator it = res.iterator(); it.hasNext();) {
+            List<String> innerList = (List<String>) it.next();
+            rowData[0] = innerList.get(0);
+            rowData[1] = innerList.get(1);
+            rowData[2] = innerList.get(2);
+            rowData[3] = innerList.get(3);
+            rowData[4] = innerList.get(4);
+            rowData[5] = innerList.get(5);
+            rowData[6] = innerList.get(6);
+
+            model.addRow(rowData);
+
+        }
+    }
+    
+    public void loadSupplierPaymentReturnedDetails() {
+
+        List<List<String>> res = customerReturns.ViewSupplierPaymentReturned();
+        addRowToJTableSupplierPaymentReturn(res);
+    }
+
+    public void addRowToJTableSupplierPaymentReturn(List res) {
+        supplierpaymentreturntab.setShowGrid(true);
+        DefaultTableModel model = (DefaultTableModel) supplierpaymentreturntab.getModel();
+        model.setRowCount(0);
+        Object rowData[] = new Object[6];
+        for (Iterator it = res.iterator(); it.hasNext();) {
+            List<String> innerList = (List<String>) it.next();
+            rowData[0] = innerList.get(0);
+            rowData[1] = innerList.get(1);
+            rowData[2] = innerList.get(2);
+            rowData[3] = innerList.get(3);
+            rowData[4] = innerList.get(4);
+            rowData[5] = innerList.get(5);
+           
+            model.addRow(rowData);
+
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField Customer;
+    private javax.swing.JTextField CustomerReturnAmount;
+    private com.toedter.calendar.JDateChooser CustomerReturnedDate;
+    private javax.swing.JComboBox<String> OrderNoCombo;
+    private java.awt.Checkbox Payable;
+    private java.awt.Checkbox PaymentAlreadyReceived;
+    private java.awt.Checkbox PaymentPaid;
+    private javax.swing.JTextField Quantity;
+    private javax.swing.JTextField ReturnId;
+    private javax.swing.JPanel ReturnNo;
+    private javax.swing.JTextField ReturnedQuantity;
+    private javax.swing.JTextField SupplierName;
+    private javax.swing.JTextField SupplierPaymentReturnAmount;
+    private com.toedter.calendar.JDateChooser SupplierReturnedDate;
+    private javax.swing.JComboBox<String> SupplyId;
+    private javax.swing.JTextField Supplyreturnid;
+    private javax.swing.JTable customerpaymentreturnedtable;
     private javax.swing.JButton jButton1;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -511,7 +971,6 @@ public class returns extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
@@ -522,21 +981,11 @@ public class returns extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTabbedPane jTabbedPane3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
     private javax.swing.JTextField payableserchField1;
     private javax.swing.JTextField payableserchField2;
     private javax.swing.JButton payableserchbutton1;
     private javax.swing.JButton payableserchbutton2;
-    private javax.swing.JTable paymentstable2;
-    private javax.swing.JTable paymentstable3;
+    private java.awt.Checkbox receivable;
+    private javax.swing.JTable supplierpaymentreturntab;
     // End of variables declaration//GEN-END:variables
 }

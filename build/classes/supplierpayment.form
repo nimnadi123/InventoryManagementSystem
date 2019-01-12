@@ -131,9 +131,9 @@
                               </Group>
                               <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="paymentReceivableId" alignment="0" pref="199" max="32767" attributes="0"/>
+                                  <Component id="paymentPaidId" alignment="0" pref="199" max="32767" attributes="0"/>
                                   <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                      <Component id="customernamefield" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="supplierName" alignment="0" max="32767" attributes="0"/>
                                       <Component id="totalpayment" alignment="0" max="32767" attributes="0"/>
                                       <Component id="netpaymentfield" alignment="0" pref="199" max="32767" attributes="0"/>
                                       <Component id="discountfield" alignment="0" max="32767" attributes="0"/>
@@ -143,7 +143,7 @@
                                           <Component id="submitbutton" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <Component id="Date" alignment="1" max="32767" attributes="0"/>
-                                      <Component id="orderNo" alignment="1" max="32767" attributes="0"/>
+                                      <Component id="supplyNo" alignment="1" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace pref="359" max="32767" attributes="0"/>
@@ -156,17 +156,17 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="orderNo" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="supplyNo" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="paymentReceivableId" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="paymentPaidId" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="customernamefield" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="supplierName" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
@@ -209,7 +209,7 @@
                         <Property name="text" type="java.lang.String" value="Supplier Name"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JTextField" name="customernamefield">
+                    <Component class="javax.swing.JTextField" name="supplierName">
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel4">
                       <Properties>
@@ -261,7 +261,7 @@
                     </Component>
                     <Component class="com.toedter.calendar.JDateChooser" name="Date">
                     </Component>
-                    <Component class="javax.swing.JComboBox" name="orderNo">
+                    <Component class="javax.swing.JComboBox" name="supplyNo">
                       <Properties>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                           <StringArray count="4">
@@ -273,7 +273,7 @@
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="orderNoActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="supplyNoActionPerformed"/>
                       </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -284,9 +284,9 @@
                         <Property name="text" type="java.lang.String" value="Payment Paid Id"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JTextField" name="paymentReceivableId">
+                    <Component class="javax.swing.JTextField" name="paymentPaidId">
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="paymentReceivableIdActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="paymentPaidIdActionPerformed"/>
                       </Events>
                     </Component>
                   </SubComponents>
@@ -408,7 +408,7 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="javax.swing.JTable" name="payementTable">
+                    <Component class="javax.swing.JTable" name="paymentPaid">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Times New Roman" size="14" style="0"/>
@@ -546,7 +546,7 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="javax.swing.JTable" name="paymentstable2">
+                    <Component class="javax.swing.JTable" name="payable">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                           <Table columnCount="4" rowCount="0">

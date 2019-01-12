@@ -282,10 +282,13 @@ public class supplierdetails extends javax.swing.JFrame {
 
     private void resetbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetbuttonActionPerformed
      ClearFields();
+     loadSupplierDetails();
+        generateId();
         // TODO add your handling code here:
     }//GEN-LAST:event_resetbuttonActionPerformed
 
     private void backbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backbuttonActionPerformed
+        this.setVisible(false);
         homepage h=new homepage();
         h.setVisible(true);
     }//GEN-LAST:event_backbuttonActionPerformed

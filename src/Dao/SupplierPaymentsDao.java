@@ -7,6 +7,7 @@ package Dao;
 
 import DTO.CustomerPaymentDTO;
 import DTO.SupplierPaymentDTO;
+import Models.PaymentPaid;
 import Models.PaymentReceived;
 import database.DBConnection;
 import static java.lang.Integer.parseInt;
@@ -68,13 +69,13 @@ public class SupplierPaymentsDao {
         return supply;
     }
 
-    public boolean addpaymentPaid(PaymentReceived PaymentReceived) throws SQLException {
-      String orderid = PaymentReceived.getOrderId();
-        String paymentReceivedId = PaymentReceived.getPaymentReceivedId();
-        Date ReceivedDate = PaymentReceived.getReceivedDate();
-        Double totalAmount = PaymentReceived.getTotalAmount();
-        Double discount = PaymentReceived.getDiscount();
-        Double netAmount = PaymentReceived.getReceivedAmount();
+    public boolean addpaymentPaid(PaymentPaid Paymentpaid) throws SQLException {
+      String Supplyid = Paymentpaid.getSupplyId();
+        String paymentPaidId = Paymentpaid.getPaymentPaidId();
+        Date PaidDate = Paymentpaid.getPaidDate();
+        Double totalAmount = Paymentpaid.getTotalAmount();
+        Double discount = Paymentpaid.getDiscount();
+        Double netAmount = Paymentpaid.getPaidAmount();
         
 
         Connection connection = null;
@@ -84,23 +85,22 @@ public class SupplierPaymentsDao {
 
             int finalRes = 0;
 
-            String sqlPaymentReceived = "insert into Payment_Received values(?,?,?,?,?,?)";
-            PreparedStatement stmpaymentreceived = connection.prepareStatement(sqlPaymentReceived);
+            String sqlPaymentpaid = "insert into Supplier_payments values(?,?,?,?,?)";
+            PreparedStatement stmpaymentpaid = connection.prepareStatement(sqlPaymentpaid);
             
             
 
-            stmpaymentreceived.setObject(1, paymentReceivedId);
-            stmpaymentreceived.setObject(2, netAmount);
-            stmpaymentreceived.setObject(3, ReceivedDate);
-             stmpaymentreceived.setObject(4, null);
-            stmpaymentreceived.setObject(5, totalAmount);
-            stmpaymentreceived.setObject(6, discount);
-            
+            stmpaymentpaid.setObject(1, paymentPaidId);
+            stmpaymentpaid.setObject(2, netAmount);
+            stmpaymentpaid.setObject(3, discount);
+             stmpaymentpaid.setObject(4, totalAmount);
+            stmpaymentpaid.setObject(5, PaidDate);
+           
 
-           String sqlupdate = "update Payment_receivable set Payment_received_id = ? where Purchase_id=?";
+           String sqlupdate = "update Payable set Paid_id = ? where Supply_details_id=?";
         PreparedStatement stmupdate= connection.prepareStatement(sqlupdate);
-        stmupdate.setObject(1, paymentReceivedId);
-        stmupdate.setString(2, orderid);
+        stmupdate.setObject(1, paymentPaidId);
+        stmupdate.setString(2, Supplyid);
 
             
            
@@ -108,7 +108,7 @@ public class SupplierPaymentsDao {
            
 
             
-                int res = stmpaymentreceived.executeUpdate();
+                int res = stmpaymentpaid.executeUpdate();
                 int res1 = stmupdate.executeUpdate();
                
 
@@ -132,7 +132,7 @@ public class SupplierPaymentsDao {
         return false;
 
     }
-    public String nextPaymentReceivedId(){
+    public String nextPaymentPaidId(){
         Connection con = null;
         Statement stm = null;
         ResultSet rst = null;
@@ -141,7 +141,7 @@ public class SupplierPaymentsDao {
         
         try
         {           
-            String sql = "select Payment_received_id from Payment_Received";
+            String sql = "select Paid_id from Supplier_payments";
             Connection connection = DBConnection.getDBConnection().getConnection();
             //stm = connection.createStatement();
             stm = connection.createStatement(
@@ -151,7 +151,7 @@ public class SupplierPaymentsDao {
             
             rst.last();
             last = rst.getRow()+1;
-             id = "RD00"+last;
+             id = "PD00"+last;
             return id;
         }
         catch(SQLException e)
@@ -164,7 +164,7 @@ public class SupplierPaymentsDao {
     }
     
     
-    public List ViewPaymentReceived(){
+    public List ViewPaymentPaid(){
         
      
         Connection con = null;
@@ -176,7 +176,8 @@ public class SupplierPaymentsDao {
         { 
             
             
-            String sql = "select o.Purchase_id,cust.Company_name,cust.Customer_name,Rd.Total_amount,Rd.Discount,Rd.Received_date,Rd.Received_amount from Customer cust, Purchase_details o,Payment_Received Rd, Payment_receivable Re where o.Customer_id =cust.Customer_id and o.Purchase_id = Re.Purchase_id and Rd.Payment_received_id = Re.Payment_received_id";
+            String sql = "select Sd.Supply_id ,supplier.Supplier_name ,Pd.Total_amount, Pd.Discount,Pd.Net_amount,Pd.Paid_date "+
+                    "from Supplier_payments Pd, Supplier supplier,Supply_details Sd, Payable Pb where Sd.Supplier_id  =supplier.Supplier_id and Sd.Supply_id = Pb.Supply_details_id and Pd.Paid_id = Pb.Paid_id";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
             rst = stm.executeQuery(); 
@@ -185,7 +186,7 @@ public class SupplierPaymentsDao {
             while(rst.next())
             {  
                   List<String> paymentReceivedDetails = new ArrayList<String>();
-                    for (int i = 1; i < 8; i++){
+                    for (int i = 1; i < 7; i++){
                             paymentReceivedDetails.add(rst.getString(i));
                             
                             
@@ -206,7 +207,7 @@ public class SupplierPaymentsDao {
         }
        return ListofPaymentpaidDetailsList;
     } 
-   public List ViewPaymentReceivable(){
+   public List ViewPaymentPayable(){
         
      
         Connection con = null;
@@ -218,8 +219,8 @@ public class SupplierPaymentsDao {
         { 
             
             
-            String sql = "select o.Purchase_id,cust.Company_name,cust.Customer_name,Re.Receivable_amount,Re.Due_date,Re.Isoutstanding"
-                    +" from Customer cust, Purchase_details o, Payment_receivable Re where o.Customer_id =cust.Customer_id and o.Purchase_id = Re.Purchase_id";
+            String sql = "select Sd.Supply_id , supplier.Supplier_id, supplier.Supplier_name ,Pb.Payable_amount\n" +
+"                    from Supplier supplier ,Supply_details Sd, Payable Pb where Sd.Supplier_id  =supplier.Supplier_id and Sd.Supply_id = Pb.Supply_details_id";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
             rst = stm.executeQuery(); 
@@ -228,14 +229,11 @@ public class SupplierPaymentsDao {
             while(rst.next())
             {  
                   List<String> paymentReceivableDetails = new ArrayList<String>();
-                    for (int i = 1; i < 7; i++){
+                    for (int i = 1; i < 5; i++){
                         
-                        if(i==6 && Integer.parseInt(rst.getString(6))==1){
-                            paymentReceivableDetails.add(rst.getString(4));
-                        }
-                        else{
+                        
                         paymentReceivableDetails.add(rst.getString(i));
-                        }
+                        
                             
                             
                           

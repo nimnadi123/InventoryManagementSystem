@@ -146,8 +146,8 @@ public class login extends javax.swing.JFrame {
          Boolean result = login.AuthenticateUser(logincredentials);
          if(result == true){
          this.setVisible(false); // hide the login menu when click on the login button.
-         welcome welcomePage=new welcome(); //create welcomePage  object       
-         welcomePage.setVisible(true); // make the homepage visible.
+         homepage HomePage=new homepage(); //create welcomePage  object       
+         HomePage.setVisible(true); // make the homepage visible.
          
          }
          else{
