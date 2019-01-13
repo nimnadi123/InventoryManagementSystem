@@ -44,7 +44,7 @@ public class inventorydetails extends javax.swing.JFrame {
      */
     public inventorydetails() {
         initComponents();
-
+        MakeFieldsNoteditable();
         getInventoryDetails();
         generateId();
         loadInventoryDetails();
@@ -1468,7 +1468,7 @@ public class inventorydetails extends javax.swing.JFrame {
     }//GEN-LAST:event_categoryIDFieldActionPerformed
 
     private void unitpriceFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unitpriceFieldActionPerformed
-        netamountField2.setText(null);        // TODO add your handling code here:
+            CalculateTotalPriceAddNew();   // TODO add your handling code here:
     }//GEN-LAST:event_unitpriceFieldActionPerformed
 
     private void supplierIDComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierIDComboActionPerformed
@@ -1477,7 +1477,7 @@ public class inventorydetails extends javax.swing.JFrame {
     }//GEN-LAST:event_supplierIDComboActionPerformed
 
     private void unitpriceField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unitpriceField1ActionPerformed
-        netamountField2.setText(null);        // TODO add your handling code here:
+       CalculateTotalPriceUpdateInventory();        // TODO add your handling code here:
     }//GEN-LAST:event_unitpriceField1ActionPerformed
 
     private void supplierIDCombo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierIDCombo1ActionPerformed
@@ -1497,7 +1497,7 @@ public class inventorydetails extends javax.swing.JFrame {
     }//GEN-LAST:event_searchFieldActionPerformed
 
     private void unitpriceField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unitpriceField2ActionPerformed
-        netamountField2.setText(null);
+ CalculateTotalPriceAddExisiting();       
         // TODO add your handling code here:
     }//GEN-LAST:event_unitpriceField2ActionPerformed
 
@@ -1565,18 +1565,17 @@ public class inventorydetails extends javax.swing.JFrame {
 
     private void quantityField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityField2ActionPerformed
         // TODO add your handling code here:
-        netamountField2.setText(null);
+       
+       
     }//GEN-LAST:event_quantityField2ActionPerformed
 
     private void netamountField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_netamountField2ActionPerformed
-        double unitPrice = Double.parseDouble(unitpriceField2.getText());
-        int quantity = Integer.parseInt(quantityField2.getText());
-
-        netamountField2.setText(getNetAmount(unitPrice, quantity));        // TODO add your handling code here:
+            // TODO add your handling code here:
     }//GEN-LAST:event_netamountField2ActionPerformed
 
     private void quantityFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityFieldActionPerformed
-        netamountField2.setText(null);
+        
+       
         // TODO add your handling code here:
     }//GEN-LAST:event_quantityFieldActionPerformed
 
@@ -1900,97 +1899,262 @@ public class inventorydetails extends javax.swing.JFrame {
     }
 
     public void SubmitInventoryAdd() {
-        String itemId = itemIDfield.getText();
+        boolean validatednull = true;
+        boolean validated = true;
 
-        String itemName = itemnameField.getText();
-        String categoryId = categoryIDField.getText();
-        String categoryName = categoryNameTextField.getText();
-        int quantity = Integer.parseInt(quantityField.getText());
-        Double unitPrice = Double.parseDouble(unitpriceField.getText());
-        Date itemAddedDate = date.getDate();
-        String supplierId = (String) supplierIDCombo.getSelectedItem();
-        String supplierName = (String) suppliernameCombo.getSelectedItem();
-        String inventoryId = inventoryIdField.getText();
+        if (itemnameField.getText().equals("") || categoryNameTextField.getText().equals("") || quantityField.getText().equals("")
+                || unitpriceField.getText().equals("") || date.getDate() == null || netamountField.getText().equals("")) {
+            validatednull = false;
+            JOptionPane.showMessageDialog(this, "Please fill up all the Fields ");
+        }
 
-        InventoryAddViewDTO inventory_item = new InventoryAddViewDTO();
-        inventory_item.setItemId(itemId);
-        inventory_item.setItemName(itemName);
-        inventory_item.setCategoryId(categoryId);
-        inventory_item.setQuantity(quantity);
-        inventory_item.setUnitPrice(unitPrice);
-        inventory_item.setSupplierId(supplierId);
-        inventory_item.setSupplierName(supplierName);
-        inventory_item.setNetAmount(Double.toString(unitPrice * quantity));
-        inventory_item.setSupplyId(inventoryId);
-        inventory_item.setCategoryName(categoryName);
-        inventory_item.setNewInventoryDate(itemAddedDate);
-
-        try {
-            boolean res = inventoryDetails.addNewInventory(inventory_item, 1);
-            if (res == true) {
-                JOptionPane.showMessageDialog(this, "Inventory added sucessfully");
-                //ClearFields();
-                //loadInventoryDetails();
-                generateId();
-            } else {
-                JOptionPane.showMessageDialog(this, "Error occur in adding Inventory");
+        if (validatednull == true) {
+            Date currentdate = new Date();
+            if ((netamountField.getText().matches("[0-9]+") == false)) {
+                JOptionPane.showMessageDialog(this, "Total Payment cannot be included letters ");
+                validated = false;
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
+
+            if ((unitpriceField.getText().matches("[0-9]+") == false)) {
+                JOptionPane.showMessageDialog(this, "Unit price cannot be included letters ");
+                validated = false;
+            }
+
+            if ((quantityField.getText().matches("[0-9]+") == false)) {
+                JOptionPane.showMessageDialog(this, "Quantity cannot be included letters ");
+                validated = false;
+            }
+
+            if (!currentdate.after(date.getDate())) {
+                JOptionPane.showMessageDialog(this, "Inventory Added date is not valid");
+                validated = false;
+            }
+
+            if (netamountField.getText().length() > 15) {
+                validated = false;
+                JOptionPane.showMessageDialog(this, "Maximum length exceeds, allows less than 15 characters");
+            }
+            if (quantityField.getText().length() > 6) {
+                validated = false;
+                JOptionPane.showMessageDialog(this, "Quantity Maximum length exceeds");
+            }
+            if (-1 != quantityField.getText().indexOf(" ")) {
+                JOptionPane.showMessageDialog(this, "Quantity cannot have spaces");
+                validated = false;
+            }
+            if (-1 != unitpriceField.getText().indexOf(" ")) {
+                JOptionPane.showMessageDialog(this, "Unit price cannot have spaces");
+                validated = false;
+            }
+
+            if (unitpriceField.getText().length() > 6) {
+                validated = false;
+                JOptionPane.showMessageDialog(this, " Unit priceMaximum length exceeds");
+            }
+
+            if (validated == true) {
+                String itemId = itemIDfield.getText();
+
+                String itemName = itemnameField.getText();
+                String categoryId = categoryIDField.getText();
+                String categoryName = categoryNameTextField.getText();
+                int quantity = Integer.parseInt(quantityField.getText());
+                Double unitPrice = Double.parseDouble(unitpriceField.getText());
+                Date itemAddedDate = date.getDate();
+                String supplierId = (String) supplierIDCombo.getSelectedItem();
+                String supplierName = (String) suppliernameCombo.getSelectedItem();
+                String inventoryId = inventoryIdField.getText();
+                String netAmount = netamountField.getText();
+
+                InventoryAddViewDTO inventory_item = new InventoryAddViewDTO();
+                inventory_item.setItemId(itemId);
+                inventory_item.setItemName(itemName);
+                inventory_item.setCategoryId(categoryId);
+                inventory_item.setQuantity(quantity);
+                inventory_item.setUnitPrice(unitPrice);
+                inventory_item.setSupplierId(supplierId);
+                inventory_item.setSupplierName(supplierName);
+                inventory_item.setNetAmount(netAmount);
+                inventory_item.setSupplyId(inventoryId);
+                inventory_item.setCategoryName(categoryName);
+                inventory_item.setNewInventoryDate(itemAddedDate);
+
+                try {
+                    boolean res = inventoryDetails.addNewInventory(inventory_item, 1);
+                    if (res == true) {
+                        JOptionPane.showMessageDialog(this, "Inventory added sucessfully");
+                        //ClearFields();
+                        //loadInventoryDetails();
+                        generateId();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Error occur in adding Inventory");
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ParseException ex) {
+                    Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
         }
 
     }
 
     public void SubmitInventoryAddExisitingCategory() {
-        String itemId = itemid.getText();
 
-        String itemName = itemname.getText();
-        String categoryId = (String) categoryIdCombo.getSelectedItem();
-        String categoryName = (String) categoryNameCombo.getSelectedItem();
-        int quantity = Integer.parseInt(quantityField2.getText());
-        Double unitPrice = Double.parseDouble(unitpriceField2.getText());
-        Date itemAddedDate = date2.getDate();
-        String supplierId = (String) supplierIDCombo2.getSelectedItem();
-        String supplierName = (String) suppliernameCombo2.getSelectedItem();
-        String inventoryId = inventoryIdField1.getText();
+        boolean validatednull = true;
+        boolean validated = true;
 
-        InventoryAddViewDTO inventory_item = new InventoryAddViewDTO();
-        inventory_item.setItemId(itemId);
-        inventory_item.setItemName(itemName);
-        inventory_item.setCategoryId(categoryId);
-        inventory_item.setQuantity(quantity);
-        inventory_item.setUnitPrice(unitPrice);
-        inventory_item.setSupplierId(supplierId);
-        inventory_item.setSupplierName(supplierName);
-        inventory_item.setNetAmount(Double.toString(unitPrice * quantity));
-        inventory_item.setSupplyId(inventoryId);
-        inventory_item.setCategoryId(categoryId);
-        inventory_item.setNewInventoryDate(itemAddedDate);
-
-        try {
-            boolean res = inventoryDetails.addNewInventory(inventory_item, 2);
-            if (res == true) {
-                JOptionPane.showMessageDialog(this, "Inventory added sucessfully");
-                //ClearFields();
-                //loadInventoryDetails();
-                generateId();
-            } else {
-                JOptionPane.showMessageDialog(this, "Error occur in adding Inventory");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
+        if (itemname.getText().equals("") || categoryNameTextField.getText().equals("") || quantityField2.getText().equals("")
+                || unitpriceField2.getText().equals("") || date2.getDate() == null || netamountField2.getText().equals("")) {
+            validatednull = false;
+            JOptionPane.showMessageDialog(this, "Please fill up all the Fields ");
         }
 
+        if (validatednull == true) {
+            Date currentdate = new Date();
+            if ((netamountField2.getText().matches("[0-9]+") == false)) {
+                JOptionPane.showMessageDialog(this, "Total Payment cannot be included letters ");
+                validated = false;
+            }
+
+            if ((unitpriceField2.getText().matches("[0-9]+") == false)) {
+                JOptionPane.showMessageDialog(this, "Unit price cannot be included letters ");
+                validated = false;
+            }
+
+            if ((quantityField2.getText().matches("[0-9]+") == false)) {
+                JOptionPane.showMessageDialog(this, "Quantity cannot be included letters ");
+                validated = false;
+            }
+
+            if (!currentdate.after(date2.getDate())) {
+                JOptionPane.showMessageDialog(this, "Inventory Added date is not valid");
+                validated = false;
+            }
+
+            if (netamountField2.getText().length() > 15) {
+                validated = false;
+                JOptionPane.showMessageDialog(this, "Maximum length exceeds, allows less than 15 characters");
+            }
+            if (quantityField2.getText().length() > 6) {
+                validated = false;
+                JOptionPane.showMessageDialog(this, "Quantity Maximum length exceeds");
+            }
+            if (-1 != quantityField2.getText().indexOf(" ")) {
+                JOptionPane.showMessageDialog(this, "Quantity cannot have spaces");
+                validated = false;
+            }
+            if (-1 != unitpriceField2.getText().indexOf(" ")) {
+                JOptionPane.showMessageDialog(this, "Unit price cannot have spaces");
+                validated = false;
+            }
+
+            if (unitpriceField2.getText().length() > 6) {
+                validated = false;
+                JOptionPane.showMessageDialog(this, " Unit priceMaximum length exceeds");
+            }
+
+            if (validated == true) {
+                String itemId = itemid.getText();
+
+                String itemName = itemname.getText();
+                String categoryId = (String) categoryIdCombo.getSelectedItem();
+                String categoryName = (String) categoryNameCombo.getSelectedItem();
+                int quantity = Integer.parseInt(quantityField2.getText());
+                Double unitPrice = Double.parseDouble(unitpriceField2.getText());
+                Date itemAddedDate = date2.getDate();
+                String supplierId = (String) supplierIDCombo2.getSelectedItem();
+                String supplierName = (String) suppliernameCombo2.getSelectedItem();
+                String inventoryId = inventoryIdField1.getText();
+                String netAmount = netamountField2.getText();
+
+                InventoryAddViewDTO inventory_item = new InventoryAddViewDTO();
+                inventory_item.setItemId(itemId);
+                inventory_item.setItemName(itemName);
+                inventory_item.setCategoryId(categoryId);
+                inventory_item.setQuantity(quantity);
+                inventory_item.setUnitPrice(unitPrice);
+                inventory_item.setSupplierId(supplierId);
+                inventory_item.setSupplierName(supplierName);
+                inventory_item.setNetAmount(netAmount);
+                inventory_item.setSupplyId(inventoryId);
+                inventory_item.setCategoryId(categoryId);
+                inventory_item.setNewInventoryDate(itemAddedDate);
+
+                try {
+                    boolean res = inventoryDetails.addNewInventory(inventory_item, 2);
+                    if (res == true) {
+                        JOptionPane.showMessageDialog(this, "Inventory added sucessfully");
+                        //ClearFields();
+                        //loadInventoryDetails();
+                        generateId();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Error occur in adding Inventory");
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ParseException ex) {
+                    Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+        }
     }
 
     public void UpdateInventory() {
-        String itemId = (String) updateItemIdCombo.getSelectedItem();
+         boolean validatednull = true;
+        boolean validated = true;
 
-        String itemName = (String) updateItemNameCombo.getSelectedItem();
+        if (quantityField1.getText().equals("")
+                || unitpriceField1.getText().equals("") || date1.getDate() == null || netamountField1.getText().equals("")) {
+            validatednull = false;
+            JOptionPane.showMessageDialog(this, "Please fill up all the Fields ");
+        }
+
+        if (validatednull == true) {
+         
+            Date currentdate = new Date();
+          
+            if ((unitpriceField1.getText().matches("[0-9]+") == false)) {
+                JOptionPane.showMessageDialog(this, "Unit price cannot be included letters ");
+                validated = false;
+            }
+
+            if ((quantityField1.getText().matches("[0-9]+") == false)) {
+                JOptionPane.showMessageDialog(this, "Quantity cannot be included letters ");
+                validated = false;
+            }
+
+            if (!currentdate.after(date1.getDate())) {
+                JOptionPane.showMessageDialog(this, "Inventory Added date is not valid");
+                validated = false;
+            }
+
+            if (netamountField1.getText().length() > 15) {
+                validated = false;
+                JOptionPane.showMessageDialog(this, "Maximum length exceeds, allows less than 15 characters");
+            }
+            if (quantityField1.getText().length() > 6) {
+                validated = false;
+                JOptionPane.showMessageDialog(this, "Quantity Maximum length exceeds");
+            }
+            if (-1 != quantityField1.getText().indexOf(" ")) {
+                JOptionPane.showMessageDialog(this, "Quantity cannot have spaces");
+                validated = false;
+            }
+            if (-1 != unitpriceField1.getText().indexOf(" ")) {
+                JOptionPane.showMessageDialog(this, "Unit price cannot have spaces");
+                validated = false;
+            }
+
+            if (unitpriceField1.getText().length() > 6) {
+                validated = false;
+                JOptionPane.showMessageDialog(this, " Unit priceMaximum length exceeds");
+            }
+
+            if (validated == true) {
+                String itemName = (String) updateItemNameCombo.getSelectedItem();
         String categoryId = (String) updateCateogryIdCombo.getSelectedItem();
         String categoryName = (String) updateCategoryNameCombo.getSelectedItem();
         int quantity = Integer.parseInt(quantityField1.getText());
@@ -1999,6 +2163,11 @@ public class inventorydetails extends javax.swing.JFrame {
         String supplierId = (String) supplierIDCombo1.getSelectedItem();
         String supplierName = (String) suppliernameCombo1.getSelectedItem();
         String inventoryId = inventoryIdField2.getText();
+        String netAmount =netamountField1.getText();
+            
+             String itemId = (String) updateItemIdCombo.getSelectedItem();
+
+       
 
         InventoryAddViewDTO inventory_item = new InventoryAddViewDTO();
         inventory_item.setItemId(itemId);
@@ -2008,7 +2177,7 @@ public class inventorydetails extends javax.swing.JFrame {
         inventory_item.setUnitPrice(unitPrice);
         inventory_item.setSupplierId(supplierId);
         inventory_item.setSupplierName(supplierName);
-        inventory_item.setNetAmount(Double.toString(unitPrice * quantity));
+        inventory_item.setNetAmount(netAmount);
         inventory_item.setSupplyId(inventoryId);
         inventory_item.setCategoryId(categoryId);
         inventory_item.setNewInventoryDate(itemAddedDate);
@@ -2028,6 +2197,12 @@ public class inventorydetails extends javax.swing.JFrame {
         } catch (ParseException ex) {
             Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+            
+            }
+        
+        
+       
     }
 
     public void loadInventoryDetails() {
@@ -2081,6 +2256,104 @@ public class inventorydetails extends javax.swing.JFrame {
         suppliernameCombo.setSelectedItem(1);
         inventoryIdField.setText(null);
     }
+
+    public void MakeFieldsNoteditable() {
+        categoryIDField.setEditable(false);
+        itemIDfield.setEditable(false);
+        inventoryIdField.setEditable(false);
+
+        itemid.setEditable(false);
+        
+        inventoryIdField1.setEditable(false);
+        inventoryIdField2.setEditable(false);
+
+    }
+
+    public void CalculateTotalPriceAddNew() {
+        boolean val = true;
+        if (quantityField.getText().equals("") || unitpriceField.getText().equals("")) {
+            val = false;
+            JOptionPane.showMessageDialog(this, "Please fill the Quantity and unit price field ");
+
+        }
+
+        if ((unitpriceField.getText().matches("[0-9]+") == false)) {
+            JOptionPane.showMessageDialog(this, "unitpriceField cannot be included letters ");
+            val = false;
+        }
+        if ((quantityField.getText().matches("[0-9]+") == false)) {
+            JOptionPane.showMessageDialog(this, "Quantity cannot be included letters ");
+            val = false;
+        }
+
+        if (val == true) {
+            Double UnitPrice = Double.parseDouble(unitpriceField.getText());
+            int Quantity = Integer.parseInt(quantityField.getText());
+            Double netAmount = UnitPrice * Quantity;
+
+            netamountField.setText(netAmount.toString());
+            netamountField.setEditable(false);
+        }
+
+    }
+    
+     public void CalculateTotalPriceAddExisiting() {
+        boolean val = true;
+        if (quantityField2.getText().equals("") || unitpriceField2.getText().equals("")) {
+            val = false;
+            JOptionPane.showMessageDialog(this, "Please fill the Quantity and unit price field ");
+
+        }
+
+        if ((unitpriceField2.getText().matches("[0-9]+") == false)) {
+            JOptionPane.showMessageDialog(this, "unitpriceField cannot be included letters ");
+            val = false;
+        }
+        if ((quantityField2.getText().matches("[0-9]+") == false)) {
+            JOptionPane.showMessageDialog(this, "Quantity cannot be included letters ");
+            val = false;
+        }
+
+        if (val == true) {
+            Double UnitPrice = Double.parseDouble(unitpriceField2.getText());
+            int Quantity = Integer.parseInt(quantityField2.getText());
+            Double netAmount = UnitPrice * Quantity;
+
+            netamountField2.setText(netAmount.toString());
+            netamountField2.setEditable(false);
+        }
+
+    }
+     
+     
+      public void CalculateTotalPriceUpdateInventory() {
+        boolean val = true;
+        if (quantityField1.getText().equals("") || unitpriceField1.getText().equals("")) {
+            val = false;
+            JOptionPane.showMessageDialog(this, "Please fill the Quantity and unit price field ");
+
+        }
+
+        if ((unitpriceField1.getText().matches("[0-9]+") == false)) {
+            JOptionPane.showMessageDialog(this, "unitpriceField cannot be included letters ");
+            val = false;
+        }
+        if ((quantityField1.getText().matches("[0-9]+") == false)) {
+            JOptionPane.showMessageDialog(this, "Quantity cannot be included letters ");
+            val = false;
+        }
+
+        if (val == true) {
+            Double UnitPrice = Double.parseDouble(unitpriceField1.getText());
+            int Quantity = Integer.parseInt(quantityField1.getText());
+            Double netAmount = UnitPrice * Quantity;
+
+            netamountField1.setText(netAmount.toString());
+            netamountField1.setEditable(false);
+        }
+
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton SubmitButton;

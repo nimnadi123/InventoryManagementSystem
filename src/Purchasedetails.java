@@ -134,6 +134,12 @@ public class Purchasedetails extends javax.swing.JFrame {
         jLabel11.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel11.setText("Quantity");
 
+        quantityField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quantityFieldActionPerformed(evt);
+            }
+        });
+
         jLabel12.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel12.setText("Net Amount (Rs)");
 
@@ -560,6 +566,10 @@ public class Purchasedetails extends javax.swing.JFrame {
 // TODO add your handling code here:
     }//GEN-LAST:event_addButtonActionPerformed
 
+    private void quantityFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityFieldActionPerformed
+       CalculateTotalPrice(); // TODO add your handling code here:
+    }//GEN-LAST:event_quantityFieldActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -712,7 +722,21 @@ public class Purchasedetails extends javax.swing.JFrame {
     public void SubmitPurchaseDetailAdd() {
         int isOutStanding = 0;
         int isHold =0;
-        String customerId = (String) customerIdComboBox1.getSelectedItem();
+        boolean validatednull = true;
+        boolean validated =true;
+        
+        
+          if(duedate.getDate()== null||unitpriceField.getText().equals("")||quantityField.getText().equals("")||dateField.getDate()==null||netamountFeild.getText().equals("")
+              ){
+              validatednull = false;
+           JOptionPane.showMessageDialog(this,"Please fill up all the Fields ");           
+        }
+          
+         
+         if( validatednull==true && validated== true)
+         {
+             
+             String customerId = (String) customerIdComboBox1.getSelectedItem();
 
         String customerName = (String) customerNameCombo.getSelectedItem();
         Date orderedDate = dateField.getDate();
@@ -721,15 +745,58 @@ public class Purchasedetails extends javax.swing.JFrame {
         if (result == true) {
             isHold = 1;
         }
-        int quantity = Integer.parseInt(quantityField.getText());
+               Date date = new Date();
+       
+                  if ((quantityField.getText().matches("[0-9]+") == false)) {
+               JOptionPane.showMessageDialog(this, "Returned quantity cannot be includede letters");
+                validated = false;
+            }
+        
+           if ((netamountFeild.getText().matches("[0-9]+") == false)) {
+              JOptionPane.showMessageDialog(this,"Amount cannot be includede letters ");
+                validated = false;
+            }
+          
+            if (!date.after(orderedDate)) {
+               JOptionPane.showMessageDialog(this,"Payment Ordered date is not valid");
+                validated = false;
+            }
+           
+            if (netamountFeild.getText().length() > 15) {
+                validated = false;
+               JOptionPane.showMessageDialog(this, "Maximum length exceeds allows less than 15 characters");
+            }
+            if (-1 != netamountFeild.getText().indexOf(" ")) {
+                JOptionPane.showMessageDialog(this,"Amount cannot have spaces");
+                validated = false;
+            }
+               if (-1 != quantityField.getText().indexOf(" ")) {
+                 JOptionPane.showMessageDialog(this,"Returned quantity cannot have spaces");
+                validated = false;
+            }
+  
+            
+          
+        
+          if (!date.before(duedate.getDate())) {
+               JOptionPane.showMessageDialog(this,"Payment due date is not valid");
+                validated = false;
+            }
+
+
+
+         
+        
+        if(validated ==true){
+               int quantity = Integer.parseInt(quantityField.getText());
         Double unitPrice = Double.parseDouble(unitpriceField.getText());
         Date itemAddedDate = duedate.getDate();
         String itemId = (String) itemIdCombo.getSelectedItem();
         String itemName = (String) itemNameCombo.getSelectedItem();
         String purchaseId = ordernoField.getText();
         Double paymentReceivable = Double.parseDouble(netamountFeild.getText());
-
-        PurchaseAddViewDTO purchaseItem = new PurchaseAddViewDTO();
+        
+              PurchaseAddViewDTO purchaseItem = new PurchaseAddViewDTO();
         purchaseItem.setPurchaseId(purchaseId);
         purchaseItem.setCustomerId(customerId);
         purchaseItem.setDueDate(orderedDate);
@@ -758,7 +825,13 @@ public class Purchasedetails extends javax.swing.JFrame {
         } catch (ParseException ex) {
             Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
+       
+        }
+        
+     
+         }
+        
     }
 
     public void loadPurchaseDetails() {
@@ -828,6 +901,38 @@ private void ClearFields() {
         customerNameCombo.setSelectedItem(1);
         dateField.setDate(null);
         availableoutsCheckbox.setState(false);
+    }
+
+
+public void CalculateTotalPrice()
+    {
+        boolean val =true;
+        if(quantityField.getText().equals("")||unitpriceField.getText().equals("")){
+              val = false;
+           JOptionPane.showMessageDialog(this,"Please fill the Quantity and unit price field ");           
+            
+        }
+        
+         if ((unitpriceField.getText().matches("[0-9]+") == false)) {
+              JOptionPane.showMessageDialog(this,"unitpriceField cannot be included letters ");
+                val = false;
+            }
+          if ((quantityField.getText().matches("[0-9]+") == false)) {
+              JOptionPane.showMessageDialog(this,"Quantity cannot be included letters ");
+                val = false;
+            }
+         
+         
+         if(val == true)
+         {
+              Double UnitPrice = Double.parseDouble(unitpriceField.getText());
+              int Quantity = Integer.parseInt(quantityField.getText());
+              Double netAmount =UnitPrice*Quantity;
+              
+              netamountFeild.setText(netAmount.toString());
+              netamountFeild.setEditable(false);
+         }
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

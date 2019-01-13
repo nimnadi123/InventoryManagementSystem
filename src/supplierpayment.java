@@ -34,8 +34,10 @@ public class supplierpayment extends javax.swing.JFrame {
         initComponents();
         loadSupplyDetails();
         generateId();
+        MakeFieldsNoteditable();
         loadPaymentReceivedDetails();
         loadPayableDetails();
+      
     }
 
     /**
@@ -426,6 +428,7 @@ public class supplierpayment extends javax.swing.JFrame {
     }//GEN-LAST:event_totalpaymentActionPerformed
 
     private void discountfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discountfieldActionPerformed
+  CalculateNetAmount();
         // TODO add your handling code here:
     }//GEN-LAST:event_discountfieldActionPerformed
 
@@ -491,7 +494,58 @@ public class supplierpayment extends javax.swing.JFrame {
         supplyNo.setModel(supplierIdModel);
     }
 
-    public void submitPaymentPaidDetails() {
+    public void submitPaymentPaidDetails() {    boolean validatednull = true;
+        boolean validated =true;
+        
+        
+          if(totalpayment.getText().equals("")||discountfield.getText().equals("")||netpaymentfield.getText().equals("")||Date.getDate()== null)
+              {
+              validatednull = false;
+           JOptionPane.showMessageDialog(this,"Please fill up all the Fields ");           
+        }
+          
+          
+          
+         if( validatednull==true)
+         {
+             Date currentdate = new Date();
+             
+//              if ((totalpayment.getText().matches("[0-9]+") == false)) {
+//              JOptionPane.showMessageDialog(this,"Total Payment cannot be includede letters ");
+//                validated = false;
+//            }
+//              
+               if ((discountfield.getText().matches("[0-9]+") == false)) {
+              JOptionPane.showMessageDialog(this,"Discount cannot be includede letters ");
+                validated = false;
+            }
+               
+               
+            if (!currentdate.after(Date.getDate())) {
+               JOptionPane.showMessageDialog(this,"Payment Paid date is not valid");
+                validated = false;
+            }
+           
+            if (totalpayment.getText().length() > 15) {
+                validated = false;
+               JOptionPane.showMessageDialog(this, "Maximum length exceeds, allows less than 15 characters");
+            }
+             if (discountfield.getText().length() > 6) {
+                validated = false;
+               JOptionPane.showMessageDialog(this, "Maximum length exceeds");
+            }
+            if (-1 != discountfield.getText().indexOf(" ")) {
+                JOptionPane.showMessageDialog(this,"Discount cannot have spaces");
+                validated = false;
+            }
+               if (-1 != totalpayment.getText().indexOf(" ")) {
+                 JOptionPane.showMessageDialog(this,"Total Amount cannot have spaces");
+                validated = false;
+            }
+               
+               if(validated == true){
+        
+        
 
         String supplyId = (String) supplyNo.getSelectedItem();
         String PaidId = paymentPaidId.getText();
@@ -520,6 +574,8 @@ public class supplierpayment extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+         }
     }
 
     public void getSupplierNameAndAmountBySupplyId() {
@@ -616,7 +672,37 @@ public class supplierpayment extends javax.swing.JFrame {
         discountfield.setText(null);
         netpaymentfield.setText(null);
     }
+ public void MakeFieldsNoteditable(){
+        totalpayment.setEditable(false);
+        paymentPaidId.setEditable(false);
+        supplierName.setEditable(false);
+    }
+ 
+ public void CalculateNetAmount()
+    {
+        boolean val =true;
+        if(discountfield.getText().equals("")){
+              val = false;
+           JOptionPane.showMessageDialog(this,"Please fill the discount Fields ");           
+            
+        }
+        
+         if ((discountfield.getText().matches("[0-9]+") == false)) {
+              JOptionPane.showMessageDialog(this,"Discount cannot be includede letters ");
+                val = false;
+            }
+         
+         if(val == true)
+         {
+              Double totalAmount = Double.parseDouble(totalpayment.getText());
+              Double discount = Double.parseDouble(discountfield.getText());
+              Double netAmount =totalAmount-discount;
+              
+              netpaymentfield.setText(netAmount.toString());
+              netpaymentfield.setEditable(false);
+         }
 
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser Date;

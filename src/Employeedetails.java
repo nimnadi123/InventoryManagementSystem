@@ -539,7 +539,7 @@ public class Employeedetails extends javax.swing.JFrame {
          }
          
             if(password.length()<6){
-                JOptionPane.showMessageDialog(this,"Password should equal or more than 6 characters<br>");
+                JOptionPane.showMessageDialog(this,"Password should equal or more than 6 characters");
                  validated = false;
             } 
             
@@ -548,8 +548,8 @@ public class Employeedetails extends javax.swing.JFrame {
                 validated = false;
             } 
               
-                 if((nic.length()<12)){
-                 JOptionPane.showMessageDialog(this,"nic should have at least 10 numbers<br>");
+                 if((nic.length()!=12 ||nic.length()!=10)){
+                 JOptionPane.showMessageDialog(this,"nic should have at least 10 numbers");
                 validated = false;
                  }
                

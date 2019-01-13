@@ -1,5 +1,6 @@
 
 import Dao.ReportDao;
+import java.util.Date;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -18,6 +19,7 @@ public class Reports extends javax.swing.JFrame {
      */
     public Reports() {
         initComponents();
+        HideComponents();
     }
 
     /**
@@ -71,6 +73,11 @@ public class Reports extends javax.swing.JFrame {
 
         reptypeCombobox.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         reptypeCombobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Inventory Report", "Monthly Profit Report", "Yearly Profit Report", "Sales Representatives' Report" }));
+        reptypeCombobox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reptypeComboboxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -130,9 +137,37 @@ public class Reports extends javax.swing.JFrame {
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
 ReportDao report = new ReportDao();
-report.PdfDaocreate();
+int reporttype = reptypeCombobox.getSelectedIndex();
+Date fromDate = null;
+Date toDate =null;
+if(reporttype!=0){
+    fromDate = fromdate.getDate();
+    toDate = todate.getDate();
+    
+}
+//report.PdfDaocreate();
+report.CreateReport(reporttype, fromDate, toDate);
         // TODO add your handling code here:
     }//GEN-LAST:event_generateButtonActionPerformed
+
+    private void reptypeComboboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reptypeComboboxActionPerformed
+      if(reptypeCombobox.getSelectedIndex()!=0)
+      {
+          fromdate.setVisible(true);
+           todate.setVisible(true);
+           jLabel2.setVisible(true);
+    jLabel3.setVisible(true);   
+      }
+      
+      else{
+          fromdate.setVisible(false);
+           todate.setVisible(false);
+           jLabel2.setVisible(false);
+    jLabel3.setVisible(false);   
+      }
+
+// TODO add your handling code here:
+    }//GEN-LAST:event_reptypeComboboxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -167,6 +202,15 @@ report.PdfDaocreate();
                 new Reports().setVisible(true);
             }
         });
+    }
+    
+    
+    public void HideComponents(){
+    fromdate.setVisible(false);
+    todate.setVisible(false);
+    jLabel2.setVisible(false);
+    jLabel3.setVisible(false);       
+            
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

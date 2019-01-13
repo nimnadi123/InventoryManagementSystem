@@ -294,8 +294,52 @@ public class supplierdetails extends javax.swing.JFrame {
     }//GEN-LAST:event_backbuttonActionPerformed
 
     private void submitbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitbuttonActionPerformed
-        // TODO add your handling code here:
-        String supplierId= supIDfield.getText();
+   boolean validatednull = true;
+        boolean validated =true;
+        
+        
+          if(suppnameField.getText().equals("")||telenofield.getText().equals("")||busplaceField.getText().equals("")||emailfield.getText().equals("")||
+              date.getDate()== null)
+              {
+              validatednull = false;
+           JOptionPane.showMessageDialog(this,"Please fill up all the Fields ");           
+        }
+          
+          
+          
+          
+         
+         if( validatednull==true)
+         {
+             Date currentdate = new Date();  
+               if ( suppnameField.getText().length() > 60 ||busplaceField.getText().length() > 60|| telenofield.getText().length() > 60 ||
+                       emailfield.getText().length() > 60) {
+                validated = false;
+              JOptionPane.showMessageDialog(this, "Maximum length exceeds allows less than 60 characters");
+         }
+         
+             
+              if((telenofield.getText().matches("[0-9]+")==false)|| (telenofield.getText().length()!=10)){
+                 JOptionPane.showMessageDialog(this,"Telephone Number should be numbers without spaces and should have at least 10 numbers");
+                validated = false;
+                 }
+              
+                
+               
+                                
+                if((-1!=emailfield.getText().indexOf(" "))||(-1==emailfield.getText().indexOf("@"))){
+                JOptionPane.showMessageDialog(this,"Enter a valid email address without spaces");
+                validated = false;
+            }
+    
+                if(!currentdate.after(date.getDate())  ){
+                JOptionPane.showMessageDialog(this,"Supplier added date is not valid");
+                validated = false;
+            }
+                
+                if(validated ==true)
+                {
+                       String supplierId= supIDfield.getText();
         String supplierName= suppnameField.getText();
         int teleNo = Integer.parseInt(telenofield.getText());
         String businessPlaceAddress = busplaceField.getText();        
@@ -327,6 +371,11 @@ public class supplierdetails extends javax.swing.JFrame {
         } catch (ParseException ex) {
             Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
         }
+                }
+     
+         }
+// TODO add your handling code here:
+     
     
         
     }//GEN-LAST:event_submitbuttonActionPerformed

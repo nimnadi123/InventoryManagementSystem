@@ -367,7 +367,57 @@ public class customerdetails extends javax.swing.JFrame {
     }//GEN-LAST:event_backbuttonActionPerformed
 
     private void submitbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitbuttonActionPerformed
-    String customerId = customerID.getText();
+    
+         boolean validatednull = true;
+        boolean validated =true;
+        
+        
+          if(customnameField.getText().equals("")||nicField.getText().equals("")||busplaceField.getText().equals("")||busregField.getText().equals("")||
+              personaladdField.getText().equals("")||emailField.getText().equals("")||telenoField.getText().equals("")||date.getDate()== null)
+              {
+              validatednull = false;
+           JOptionPane.showMessageDialog(this,"Please fill up all the Fields ");           
+        }
+          
+          
+          
+          
+         
+         if( validatednull==true)
+         {
+             Date currentdate = new Date();
+             
+               if ( customnameField.getText().length() > 60 ||busplaceField.getText().length() > 60|| busregField.getText().length() > 60 ||  personaladdField.getText().length() > 60||
+                       emailField.getText().length() > 60) {
+                validated = false;
+              JOptionPane.showMessageDialog(this, "Maximum length exceeds allows less than 60 characters");
+         }
+         
+             
+              if((telenoField.getText().matches("[0-9]+")==false)|| (telenoField.getText().length()!=10)){
+                 JOptionPane.showMessageDialog(this,"Telephone Number should be numbers without spaces and should have at least 10 numbers");
+                validated = false;
+                 }
+              
+                if((nicField.getText().length()!=12|| nicField.getText().length()!=10)){
+                 JOptionPane.showMessageDialog(this,"nic should have at least 10 numbers");
+                validated = false;
+                 }
+               
+                                
+                if((-1!=emailField.getText().indexOf(" "))||(-1==emailField.getText().indexOf("@"))){
+                JOptionPane.showMessageDialog(this,"Enter a valid email address without spaces");
+                validated = false;
+            }
+    
+                if(!currentdate.after(date.getDate())  ){
+                JOptionPane.showMessageDialog(this,"Customer added date is not valid");
+                validated = false;
+            }
+                
+                if(validated ==true)
+                {
+                      String customerId = customerID.getText();
      String customerName= customnameField.getText();
      String customerNic= nicField.getText();
      String customerBusinessPlace= busplaceField.getText();
@@ -405,6 +455,18 @@ public class customerdetails extends javax.swing.JFrame {
         } catch (ParseException ex) {
             Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
         }
+                }
+           
+         }
+
+        
+        
+        
+        
+        
+        
+        
+        
                       // TODO add your handling code here:
     }//GEN-LAST:event_submitbuttonActionPerformed
 
