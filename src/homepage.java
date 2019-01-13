@@ -199,46 +199,55 @@ public class homepage extends javax.swing.JFrame {
     private void customdetailsbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customdetailsbuttonActionPerformed
         customerdetails h=new customerdetails();
         h.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_customdetailsbuttonActionPerformed
 
     private void invevtorybuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_invevtorybuttonActionPerformed
         inventorydetails h=new inventorydetails();
         h.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_invevtorybuttonActionPerformed
 
     private void orderdetailsbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderdetailsbuttonActionPerformed
         Purchasedetails h=new Purchasedetails();
         h.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_orderdetailsbuttonActionPerformed
 
     private void paymentbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paymentbuttonActionPerformed
-        paymentdetails_old h=new paymentdetails_old();
+        customerpayment h=new customerpayment();
         h.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_paymentbuttonActionPerformed
 
     private void employeesbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeesbuttonActionPerformed
         Employeedetails h=new Employeedetails();
         h.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_employeesbuttonActionPerformed
 
     private void suppliersbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_suppliersbuttonActionPerformed
         supplierdetails h=new supplierdetails();
         h.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_suppliersbuttonActionPerformed
 
     private void reportsbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportsbuttonActionPerformed
         Reports h=new Reports();
         h.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_reportsbuttonActionPerformed
 
     private void logoutbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutbuttonActionPerformed
         welcome h=new welcome();
         h.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_logoutbuttonActionPerformed
 
     private void userregbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userregbuttonActionPerformed
         Employeedetails h=new Employeedetails();
         h.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_userregbuttonActionPerformed
 
     /**

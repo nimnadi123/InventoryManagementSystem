@@ -3,6 +3,7 @@ import DTO.CustomerPaymentDTO;
 import DTO.SupplierPaymentDTO;
 import Dao.PaymentReturnsDao;
 import Dao.CustomerPaymentsDao;
+import Dao.SearchDao;
 import Dao.SupplierPaymentsDao;
 import Models.CustomerPaymentReturned;
 import Models.SupplierPaymentReturned;
@@ -250,6 +251,11 @@ public class returns extends javax.swing.JFrame {
         jScrollPane4.setViewportView(customerpaymentreturnedtable);
 
         payableserchbutton1.setText("Search Order No");
+        payableserchbutton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                payableserchbutton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -452,6 +458,11 @@ public class returns extends javax.swing.JFrame {
         jScrollPane5.setViewportView(supplierpaymentreturntab);
 
         payableserchbutton2.setText("Search Order No");
+        payableserchbutton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                payableserchbutton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -744,6 +755,23 @@ public class returns extends javax.swing.JFrame {
         getSupplierNameBySupplyId();
         // TODO add your handling code here:
     }//GEN-LAST:event_SupplyIdActionPerformed
+
+    private void payableserchbutton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payableserchbutton1ActionPerformed
+String SearchId = payableserchField1.getText();
+ SearchDao empDetailSearchDao = new SearchDao();
+      
+        List<List<String>> res = empDetailSearchDao.SearchCustomerPaymentReturnedbyOrderId(SearchId);
+        addRowToJTableHold(res);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_payableserchbutton1ActionPerformed
+
+    private void payableserchbutton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payableserchbutton2ActionPerformed
+      String SearchId = payableserchbutton2.getText();
+ SearchDao empDetailSearchDao = new SearchDao();
+      
+        List<List<String>> res = empDetailSearchDao.SearchSupplierPaymentReturnedBySupplyId(SearchId);
+        addRowToJTableSupplierPaymentReturn(res);  // TODO add your handling code here:
+    }//GEN-LAST:event_payableserchbutton2ActionPerformed
 
     /**
      * @param args the command line arguments

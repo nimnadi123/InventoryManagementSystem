@@ -2,6 +2,7 @@
 import DTO.PurchaseAddViewDTO;
 import DTO.PurchaseDetailsDTO;
 import Dao.PurchaseDetailsDao;
+import Dao.SearchDao;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
@@ -343,7 +344,7 @@ public class Purchasedetails extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Order No ", "Customer Name", "Item ID", "Item Name", "Unit Price(Rs)", "Quantity", "Net Amount", "order Placed Date", "Payment Due Date"
+                "Order No ", "Customer Id", "Customer Name", "Item ID", "Item Name", "Unit Price(Rs)", "Quantity", "Net Amount", "order Placed Date", "Payment Due Date"
             }
         ));
         jScrollPane1.setViewportView(placedordtable);
@@ -370,6 +371,11 @@ public class Purchasedetails extends javax.swing.JFrame {
 
         searchButtn.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         searchButtn.setText("Search");
+        searchButtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchButtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -414,13 +420,18 @@ public class Purchasedetails extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Order No", "Customer Name", "Item ID", "Item Name", "Unit Price(Rs)", "Quantity", "Net Amount", "Order Placed Date"
+                "Order No", "Customer Id", "Customer Name", "Item ID", "Item Name", "Unit Price(Rs)", "Quantity", "Net Amount", "Order Placed Date"
             }
         ));
         jScrollPane2.setViewportView(holdordTable);
 
         searchButton.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         searchButton.setText("Search");
+        searchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchButtonActionPerformed(evt);
+            }
+        });
 
         searchField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -569,6 +580,70 @@ public class Purchasedetails extends javax.swing.JFrame {
     private void quantityFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityFieldActionPerformed
        CalculateTotalPrice(); // TODO add your handling code here:
     }//GEN-LAST:event_quantityFieldActionPerformed
+
+    private void searchButtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtnActionPerformed
+ String SearchId = searchField.getText();
+        if(custIDradButton.isSelected()==true){
+        
+         
+          SearchDao empDetailSearchDao = new SearchDao();
+      
+        List<List<String>> res = empDetailSearchDao.SearchPurchaseDetailsByCustomerId(SearchId);
+        addRowToJTable(res);}
+        
+        if(ordnoRadbutton.isSelected()==true){
+        
+         
+          SearchDao empDetailSearchDao = new SearchDao();
+      
+        List<List<String>> res = empDetailSearchDao.SearchPurchaseDetailsByOrderId(SearchId);
+        addRowToJTable(res);}
+        if(dateRadbutton.isSelected()==true){
+        
+         
+          SearchDao empDetailSearchDao = new SearchDao();
+      
+        List<List<String>> res = empDetailSearchDao.SearchPurchaseDetailsByorderedDate(SearchId);
+        addRowToJTable(res);}
+        
+        
+        
+        
+        
+      
+
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchButtnActionPerformed
+
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+    String SearchId = searchField.getText();
+        if(custIDradbutton.isSelected()==true){
+        
+         
+          SearchDao empDetailSearchDao = new SearchDao();
+      
+        List<List<String>> res = empDetailSearchDao.SearchHoldPurchaseDetailsByCustomerId(SearchId);
+        addRowToJTableHold(res);}
+        
+        if(ordnoRAdBut.isSelected()==true){
+        
+         
+          SearchDao empDetailSearchDao = new SearchDao();
+      
+        List<List<String>> res = empDetailSearchDao.SearchHoldPurchaseDetailsByOrderId(SearchId);
+        addRowToJTableHold(res);}
+        if(dateradioButton.isSelected()==true){
+        
+         
+          SearchDao empDetailSearchDao = new SearchDao();
+      
+        List<List<String>> res = empDetailSearchDao.SearchHoldPurchaseDetailsByOrderedDate(SearchId);
+        addRowToJTableHold(res);}
+        
+        
+            // TODO add your handling code here:
+    }//GEN-LAST:event_searchButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -844,7 +919,7 @@ public class Purchasedetails extends javax.swing.JFrame {
         placedordtable.setShowGrid(true);
         DefaultTableModel model = (DefaultTableModel) placedordtable.getModel();
         model.setRowCount(0);
-        Object rowData[] = new Object[9];
+        Object rowData[] = new Object[10];
         for (Iterator it = res.iterator(); it.hasNext();) {
             List<String> innerList = (List<String>) it.next();
             rowData[0] = innerList.get(0);
@@ -856,6 +931,7 @@ public class Purchasedetails extends javax.swing.JFrame {
             rowData[6] = innerList.get(6);
             rowData[7] = innerList.get(7);
             rowData[8] = innerList.get(8);
+            rowData[9] = innerList.get(9);
             
 
             model.addRow(rowData);
@@ -873,7 +949,7 @@ public class Purchasedetails extends javax.swing.JFrame {
         holdordTable.setShowGrid(true);
         DefaultTableModel model = (DefaultTableModel) holdordTable.getModel();
         model.setRowCount(0);
-        Object rowData[] = new Object[8];
+        Object rowData[] = new Object[9];
         for (Iterator it = res.iterator(); it.hasNext();) {
             List<String> innerList = (List<String>) it.next();
             rowData[0] = innerList.get(0);
@@ -884,6 +960,7 @@ public class Purchasedetails extends javax.swing.JFrame {
             rowData[5] = innerList.get(5);
             rowData[6] = innerList.get(6);
             rowData[7] = innerList.get(7);
+            rowData[8] = innerList.get(8);
            
 
             model.addRow(rowData);

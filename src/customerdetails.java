@@ -267,7 +267,7 @@ public class customerdetails extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Customer ID", "Name", "NIC", "Business Place", "Business Reg No", "Personal Address", "Email", "Tele No"
+                "Customer ID", "Name", "NIC", "Business Place", "Company Address", "Email", "Tele No", "Business Reg No"
             }
         ));
         jScrollPane1.setViewportView(customerdetailsTable);

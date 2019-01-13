@@ -326,6 +326,11 @@ public class customerpayment extends javax.swing.JFrame {
         jScrollPane3.setViewportView(paymentstable1);
 
         payableserchbutton.setText("Search Order No");
+        payableserchbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                payableserchbuttonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -428,7 +433,12 @@ public class customerpayment extends javax.swing.JFrame {
     }//GEN-LAST:event_submitbuttonActionPerformed
 
     private void searchOrNoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchOrNoButtonActionPerformed
-        // TODO add your handling code here:
+        String searchId = searchOrNoButton.getText();
+        SearchDao empDetailSearchDao = new SearchDao();
+      
+        List<List<String>> res = empDetailSearchDao.SearchPaymentReceivedbyOrderId(searchId);
+        addRowToJTable(res);
+// TODO add your handling code here:
     }//GEN-LAST:event_searchOrNoButtonActionPerformed
 
     private void orderNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderNoActionPerformed
@@ -452,6 +462,16 @@ public class customerpayment extends javax.swing.JFrame {
         homepage h = new homepage();
         h.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void payableserchbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payableserchbuttonActionPerformed
+        String searchId = payableserchField.getText();
+        SearchDao empDetailSearchDao = new SearchDao();
+      
+        List<List<String>> res = empDetailSearchDao.PaymentReceivableSearchByOrderId(searchId);
+        addRowToJTableReceivable(res);
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_payableserchbuttonActionPerformed
 
     /**
      * @param args the command line arguments

@@ -267,7 +267,7 @@ public class PurchaseDetailsDao {
         { 
             
             
-            String sql = "select o.Purchase_id,cust.Customer_name,i.item_name,o.Item_id, o.Unit_value, p.Receivable_amount, o.Quantity, o.Orderd_date, p.Due_date  from Items i, Customer cust, Purchase_details o,Payment_receivable p where i.Item_id = o.Item_id and o.Customer_id =cust.Customer_id and o.Purchase_id = p.Purchase_id and o.IsHold =0";
+            String sql = "select o.Purchase_id,cust.Customer_id,cust.Customer_name,i.item_name,o.Item_id, o.Unit_value, p.Receivable_amount, o.Quantity, o.Orderd_date, p.Due_date  from Items i, Customer cust, Purchase_details o,Payment_receivable p where i.Item_id = o.Item_id and o.Customer_id =cust.Customer_id and o.Purchase_id = p.Purchase_id and o.IsHold =0";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
             rst = stm.executeQuery(); 
@@ -276,7 +276,7 @@ public class PurchaseDetailsDao {
             while(rst.next())
             {  
                   List<String> purchaseDetails = new ArrayList<String>();
-                    for (int i = 1; i < 10; i++){
+                    for (int i = 1; i < 11; i++){
                             purchaseDetails.add(rst.getString(i));
                             
                             
@@ -311,7 +311,7 @@ public class PurchaseDetailsDao {
         { 
             
             
-            String sql = "select o.Purchase_id,cust.Customer_name,i.item_name,o.Item_id, o.Unit_value, p.Receivable_amount, o.Quantity, o.Orderd_date from Items i, Customer cust, Purchase_details o,Payment_receivable p where i.Item_id = o.Item_id and o.Customer_id =cust.Customer_id and o.Purchase_id = p.Purchase_id and o.IsHold =1";
+            String sql = "select o.Purchase_id,cust.Customer_id,cust.Customer_name,i.item_name,o.Item_id, o.Unit_value, p.Receivable_amount, o.Quantity, o.Orderd_date from Items i, Customer cust, Purchase_details o,Payment_receivable p where i.Item_id = o.Item_id and o.Customer_id =cust.Customer_id and o.Purchase_id = p.Purchase_id and o.IsHold =1";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
             rst = stm.executeQuery(); 
@@ -320,7 +320,7 @@ public class PurchaseDetailsDao {
             while(rst.next())
             {  
                   List<String> purchaseDetails = new ArrayList<String>();
-                    for (int i = 1; i < 9; i++){
+                    for (int i = 1; i < 10; i++){
                             purchaseDetails.add(rst.getString(i));
                             
                             

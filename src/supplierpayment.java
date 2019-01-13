@@ -1,5 +1,6 @@
 
 import DTO.SupplierPaymentDTO;
+import Dao.SearchDao;
 import Dao.SupplierPaymentsDao;
 import Models.PaymentPaid;
 import Models.PaymentReceived;
@@ -344,6 +345,11 @@ public class supplierpayment extends javax.swing.JFrame {
         jScrollPane4.setViewportView(payable);
 
         payableserchbutton1.setText("Search Order No");
+        payableserchbutton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                payableserchbutton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -420,6 +426,11 @@ public class supplierpayment extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void searchOrNoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchOrNoButtonActionPerformed
+String searchId = searchOrNoButton.getText();
+        SearchDao empDetailSearchDao = new SearchDao();
+      
+        List<List<String>> res = empDetailSearchDao.PaymentPaidSearchBySupplyId(searchId);
+        addRowToJTable(res);
         // TODO add your handling code here:
     }//GEN-LAST:event_searchOrNoButtonActionPerformed
 
@@ -450,6 +461,15 @@ public class supplierpayment extends javax.swing.JFrame {
     private void paymentPaidIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paymentPaidIdActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_paymentPaidIdActionPerformed
+
+    private void payableserchbutton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payableserchbutton1ActionPerformed
+String searchId = payableserchbutton1.getText();
+        SearchDao empDetailSearchDao = new SearchDao();
+      
+        List<List<String>> res = empDetailSearchDao.SearchPaymentPayablebySupplyId(searchId);
+        addRowToJTablePayable(res);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_payableserchbutton1ActionPerformed
 
     /**
      * @param args the command line arguments

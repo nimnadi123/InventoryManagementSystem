@@ -183,7 +183,6 @@ public class inventorydetails extends javax.swing.JFrame {
         inventorytable = new javax.swing.JTable();
         searchRadiobutton = new javax.swing.JButton();
         searchField = new javax.swing.JTextField();
-        dateRadiobutton = new javax.swing.JRadioButton();
         SupIDRadiobutton = new javax.swing.JRadioButton();
         itemIDRadiobutton = new javax.swing.JRadioButton();
         jPanel6 = new javax.swing.JPanel();
@@ -1149,9 +1148,12 @@ public class inventorydetails extends javax.swing.JFrame {
             }
         });
 
-        dateRadiobutton.setText("Date");
-
-        SupIDRadiobutton.setText("Sup.ID");
+        SupIDRadiobutton.setText("Status");
+        SupIDRadiobutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SupIDRadiobuttonActionPerformed(evt);
+            }
+        });
 
         itemIDRadiobutton.setText("Item ID");
         itemIDRadiobutton.addActionListener(new java.awt.event.ActionListener() {
@@ -1169,11 +1171,9 @@ public class inventorydetails extends javax.swing.JFrame {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(itemIDRadiobutton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(29, 29, 29)
                         .addComponent(SupIDRadiobutton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(dateRadiobutton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(26, 26, 26)
                         .addComponent(searchRadiobutton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1187,7 +1187,6 @@ public class inventorydetails extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(searchRadiobutton)
                     .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dateRadiobutton)
                     .addComponent(SupIDRadiobutton)
                     .addComponent(itemIDRadiobutton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1487,8 +1486,24 @@ public class inventorydetails extends javax.swing.JFrame {
 
     private void searchRadiobuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchRadiobuttonActionPerformed
         String SearchId = searchField.getText();
-        List<List<String>> res = SearchInventory(SearchId);
+        if(itemIDRadiobutton.isSelected()==true){
+        
+          
+          SearchDao empDetailSearchDao = new SearchDao();
+      
+        List<List<String>> res = empDetailSearchDao.InventorySearchByItemId(SearchId);
         addRowToJTable(res);
+        
+      }
+       if(SupIDRadiobutton.isSelected()==true){
+           SearchDao empDetailSearchDao = new SearchDao();
+      
+        List<List<String>> res = empDetailSearchDao.InventorySearchBystatus(SearchId);
+        addRowToJTable(res);
+      }
+      
+     
+        
         // TODO add your handling code here:
     }//GEN-LAST:event_searchRadiobuttonActionPerformed
 
@@ -1619,6 +1634,10 @@ public class inventorydetails extends javax.swing.JFrame {
         generateId();
 // TODO add your handling code here:
     }//GEN-LAST:event_resetButtonActionPerformed
+
+    private void SupIDRadiobuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SupIDRadiobuttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SupIDRadiobuttonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2369,7 +2388,6 @@ public class inventorydetails extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser date;
     private com.toedter.calendar.JDateChooser date1;
     private com.toedter.calendar.JDateChooser date2;
-    private javax.swing.JRadioButton dateRadiobutton;
     private javax.swing.JTextField inventoryIdField;
     private javax.swing.JTextField inventoryIdField1;
     private javax.swing.JTextField inventoryIdField2;
