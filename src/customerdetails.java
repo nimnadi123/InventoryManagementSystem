@@ -3,6 +3,8 @@ import Dao.CustomerDetailsDao;
 import Dao.EmployeeDetailsDao;
 import Dao.SearchDao;
 import Models.CustomerDetails;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.sql.SQLException;
@@ -30,6 +32,8 @@ public class customerdetails extends javax.swing.JFrame {
      */
     public customerdetails() {
         initComponents();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+      setBounds(0,0,screenSize.width, screenSize.height);
         loadCustomerDetails();
         generateId();
     }

@@ -3,6 +3,8 @@ import DTO.PurchaseAddViewDTO;
 import DTO.PurchaseDetailsDTO;
 import Dao.PurchaseDetailsDao;
 import Dao.SearchDao;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
@@ -33,6 +35,8 @@ public class Purchasedetails extends javax.swing.JFrame {
 
     public Purchasedetails() {
         initComponents();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+      setBounds(0,0,screenSize.width, screenSize.height);
         getCustomerAndItemDetails();
         generateId();
         loadPurchaseDetails();

@@ -101,16 +101,20 @@ public class CustomerPaymentsDao {
         stmupdate.setString(2, orderid);
 
             
-           
+           String sqlupdate1 = "update Payment_receivable set Isoutstanding =0 where Purchase_id=?";
+        PreparedStatement stmupdate1= connection.prepareStatement(sqlupdate1);
+       
+        stmupdate.setString(1, orderid);
 
            
 
             
                 int res = stmpaymentreceived.executeUpdate();
                 int res1 = stmupdate.executeUpdate();
+                int res2= stmupdate1.executeUpdate();
                
 
-                if (res == 1 && res1 == 1 ) {
+                if (res == 1 && res1 == 1 && res2 ==1) {
                     connection.commit();
                     return true;
                 } else {

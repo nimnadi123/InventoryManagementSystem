@@ -2,6 +2,8 @@
 import Dao.EmployeeDetailsDao;
 import Dao.SearchDao;
 import Models.EmployeeDetails;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
@@ -31,6 +33,8 @@ public class Employeedetails extends javax.swing.JFrame {
      */
     public Employeedetails() {
         initComponents();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+      setBounds(0,0,screenSize.width, screenSize.height);
         loadEmployeeDetails();
         generateId();
     }
