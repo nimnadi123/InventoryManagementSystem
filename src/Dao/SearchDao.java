@@ -20,7 +20,7 @@ import java.util.List;
 public class SearchDao {
 
     public List<List<String>> ListofEmployeeList = new ArrayList<List<String>>();
-    public List<List<String>> ListofInventoryList = new ArrayList<List<String>>();
+   
     public List<List<String>> ListofCustomerDetailsList = new ArrayList<List<String>>();
     public List<List<String>> ListofSupplierDetailsList = new ArrayList<List<String>>();
     public List<List<String>> ListofPaymentReceivedDetailsList = new ArrayList<List<String>>();
@@ -43,7 +43,7 @@ public class SearchDao {
         int last = 0;
 
         try {
-            String sql = "select emp.Employee_name,emp.Dateofbirth,emp.Personal_adress,emp.TeleNo,emp.Department,emp.Role_id,emp.Hireddate"
+            String sql = "select distinct emp.Employee_name,emp.Dateofbirth,emp.Personal_adress,emp.TeleNo,emp.Department,emp.Role_id,emp.Hireddate"
                     + " from Employee emp where emp.Employee_id = ?";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
@@ -140,32 +140,121 @@ public class SearchDao {
     }
 
     public List InventorySearchByItemId(String itemId) {
-        Connection con = null;
-        PreparedStatement stm = null;
-        ResultSet rst = null;
+          List<List<String>> ListofInventoryList = new ArrayList<List<String>>();
+//        Connection con = null;
+//        PreparedStatement stm = null;
+//        PreparedStatement stm1 = null;
+//        ResultSet rst = null;
+//        ResultSet rst1 = null;
+//
+//        int last = 0;
+//
+//        try {
+//
+//            String sql = "select i.item_name,i.Item_id,sup.Supplier_name, c.Category_id,c.Category_name, s.Unit_price,Sum(s.Quantity) from Items i, Category c, Supply_details s, Supplier sup, Purchase_details o where i.Item_id = s.Item_id and i.Category_id =c.Category_id and sup.Supplier_id = s.Supplier_id and i.Item_id =? group by i.Item_id,"
+//                    + "sup.Supplier_name,c.Category_id,c.Category_name, s.Unit_price,i.item_name,s.Supplier_id";
+//            Connection connection = DBConnection.getDBConnection().getConnection();
+//            stm = connection.prepareStatement(sql);
+//            stm.setObject(1, itemId);
+//            rst = stm.executeQuery();
+//
+//            while (rst.next()) {
+//                int suuplyquantity = 0;
+//                int orderedquantity = 0;
+//                int availablequantity = 0;
+//
+//                String sql1 = "select Sum(o.Quantity) from Purchase_details o where o.Item_id = ? group by o.Item_id";
+//
+//                Connection connection1 = DBConnection.getDBConnection().getConnection();
+//                stm1 = connection.prepareStatement(sql1);
+//                stm1.setObject(1, rst.getString(2));
+//                rst1 = stm1.executeQuery();
+//                suuplyquantity = Integer.parseInt(rst.getString(7));
+//                if (rst1.next()) {
+//                    orderedquantity = Integer.parseInt(rst1.getString(1));
+//
+//                }
+//
+//                availablequantity = suuplyquantity - orderedquantity;
+//                List<String> inventoryDetails = new ArrayList<String>();
+//                String status = "Sufficient";
+//                for (int i = 1; i < 8; i++) {
+//                    if (i == 7 && rst.getString(7) != null) {
+//                        inventoryDetails.add(Integer.toString(availablequantity));
+//                        if (availablequantity < 100) {
+//                            status = "Low";
+//                        }
+//                        inventoryDetails.add(status);
+//                    } else {
+//                        inventoryDetails.add(rst.getString(i));
+//                    }
+//                }
+
+
+Connection con = null;
+
         int last = 0;
 
         try {
-            String sql = "select i.item_name,i.Item_id,sup.Supplier_name, c.Category_id,c.Category_name, s.Unit_price, s.Quantity from Items i, Category c, Supply_details s, Supplier sup where i.Item_id = s.Item_id and i.Category_id =c.Category_id and sup.Supplier_id = s.Supplier_id and i.Item_id =?";
+            PreparedStatement stm = null;
+            ResultSet rst = null;
+            String sql = "select distinct i.item_name,i.Item_id, c.Category_id,c.Category_name from Items i, Category c, Supply_details s, Supplier sup, Purchase_details o where i.Item_id = s.Item_id and i.Category_id =c.Category_id and sup.Supplier_id = s.Supplier_id and i.Item_id =? group by  i.item_name,i.Item_id,c.Category_id,c.Category_name";
+
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
-
-            stm.setObject(1, itemId);
+             stm.setObject(1, itemId);
             rst = stm.executeQuery();
 
             while (rst.next()) {
+               
+                int suuplyquantity = 0;
+                int orderedquantity = 0;
+                int availablequantity = 0;
+
+                String sql1 = "select Sum(o.Quantity) from Purchase_details o where o.Item_id = ?";
+                ResultSet rst1 = null;
+                PreparedStatement stm1 = null;
+                Connection connection1 = DBConnection.getDBConnection().getConnection();
+                stm1 = connection.prepareStatement(sql1);
+                stm1.setObject(1, itemId);
+                rst1 = stm1.executeQuery();
+
+                if (rst1.next()) {
+                    String q = rst1.getString(1);
+                    if (q != null) {
+                        orderedquantity = Integer.parseInt(q);
+                    }
+
+                }
+
+                String sql2 = "select Sum(s.Quantity) from Supply_details s where s.Item_id = ?";
+
+                PreparedStatement stm2 = null;
+                ResultSet rst2 = null;
+                stm2 = connection.prepareStatement(sql2);
+                stm2.setObject(1, itemId);
+                rst2 = stm2.executeQuery();
+
+                if (rst2.next()) {
+                    suuplyquantity = Integer.parseInt(rst2.getString(1));
+
+                }
+
+                availablequantity = suuplyquantity - orderedquantity;
                 List<String> inventoryDetails = new ArrayList<String>();
                 String status = "Sufficient";
-                for (int i = 1; i < 8; i++) {
-                    inventoryDetails.add(rst.getString(i));
-
-                    if (i == 7 && rst.getString(7) != null) {
-                        if (Integer.parseInt(rst.getString(7)) < 100) {
+                for (int i = 1; i < 6; i++) {
+                    if (i == 5) {
+                        inventoryDetails.add(Integer.toString(availablequantity));
+                        if (availablequantity < 100) {
                             status = "Low";
                         }
                         inventoryDetails.add(status);
+                    } else {
+                        inventoryDetails.add(rst.getString(i));
                     }
                 }
+
                 ListofInventoryList.add(inventoryDetails);
             }
             return ListofInventoryList;
@@ -179,44 +268,178 @@ public class SearchDao {
     }
 
     public List InventorySearchBystatus(String state) {
-        Connection con = null;
-        PreparedStatement stm = null;
-        ResultSet rst = null;
+//        Connection con = null;
+//        PreparedStatement stm = null;
+//        ResultSet rst = null;
+//        int last = 0;
+//        String sql = "";
+//        try {
+//
+//            if (state.equalsIgnoreCase("Sufficient")) {
+//                sql = "select i.item_name,i.Item_id,sup.Supplier_name, c.Category_id,c.Category_name, s.Unit_price,Sum(s.Quantity)-Sum(o.Quantity) from Items i, Category c, Supply_details s, Supplier sup, Purchase_details o where i.Item_id = s.Item_id and i.Category_id =c.Category_id and sup.Supplier_id = s.Supplier_id and o.Item_id = i.Item_id group by i.Item_id,"
+//                        + "sup.Supplier_name,c.Category_id,c.Category_name, s.Unit_price,i.item_name,s.Supplier_id and Sum(s.Quantity)-Sum(o.Quantity)>100";
+//            }
+//
+//            if (state.equalsIgnoreCase("Low")) {
+//                sql = "select i.item_name,i.Item_id,sup.Supplier_name, c.Category_id,c.Category_name, s.Unit_price,Sum(s.Quantity)-Sum(o.Quantity) from Items i, Category c, Supply_details s, Supplier sup, Purchase_details o where i.Item_id = s.Item_id and i.Category_id =c.Category_id and sup.Supplier_id = s.Supplier_id and o.Item_id = i.Item_id group by i.Item_id,"
+//                        + "sup.Supplier_name,c.Category_id,c.Category_name, s.Unit_price,i.item_name,s.Supplier_id and Sum(s.Quantity)-Sum(o.Quantity)<100";
+//            }
+//
+//            Connection connection = DBConnection.getDBConnection().getConnection();
+//            stm = connection.prepareStatement(sql);
+//
+//            rst = stm.executeQuery();
+//
+//            while (rst.next()) {
+//                List<String> inventoryDetails = new ArrayList<String>();
+//                String status = "Sufficient";
+//                for (int i = 1; i < 8; i++) {
+//                    inventoryDetails.add(rst.getString(i));
+//
+//                    if (i == 7 && rst.getString(7) != null) {
+//                        if (Integer.parseInt(rst.getString(7)) < 100) {
+//                            status = "Low";
+//                        }
+//                        inventoryDetails.add(status);
+//                    }
+//                }
+//                ListofInventoryList.add(inventoryDetails);
+//            }
+List<List<String>> ListofInventoryList = new ArrayList<List<String>>();
+        
+
         int last = 0;
-        String sql = "";
+
         try {
-
             if (state.equalsIgnoreCase("Sufficient")) {
-                sql = "select i.item_name,i.Item_id,sup.Supplier_name, c.Category_id,c.Category_name, s.Unit_price,Sum(s.Quantity)-Sum(o.Quantity) from Items i, Category c, Supply_details s, Supplier sup, Purchase_details o where i.Item_id = s.Item_id and i.Category_id =c.Category_id and sup.Supplier_id = s.Supplier_id and o.Item_id = i.Item_id group by i.Item_id,"
-                        + "sup.Supplier_name,c.Category_id,c.Category_name, s.Unit_price,i.item_name,s.Supplier_id and Sum(s.Quantity)-Sum(o.Quantity)>100";
-            }
-
-            if (state.equalsIgnoreCase("Low")) {
-                sql = "select i.item_name,i.Item_id,sup.Supplier_name, c.Category_id,c.Category_name, s.Unit_price,Sum(s.Quantity)-Sum(o.Quantity) from Items i, Category c, Supply_details s, Supplier sup, Purchase_details o where i.Item_id = s.Item_id and i.Category_id =c.Category_id and sup.Supplier_id = s.Supplier_id and o.Item_id = i.Item_id group by i.Item_id,"
-                        + "sup.Supplier_name,c.Category_id,c.Category_name, s.Unit_price,i.item_name,s.Supplier_id and Sum(s.Quantity)-Sum(o.Quantity)<100";
-            }
+                 PreparedStatement stm = null;
+            ResultSet rst = null;
+            String sql = "select distinct i.item_name,i.Item_id, c.Category_id,c.Category_name from Items i, Category c, Supply_details s, Supplier sup, Purchase_details o where i.Item_id = s.Item_id and i.Category_id =c.Category_id and sup.Supplier_id = s.Supplier_id   group by  i.item_name,i.Item_id,c.Category_id,c.Category_name";
 
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
-
             rst = stm.executeQuery();
 
             while (rst.next()) {
-                List<String> inventoryDetails = new ArrayList<String>();
-                String status = "Sufficient";
-                for (int i = 1; i < 8; i++) {
-                    inventoryDetails.add(rst.getString(i));
+               String itemID = rst.getString(2).trim();
+                int suuplyquantity = 0;
+                int orderedquantity = 0;
+                int availablequantity = 0;
 
-                    if (i == 7 && rst.getString(7) != null) {
-                        if (Integer.parseInt(rst.getString(7)) < 100) {
-                            status = "Low";
-                        }
-                        inventoryDetails.add(status);
+                String sql1 = "select Sum(o.Quantity) from Purchase_details o where o.Item_id = ?";
+                ResultSet rst1 = null;
+                PreparedStatement stm1 = null;
+                Connection connection1 = DBConnection.getDBConnection().getConnection();
+                stm1 = connection.prepareStatement(sql1);
+                stm1.setObject(1, itemID);
+                rst1 = stm1.executeQuery();
+
+                if (rst1.next()) {
+                    String q = rst1.getString(1);
+                    if (q != null) {
+                        orderedquantity = Integer.parseInt(q);
                     }
+
                 }
-                ListofInventoryList.add(inventoryDetails);
+
+                String sql2 = "select Sum(s.Quantity) from Supply_details s where s.Item_id = ?";
+
+                PreparedStatement stm2 = null;
+                ResultSet rst2 = null;
+                stm2 = connection.prepareStatement(sql2);
+                stm2.setObject(1, itemID);
+                rst2 = stm2.executeQuery();
+
+                if (rst2.next()) {
+                    suuplyquantity = Integer.parseInt(rst2.getString(1));
+
+                }
+
+                    availablequantity = suuplyquantity - orderedquantity;
+                    List<String> inventoryDetails = new ArrayList<String>();
+                    String status = "Sufficient";
+                    if (availablequantity > 100) {
+                        for (int i = 1; i < 6; i++) {
+                            if (i == 5) {
+                                inventoryDetails.add(Integer.toString(availablequantity));
+                                inventoryDetails.add(status);
+                            } else {
+                                inventoryDetails.add(rst.getString(i));
+                            }
+                        }
+
+                        ListofInventoryList.add(inventoryDetails);
+                    }
+
+                }
             }
+
+            if (state.equalsIgnoreCase("Low")) {
+                PreparedStatement stm = null;
+            ResultSet rst = null;
+            String sql = "select distinct i.item_name,i.Item_id, c.Category_id,c.Category_name from Items i, Category c, Supply_details s, Supplier sup, Purchase_details o where i.Item_id = s.Item_id and i.Category_id =c.Category_id and sup.Supplier_id = s.Supplier_id group by  i.item_name,i.Item_id,c.Category_id,c.Category_name";
+
+            Connection connection = DBConnection.getDBConnection().getConnection();
+            stm = connection.prepareStatement(sql);
+            rst = stm.executeQuery();
+
+            while (rst.next()) {
+               String itemID = rst.getString(2).trim();
+                int suuplyquantity = 0;
+                int orderedquantity = 0;
+                int availablequantity = 0;
+
+                String sql1 = "select Sum(o.Quantity) from Purchase_details o where o.Item_id = ?";
+                ResultSet rst1 = null;
+                PreparedStatement stm1 = null;
+                Connection connection1 = DBConnection.getDBConnection().getConnection();
+                stm1 = connection.prepareStatement(sql1);
+                stm1.setObject(1, itemID);
+                rst1 = stm1.executeQuery();
+
+                if (rst1.next()) {
+                    String q = rst1.getString(1);
+                    if (q != null) {
+                        orderedquantity = Integer.parseInt(q);
+                    }
+
+                }
+
+                String sql2 = "select Sum(s.Quantity) from Supply_details s where s.Item_id = ?";
+
+                PreparedStatement stm2 = null;
+                ResultSet rst2 = null;
+                stm2 = connection.prepareStatement(sql2);
+                stm2.setObject(1, itemID);
+                rst2 = stm2.executeQuery();
+
+                if (rst2.next()) {
+                    suuplyquantity = Integer.parseInt(rst2.getString(1));
+
+                }
+
+                    availablequantity = suuplyquantity - orderedquantity;
+                    List<String> inventoryDetails = new ArrayList<String>();
+                    String status = "Low";
+                    if (availablequantity < 100) {
+                        for (int i = 1; i < 6; i++) {
+                            if (i == 5) {
+                                inventoryDetails.add(Integer.toString(availablequantity));
+                                inventoryDetails.add(status);
+                            } else {
+                                inventoryDetails.add(rst.getString(i));
+                            }
+                        }
+
+
+                        ListofInventoryList.add(inventoryDetails);
+                    }
+
+                }
+            }
+
             return ListofInventoryList;
+
         } catch (SQLException e) {
             System.out.println("error@ " + e.getMessage());
             e.printStackTrace();
@@ -235,7 +458,7 @@ public class SearchDao {
 
         try {
 
-            String sql = "select o.Purchase_id,cust.Company_name,cust.Customer_name,Rd.Total_amount,Rd.Discount,Rd.Received_date,Rd.Received_amount from Customer cust, Purchase_details o,Payment_Received Rd, Payment_receivable Re where o.Customer_id =cust.Customer_id and o.Purchase_id = Re.Purchase_id and Rd.Payment_received_id = Re.Payment_received_id and o.Purchase_id = ?";
+            String sql = "select distinct o.Purchase_id,cust.Company_name,cust.Customer_name,Rd.Total_amount,Rd.Discount,Rd.Received_date,Rd.Received_amount from Customer cust, Purchase_details o,Payment_Received Rd, Payment_receivable Re where o.Customer_id =cust.Customer_id and o.Purchase_id = Re.Purchase_id and Rd.Payment_received_id = Re.Payment_received_id and o.Purchase_id = ?";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
             stm.setObject(1, orderId);
@@ -270,7 +493,7 @@ public class SearchDao {
 
         try {
 
-            String sql = "select o.Purchase_id,cust.Company_name,cust.Customer_name,Re.Receivable_amount,Re.Due_date,Re.Isoutstanding"
+            String sql = "select distinct o.Purchase_id,cust.Company_name,cust.Customer_name,Re.Receivable_amount,Re.Due_date,Re.Isoutstanding"
                     + " from Customer cust, Purchase_details o, Payment_receivable Re where o.Customer_id =cust.Customer_id and o.Purchase_id = Re.Purchase_id and o.Purchase_id = ?";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
@@ -311,7 +534,7 @@ public class SearchDao {
 
         try {
 
-            String sql = "select Sd.Supply_id ,supplier.Supplier_name ,Pd.Total_amount, Pd.Discount,Pd.Net_amount,Pd.Paid_date "
+            String sql = "select distinct Sd.Supply_id ,supplier.Supplier_name ,Pd.Total_amount, Pd.Discount,Pd.Net_amount,Pd.Paid_date "
                     + "from Supplier_payments Pd, Supplier supplier,Supply_details Sd, Payable Pb where Sd.Supplier_id  =supplier.Supplier_id and Sd.Supply_id = Pb.Supply_details_id and Pd.Paid_id = Pb.Paid_id and Sd.Supply_id =?";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
@@ -347,7 +570,7 @@ public class SearchDao {
 
         try {
 
-            String sql = "select Sd.Supply_id , supplier.Supplier_id, supplier.Supplier_name ,Pb.Payable_amount\n"
+            String sql = "select distinct Sd.Supply_id , supplier.Supplier_id, supplier.Supplier_name ,Pb.Payable_amount\n"
                     + "from Supplier supplier ,Supply_details Sd, Payable Pb where Sd.Supplier_id  =supplier.Supplier_id and Sd.Supply_id = Pb.Supply_details_id and Sd.Supplier_id =?";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
@@ -385,7 +608,7 @@ public class SearchDao {
 
         try {
 
-            String sql = "select o.Purchase_id,cust.Customer_id,cust.Customer_name,i.item_name,o.Item_id, o.Unit_value, p.Receivable_amount, o.Quantity, o.Orderd_date, p.Due_date  from Items i, Customer cust, Purchase_details o,Payment_receivable p where i.Item_id = o.Item_id and o.Customer_id =cust.Customer_id and o.Purchase_id = p.Purchase_id and o.IsHold =0 and o.Purchase_id=? ";
+            String sql = "select distinct o.Purchase_id,cust.Customer_id,cust.Customer_name,i.item_name,o.Item_id, o.Unit_value, p.Receivable_amount, o.Quantity, o.Orderd_date, p.Due_date  from Items i, Customer cust, Purchase_details o,Payment_receivable p where i.Item_id = o.Item_id and o.Customer_id =cust.Customer_id and o.Purchase_id = p.Purchase_id and o.IsHold =0 and o.Purchase_id=? ";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
             stm.setObject(1, OrderId);
@@ -421,7 +644,7 @@ public class SearchDao {
 
         try {
 
-            String sql = "select o.Purchase_id,cust.Customer_id,cust.Customer_name,i.item_name,o.Item_id, o.Unit_value, p.Receivable_amount, o.Quantity, o.Orderd_date from Items i, Customer cust, Purchase_details o,Payment_receivable p where i.Item_id = o.Item_id and o.Customer_id =cust.Customer_id and o.Purchase_id = p.Purchase_id and o.IsHold =1 and o.Purchase_id =? ";
+            String sql = "select distinct o.Purchase_id,cust.Customer_id,cust.Customer_name,i.item_name,o.Item_id, o.Unit_value, p.Receivable_amount, o.Quantity, o.Orderd_date from Items i, Customer cust, Purchase_details o,Payment_receivable p where i.Item_id = o.Item_id and o.Customer_id =cust.Customer_id and o.Purchase_id = p.Purchase_id and o.IsHold =1 and o.Purchase_id =? ";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
             stm.setObject(1, OrderId);
@@ -456,7 +679,7 @@ public class SearchDao {
 
         try {
 
-            String sql = "select o.Purchase_id,cust.Customer_id,cust.Customer_name,i.item_name,o.Item_id, o.Unit_value, p.Receivable_amount, o.Quantity, o.Orderd_date, p.Due_date  from Items i, Customer cust, Purchase_details o,Payment_receivable p where i.Item_id = o.Item_id and o.Customer_id =cust.Customer_id and o.Purchase_id = p.Purchase_id and o.IsHold =0 and cust.Customer_id=? ";
+            String sql = "select distinct o.Purchase_id,cust.Customer_id,cust.Customer_name,i.item_name,o.Item_id, o.Unit_value, p.Receivable_amount, o.Quantity, o.Orderd_date, p.Due_date  from Items i, Customer cust, Purchase_details o,Payment_receivable p where i.Item_id = o.Item_id and o.Customer_id =cust.Customer_id and o.Purchase_id = p.Purchase_id and o.IsHold =0 and cust.Customer_id=? ";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
             stm.setObject(1, CustomerId);
@@ -492,7 +715,7 @@ public class SearchDao {
 
         try {
 
-            String sql = "select o.Purchase_id,cust.Customer_id,cust.Customer_name,i.item_name,o.Item_id, o.Unit_value, p.Receivable_amount, o.Quantity, o.Orderd_date from Items i, Customer cust, Purchase_details o,Payment_receivable p where i.Item_id = o.Item_id and o.Customer_id =cust.Customer_id and o.Purchase_id = p.Purchase_id and o.IsHold =1 and cust.Customer_id =? ";
+            String sql = "select distinct o.Purchase_id,cust.Customer_id,cust.Customer_name,i.item_name,o.Item_id, o.Unit_value, p.Receivable_amount, o.Quantity, o.Orderd_date from Items i, Customer cust, Purchase_details o,Payment_receivable p where i.Item_id = o.Item_id and o.Customer_id =cust.Customer_id and o.Purchase_id = p.Purchase_id and o.IsHold =1 and cust.Customer_id =? ";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
             stm.setObject(1, CustomerId);
@@ -527,7 +750,7 @@ public class SearchDao {
 
         try {
 
-            String sql = "select o.Purchase_id,cust.Customer_id,cust.Customer_name,i.item_name,o.Item_id, o.Unit_value, p.Receivable_amount, o.Quantity, o.Orderd_date, p.Due_date  from Items i, Customer cust, Purchase_details o,Payment_receivable p where i.Item_id = o.Item_id and o.Customer_id =cust.Customer_id and o.Purchase_id = p.Purchase_id and o.IsHold =0 and o.Orderd_date=? ";
+            String sql = "select distinct o.Purchase_id,cust.Customer_id,cust.Customer_name,i.item_name,o.Item_id, o.Unit_value, p.Receivable_amount, o.Quantity, o.Orderd_date, p.Due_date  from Items i, Customer cust, Purchase_details o,Payment_receivable p where i.Item_id = o.Item_id and o.Customer_id =cust.Customer_id and o.Purchase_id = p.Purchase_id and o.IsHold =0 and o.Orderd_date=? ";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
             stm.setObject(1, Date);
@@ -563,7 +786,7 @@ public class SearchDao {
 
         try {
 
-            String sql = "select o.Purchase_id,cust.Customer_id,cust.Customer_name,i.item_name,o.Item_id, o.Unit_value, p.Receivable_amount, o.Quantity, o.Orderd_date from Items i, Customer cust, Purchase_details o,Payment_receivable p where i.Item_id = o.Item_id and o.Customer_id =cust.Customer_id and o.Purchase_id = p.Purchase_id and o.IsHold =1 and o.Orderd_date =? ";
+            String sql = "select distinct o.Purchase_id,cust.Customer_id,cust.Customer_name,i.item_name,o.Item_id, o.Unit_value, p.Receivable_amount, o.Quantity, o.Orderd_date from Items i, Customer cust, Purchase_details o,Payment_receivable p where i.Item_id = o.Item_id and o.Customer_id =cust.Customer_id and o.Purchase_id = p.Purchase_id and o.IsHold =1 and o.Orderd_date =? ";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
             stm.setObject(1, OrderedDate);
@@ -598,7 +821,7 @@ public class SearchDao {
 
         try {
 
-            String sql = "select sup.Supply_id,supplier.Supplier_id,supplier.Supplier_name,Srr.Returned_amount,Srr.Returned_date,Srr.Quantity\n"
+            String sql = "select distinct sup.Supply_id,supplier.Supplier_id,supplier.Supplier_name,Srr.Returned_amount,Srr.Returned_date,Srr.Quantity\n"
                     + "from Supplier supplier, Supply_details sup,Supplier_payments pd, Payable pb , supplier_payment_return Srr \n"
                     + "where sup.Supplier_id =supplier.Supplier_id and sup.Supply_id= pb.Supply_details_id\n"
                     + "and pb.Payable_id = Srr.Payable_id or pd.Paid_id =Srr.Paid_id and sup.Supply_id =? ";
@@ -636,7 +859,7 @@ public class SearchDao {
 
         try {
 
-            String sql = "select o.Purchase_id,cust.Customer_id,cust.Customer_name,cust.Company_name,\n"
+            String sql = "select distinct o.Purchase_id,cust.Customer_id,cust.Customer_name,cust.Company_name,\n"
                     + "                    Prr.Amount, prr.Returned_date, prr.ReturnedQuantity\n"
                     + "                    from Customer cust, Purchase_details o,Payment_Received Rd, Payment_receivable Re , Payment_received_return Prr\n"
                     + "                    where o.Customer_id =cust.Customer_id and o.Purchase_id = Re.Purchase_id\n"

@@ -460,7 +460,7 @@ public class customerpayment extends javax.swing.JFrame {
     }//GEN-LAST:event_submitbuttonActionPerformed
 
     private void searchOrNoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchOrNoButtonActionPerformed
-        String searchId = searchOrNoButton.getText();
+        String searchId = searchorderField.getText();
         SearchDao empDetailSearchDao = new SearchDao();
 
         List<List<String>> res = empDetailSearchDao.SearchPaymentReceivedbyOrderId(searchId);

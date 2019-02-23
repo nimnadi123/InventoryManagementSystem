@@ -45,9 +45,11 @@ public class SupplierDetailsDao {
 
             stm.setObject(1, supplierId);
             stm.setObject(2, supplierName);
-            stm.setObject(3, teleNo);
-            stm.setObject(4, mailAddress);
-            stm.setObject(5, businessPlaceAddress);
+             stm.setObject(3, businessPlaceAddress);
+                         stm.setObject(4, mailAddress);
+
+            stm.setObject(5, teleNo);
+          
             stm.setObject(6, addedDate);
 
             int res = stm.executeUpdate(); //excute statement and assign result to int res

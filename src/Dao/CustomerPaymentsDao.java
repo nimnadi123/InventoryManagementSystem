@@ -113,8 +113,8 @@ public class CustomerPaymentsDao {
 
             stmpaymentreceived.setObject(1, paymentReceivedId);
             stmpaymentreceived.setObject(2, netAmount);
-            stmpaymentreceived.setObject(3, ReceivedDate);
-            stmpaymentreceived.setObject(4, totalAmount);
+               stmpaymentreceived.setObject(3, totalAmount);
+            stmpaymentreceived.setObject(4, ReceivedDate);
             stmpaymentreceived.setObject(5, discount);
 
             String sqlupdate = "update Payment_receivable set Payment_received_id = ? where Purchase_id=?";
@@ -188,7 +188,7 @@ public class CustomerPaymentsDao {
 
         try {
 
-            String sql = "select o.Purchase_id,cust.Company_name,cust.Customer_name,Rd.Total_amount,Rd.Discount,Rd.Received_amount,Rd.Received_date from Customer cust, Purchase_details o,Payment_Received Rd, Payment_receivable Re where o.Customer_id =cust.Customer_id and o.Purchase_id = Re.Purchase_id and Rd.Payment_received_id = Re.Payment_received_id ";
+            String sql = "select distinct o.Purchase_id,cust.Company_name,cust.Customer_name,Rd.Total_amount,Rd.Discount,Rd.Received_amount,Rd.Received_date from Customer cust, Purchase_details o,Payment_Received Rd, Payment_receivable Re where o.Customer_id =cust.Customer_id and o.Purchase_id = Re.Purchase_id and Rd.Payment_received_id = Re.Payment_received_id ";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
             rst = stm.executeQuery();
@@ -222,7 +222,7 @@ public class CustomerPaymentsDao {
 
         try {
 
-            String sql = "select o.Purchase_id,cust.Company_name,cust.Customer_name,Re.Receivable_amount,Re.Due_date,Re.Isoutstanding"
+            String sql = "select distinct o.Purchase_id,cust.Company_name,cust.Customer_name,Re.Receivable_amount,Re.Due_date,Re.Isoutstanding"
                     + " from Customer cust, Purchase_details o, Payment_receivable Re where o.Customer_id =cust.Customer_id and o.Purchase_id = Re.Purchase_id and Re.Payment_received_id IS NULL";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);

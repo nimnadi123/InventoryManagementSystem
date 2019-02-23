@@ -1136,11 +1136,11 @@ public class inventorydetails extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Item Name", "Item ID", "Supplier Name", "Category Id", "Category Name", "Unit Price", "Available Quantity", "Status"
+                "Item Name", "Item ID", "Category Id", "Category Name", "Available Quantity", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, false, true, true, true, true, true
+                false, true, true, true, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -1150,7 +1150,6 @@ public class inventorydetails extends javax.swing.JFrame {
         jScrollPane3.setViewportView(inventorytable);
         if (inventorytable.getColumnModel().getColumnCount() > 0) {
             inventorytable.getColumnModel().getColumn(1).setResizable(false);
-            inventorytable.getColumnModel().getColumn(2).setResizable(false);
         }
 
         searchRadiobutton.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
@@ -1209,8 +1208,7 @@ public class inventorydetails extends javax.swing.JFrame {
                     .addComponent(SupIDRadiobutton)
                     .addComponent(itemIDRadiobutton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(88, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE))
         );
 
         addanewitem.addTab("View Inventory", jPanel5);
@@ -2052,7 +2050,7 @@ public class inventorydetails extends javax.swing.JFrame {
         boolean validatednull = true;
         boolean validated = true;
 
-        if (itemname.getText().equals("") || categoryNameTextField.getText().equals("") || quantityField2.getText().equals("")
+        if (itemname.getText().equals("") || quantityField2.getText().equals("")
                 || unitpriceField2.getText().equals("") || date2.getDate() == null || netamountField2.getText().equals("")) {
             validatednull = false;
             JOptionPane.showMessageDialog(this, "Please fill up all the Fields ");
@@ -2258,7 +2256,7 @@ public class inventorydetails extends javax.swing.JFrame {
         inventorytable.setShowGrid(true);
         DefaultTableModel model = (DefaultTableModel) inventorytable.getModel();
         model.setRowCount(0);
-        Object rowData[] = new Object[8];
+        Object rowData[] = new Object[6];
         for (Iterator it = res.iterator(); it.hasNext();) {
             List<String> innerList = (List<String>) it.next();
             rowData[0] = innerList.get(0);
@@ -2267,9 +2265,7 @@ public class inventorydetails extends javax.swing.JFrame {
             rowData[3] = innerList.get(3);
             rowData[4] = innerList.get(4);
             rowData[5] = innerList.get(5);
-            rowData[6] = innerList.get(6);
-            rowData[7] = innerList.get(7);
-
+            
             model.addRow(rowData);
 
         }
@@ -2298,6 +2294,16 @@ public class inventorydetails extends javax.swing.JFrame {
         supplierIDCombo.setSelectedItem(1);
         suppliernameCombo.setSelectedItem(1);
         inventoryIdField.setText(null);
+        updateItemIdCombo.setSelectedItem(1);
+updateItemNameCombo.setSelectedItem(1);
+updateCateogryIdCombo.setSelectedItem(1);
+updateCategoryNameCombo.setSelectedItem(1);
+quantityField1.setText(null);
+unitpriceField1.setText(null);
+netamountField1.setText(null);
+date1.setDate(null);
+supplierIDCombo1.setSelectedItem(1);
+suppliernameCombo1.setSelectedItem(1);
     }
 
     public void MakeFieldsNoteditable() {

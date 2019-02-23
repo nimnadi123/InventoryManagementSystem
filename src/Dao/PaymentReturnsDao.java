@@ -178,9 +178,9 @@ public class PaymentReturnsDao {
                 //stm = connection.createStatement();
 
                 while (rst.next()) {
-                    for (int i = 0; i < 1; i++) {
-                        ReceivedId = rst.getString(i);
-                    }
+                   
+                        ReceivedId = rst.getString(1);
+                    
 
                 }
             }

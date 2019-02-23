@@ -588,7 +588,7 @@ public class Purchasedetails extends javax.swing.JFrame {
     }//GEN-LAST:event_quantityFieldActionPerformed
 
     private void searchButtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtnActionPerformed
-        String SearchId = searchField.getText();
+        String SearchId = jTextField8.getText();
         if (custIDradButton.isSelected() == true) {
 
             SearchDao empDetailSearchDao = new SearchDao();
@@ -852,7 +852,7 @@ public class Purchasedetails extends javax.swing.JFrame {
             if (validated == true) {
                 int quantity = Integer.parseInt(quantityField.getText());
                 Double unitPrice = Double.parseDouble(unitpriceField.getText());
-                Date itemAddedDate = duedate.getDate();
+                Date dueDate = duedate.getDate();
                 String itemId = (String) itemIdCombo.getSelectedItem();
                 String itemName = (String) itemNameCombo.getSelectedItem();
                 String purchaseId = ordernoField.getText();
@@ -861,7 +861,7 @@ public class Purchasedetails extends javax.swing.JFrame {
                 PurchaseAddViewDTO purchaseItem = new PurchaseAddViewDTO();
                 purchaseItem.setPurchaseId(purchaseId);
                 purchaseItem.setCustomerId(customerId);
-                purchaseItem.setDueDate(orderedDate);
+                purchaseItem.setDueDate(dueDate);
                 purchaseItem.setIsOutStanding(isOutStanding);
                 purchaseItem.setItemId(itemId);
                 purchaseItem.setOrderedDate(orderedDate);
@@ -878,6 +878,7 @@ public class Purchasedetails extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(this, "Order added sucessfully");
                         ClearFields();
                         loadPurchaseDetails();
+                        loadHoldPurchaseDetails();
                         generateId();
                     } else {
                         JOptionPane.showMessageDialog(this, "Error occur in adding Order");

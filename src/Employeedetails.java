@@ -513,7 +513,7 @@ public class Employeedetails extends javax.swing.JFrame {
             
         }
           if((Tele.matches("[0-9]+")==false)|| (Tele.length()!=10)){
-                 JOptionPane.showMessageDialog(this,"Telephone Number should be numbers without spaces and should have at least 10 numbers<br>");
+                 JOptionPane.showMessageDialog(this,"Telephone Number should be numbers without spaces and should have at least 10 numbers");
                 validated = false;
                  }
 
@@ -548,7 +548,7 @@ public class Employeedetails extends javax.swing.JFrame {
             } 
             
             if(-1!=password.indexOf(" ")){
-               JOptionPane.showMessageDialog(this,"Password cannot have spaces<br>");   
+               JOptionPane.showMessageDialog(this,"Password cannot have spaces");   
                 validated = false;
             } 
               

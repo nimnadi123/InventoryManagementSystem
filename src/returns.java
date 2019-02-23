@@ -953,6 +953,7 @@ public class returns extends javax.swing.JFrame {
         ReturnId.setText(null);
         CustomerReturnedDate.setDate(null);
         CustomerReturnAmount.setText(null);
+        ReturnedQuantity.setText(null);
         loadOrderDetails();
         generateId();
     }

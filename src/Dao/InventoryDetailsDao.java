@@ -377,43 +377,58 @@ public class InventoryDetailsDao {
     public List ViewInventoryDetails() {
 
         Connection con = null;
-        PreparedStatement stm = null;
-        PreparedStatement stm1 = null;
-        ResultSet rst = null;
-        ResultSet rst1 = null;
 
         int last = 0;
 
         try {
+            PreparedStatement stm = null;
+            ResultSet rst = null;
+            String sql = "select distinct i.item_name,i.Item_id, c.Category_id,c.Category_name from Items i, Category c, Supply_details s, Supplier sup, Purchase_details o where i.Item_id = s.Item_id and i.Category_id =c.Category_id and sup.Supplier_id = s.Supplier_id group by  i.item_name,i.Item_id,c.Category_id,c.Category_name";
 
-            String sql = "select i.item_name,i.Item_id,sup.Supplier_name, c.Category_id,c.Category_name, s.Unit_price,Sum(s.Quantity) from Items i, Category c, Supply_details s, Supplier sup, Purchase_details o where i.Item_id = s.Item_id and i.Category_id =c.Category_id and sup.Supplier_id = s.Supplier_id group by i.Item_id,"
-                    + "sup.Supplier_name,c.Category_id,c.Category_name, s.Unit_price,i.item_name,s.Supplier_id";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
             rst = stm.executeQuery();
 
             while (rst.next()) {
+                String itemID = rst.getString(2).trim();
                 int suuplyquantity = 0;
                 int orderedquantity = 0;
                 int availablequantity = 0;
 
-                String sql1 = "select Sum(o.Quantity) from Purchase_details o where o.Item_id = ? group by o.Item_id";
-
+                String sql1 = "select Sum(o.Quantity) from Purchase_details o where o.Item_id = ?";
+                ResultSet rst1 = null;
+                PreparedStatement stm1 = null;
                 Connection connection1 = DBConnection.getDBConnection().getConnection();
                 stm1 = connection.prepareStatement(sql1);
-                stm1.setObject(1, rst.getString(2));
+                stm1.setObject(1, itemID);
                 rst1 = stm1.executeQuery();
-                suuplyquantity = Integer.parseInt(rst.getString(7));
+
                 if (rst1.next()) {
-                    orderedquantity = Integer.parseInt(rst1.getString(1));
+                    String q = rst1.getString(1);
+                    if (q != null) {
+                        orderedquantity = Integer.parseInt(q);
+                    }
+
+                }
+
+                String sql2 = "select Sum(s.Quantity) from Supply_details s where s.Item_id = ?";
+
+                PreparedStatement stm2 = null;
+                ResultSet rst2 = null;
+                stm2 = connection.prepareStatement(sql2);
+                stm2.setObject(1, itemID);
+                rst2 = stm2.executeQuery();
+
+                if (rst2.next()) {
+                    suuplyquantity = Integer.parseInt(rst2.getString(1));
 
                 }
 
                 availablequantity = suuplyquantity - orderedquantity;
                 List<String> inventoryDetails = new ArrayList<String>();
                 String status = "Sufficient";
-                for (int i = 1; i < 8; i++) {
-                    if (i == 7 && rst.getString(7) != null) {
+                for (int i = 1; i < 6; i++) {
+                    if (i == 5) {
                         inventoryDetails.add(Integer.toString(availablequantity));
                         if (availablequantity < 100) {
                             status = "Low";
