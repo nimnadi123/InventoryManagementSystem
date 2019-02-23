@@ -126,7 +126,7 @@ public class signup extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginbuttonActionPerformed
-        homepage h=new homepage();
+        homepage h = new homepage();
         h.setVisible(true);
     }//GEN-LAST:event_loginbuttonActionPerformed
 
@@ -139,7 +139,7 @@ public class signup extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordFieldActionPerformed
 
     private void cancelbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelbuttonActionPerformed
-        login h=new login();
+        login h = new login();
         h.setVisible(true);
     }//GEN-LAST:event_cancelbuttonActionPerformed
 

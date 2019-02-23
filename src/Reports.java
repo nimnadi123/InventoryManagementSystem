@@ -3,13 +3,13 @@ import Dao.ReportDao;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.Date;
+import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author user
@@ -22,7 +22,7 @@ public class Reports extends javax.swing.JFrame {
     public Reports() {
         initComponents();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-      setBounds(0,0,screenSize.width, screenSize.height);
+        setBounds(0, 0, screenSize.width, screenSize.height);
         HideComponents();
     }
 
@@ -149,40 +149,41 @@ public class Reports extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-        homepage h=new homepage();
+        this.setVisible(false);
+        homepage h = new homepage();
         h.setVisible(true);
     }//GEN-LAST:event_backButtonActionPerformed
 
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
-ReportDao report = new ReportDao();
-int reporttype = reptypeCombobox.getSelectedIndex();
-Date fromDate = null;
-Date toDate =null;
-if(reporttype!=0){
-    fromDate = fromdate.getDate();
-    toDate = todate.getDate();
-    
-}
+        ReportDao report = new ReportDao();
+        int reporttype = reptypeCombobox.getSelectedIndex();
+        Date fromDate = null;
+        Date toDate = null;
+        if (reporttype != 0) {
+            fromDate = fromdate.getDate();
+            toDate = todate.getDate();
+
+        }
 //report.PdfDaocreate();
-report.CreateReport(reporttype, fromDate, toDate);
+        boolean res = report.CreateReport(reporttype, fromDate, toDate);
+        if (res == true) {
+            JOptionPane.showMessageDialog(this, "Report generated sucessfully");
+        }
         // TODO add your handling code here:
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void reptypeComboboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reptypeComboboxActionPerformed
-      if(reptypeCombobox.getSelectedIndex()!=0)
-      {
-          fromdate.setVisible(true);
-           todate.setVisible(true);
-           jLabel2.setVisible(true);
-    jLabel3.setVisible(true);   
-      }
-      
-      else{
-          fromdate.setVisible(false);
-           todate.setVisible(false);
-           jLabel2.setVisible(false);
-    jLabel3.setVisible(false);   
-      }
+        if (reptypeCombobox.getSelectedIndex() != 0) {
+            fromdate.setVisible(true);
+            todate.setVisible(true);
+            jLabel2.setVisible(true);
+            jLabel3.setVisible(true);
+        } else {
+            fromdate.setVisible(false);
+            todate.setVisible(false);
+            jLabel2.setVisible(false);
+            jLabel3.setVisible(false);
+        }
 
 // TODO add your handling code here:
     }//GEN-LAST:event_reptypeComboboxActionPerformed
@@ -221,14 +222,13 @@ report.CreateReport(reporttype, fromDate, toDate);
             }
         });
     }
-    
-    
-    public void HideComponents(){
-    fromdate.setVisible(false);
-    todate.setVisible(false);
-    jLabel2.setVisible(false);
-    jLabel3.setVisible(false);       
-            
+
+    public void HideComponents() {
+        fromdate.setVisible(false);
+        todate.setVisible(false);
+        jLabel2.setVisible(false);
+        jLabel3.setVisible(false);
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

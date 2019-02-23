@@ -1692,8 +1692,8 @@
                         <Column editable="false" title="Supplier Name" type="java.lang.Object"/>
                         <Column editable="true" title="Category Id" type="java.lang.Object"/>
                         <Column editable="true" title="Category Name" type="java.lang.Object"/>
-                        <Column editable="true" title="Available Quantity" type="java.lang.Object"/>
                         <Column editable="true" title="Unit Price" type="java.lang.Object"/>
+                        <Column editable="true" title="Available Quantity" type="java.lang.Object"/>
                         <Column editable="true" title="Status" type="java.lang.Object"/>
                       </Table>
                     </Property>

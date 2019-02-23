@@ -372,11 +372,11 @@ public class Employeedetails extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Employee ID", "Name", "Date of Birth", "Address", "Tele No", "Department", "Position", "Service since"
+                "Employee ID", "Name", "Date of Birth", "Address", "Tele No", "Department", "Service since"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, false, true, true, false, false, false
+                false, true, false, true, true, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -552,7 +552,7 @@ public class Employeedetails extends javax.swing.JFrame {
                 validated = false;
             } 
               
-                 if((nic.length()!=12 ||nic.length()!=10)){
+                 if((nic.length()!=10)){
                  JOptionPane.showMessageDialog(this,"nic should have at least 10 numbers");
                 validated = false;
                  }
@@ -696,7 +696,7 @@ public class Employeedetails extends javax.swing.JFrame {
         employeeDetailsTable.setShowGrid(true);
         DefaultTableModel model = (DefaultTableModel) employeeDetailsTable.getModel();
         model.setRowCount(0);
-        Object rowData[] = new Object[8];
+        Object rowData[] = new Object[7];
         for (Iterator it = res.iterator(); it.hasNext();) {
             List<String> innerList = (List<String>) it.next();
             rowData[0] = innerList.get(0);
@@ -706,7 +706,7 @@ public class Employeedetails extends javax.swing.JFrame {
             rowData[4] = innerList.get(4);
             rowData[5] = innerList.get(5);
             rowData[6] = innerList.get(6);
-            rowData[7] = innerList.get(7);
+            
 
             model.addRow(rowData);
 

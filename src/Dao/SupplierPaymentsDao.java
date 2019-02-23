@@ -27,18 +27,21 @@ import java.util.List;
 public class SupplierPaymentsDao {
 
     List<String> supplierIds = new ArrayList<String>();
+    List<String> AllSupplyIds = new ArrayList<String>();
     Connection con = null;
     PreparedStatement stm = null;
     ResultSet rst = null;
+    Connection con1 = null;
+    PreparedStatement stm1 = null;
+    ResultSet rst1 = null;
 
     SupplierPaymentDTO supply = new SupplierPaymentDTO();
     public List<List<String>> ListofSupplierDetailsList = new ArrayList<List<String>>();
-    public List<List<String>> ListofPaymentpaidDetailsList = new ArrayList<List<String>>();
-    public List<List<String>> ListofPaymentPayableDetailsList = new ArrayList<List<String>>();
+    public List<List<String>> ListofAllSupplierDetailsList = new ArrayList<List<String>>();
 
     public SupplierPaymentDTO getSupplyDetails() {
         try {
-            String sql = "select s.Supply_id, supplier.Supplier_name, pb.Payable_amount from Supplier supplier, Supply_details s, Payable pb where s.Supplier_id= supplier.Supplier_id and s.Supply_id = pb.Supply_details_id";
+            String sql = "select s.Supply_id, supplier.Supplier_name, pb.Payable_amount from Supplier supplier, Supply_details s, Payable pb where s.Supplier_id= supplier.Supplier_id and s.Supply_id = pb.Supply_details_id and pb.Paid_id IS NULL";
             Connection connection = DBConnection.getDBConnection().getConnection();// database connection
             con = DBConnection.getDBConnection().getConnection();
             stm = con.prepareStatement(sql);
@@ -56,8 +59,28 @@ public class SupplierPaymentsDao {
 
             }
 
+            String sql1 = "select s.Supply_id, supplier.Supplier_name, pb.Payable_amount from Supplier supplier, Supply_details s, Payable pb where s.Supplier_id= supplier.Supplier_id and s.Supply_id = pb.Supply_details_id";
+            Connection connection1 = DBConnection.getDBConnection().getConnection();// database connection
+            con1 = DBConnection.getDBConnection().getConnection();
+            stm1 = con.prepareStatement(sql1);
+            rst1 = stm1.executeQuery();
+
+            while (rst1.next()) {
+                List<String> AllSupplyDetails = new ArrayList<String>(); //  create supplier details array                  
+                AllSupplyIds.add(rst1.getString(1)); //orderId list
+
+                for (int i = 1; i < 4; i++) {
+                    AllSupplyDetails.add(rst1.getString(i));
+                }
+
+                ListofAllSupplierDetailsList.add(AllSupplyDetails);
+
+            }
+
             supply.supplyDetails = ListofSupplierDetailsList;
             supply.supplyIds = supplierIds;
+            supply.AllSupplyDetails = ListofAllSupplierDetailsList;
+            supply.AllsupplyIds = AllSupplyIds;
 
             return supply;
         } catch (SQLException e) {
@@ -70,13 +93,12 @@ public class SupplierPaymentsDao {
     }
 
     public boolean addpaymentPaid(PaymentPaid Paymentpaid) throws SQLException {
-      String Supplyid = Paymentpaid.getSupplyId();
+        String Supplyid = Paymentpaid.getSupplyId();
         String paymentPaidId = Paymentpaid.getPaymentPaidId();
         Date PaidDate = Paymentpaid.getPaidDate();
         Double totalAmount = Paymentpaid.getTotalAmount();
         Double discount = Paymentpaid.getDiscount();
         Double netAmount = Paymentpaid.getPaidAmount();
-        
 
         Connection connection = null;
 
@@ -87,40 +109,29 @@ public class SupplierPaymentsDao {
 
             String sqlPaymentpaid = "insert into Supplier_payments values(?,?,?,?,?)";
             PreparedStatement stmpaymentpaid = connection.prepareStatement(sqlPaymentpaid);
-            
-            
 
             stmpaymentpaid.setObject(1, paymentPaidId);
             stmpaymentpaid.setObject(2, netAmount);
             stmpaymentpaid.setObject(3, discount);
-             stmpaymentpaid.setObject(4, totalAmount);
+            stmpaymentpaid.setObject(4, totalAmount);
             stmpaymentpaid.setObject(5, PaidDate);
-           
 
-           String sqlupdate = "update Payable set Paid_id = ? where Supply_details_id=?";
-        PreparedStatement stmupdate= connection.prepareStatement(sqlupdate);
-        stmupdate.setObject(1, paymentPaidId);
-        stmupdate.setString(2, Supplyid);
+            String sqlupdate = "update Payable set Paid_id = ? where Supply_details_id=?";
+            PreparedStatement stmupdate = connection.prepareStatement(sqlupdate);
+            stmupdate.setObject(1, paymentPaidId);
+            stmupdate.setString(2, Supplyid);
 
-            
-           
+            int res = stmpaymentpaid.executeUpdate();
+            int res1 = stmupdate.executeUpdate();
 
-           
-
-            
-                int res = stmpaymentpaid.executeUpdate();
-                int res1 = stmupdate.executeUpdate();
-               
-
-                if (res == 1 && res1 == 1 ) {
-                    connection.commit();
-                    return true;
-                } else {
-                    connection.rollback();
-                    return false;
-                }
+            if (res == 1 && res1 == 1) {
+                connection.commit();
+                return true;
+            } else {
+                connection.rollback();
+                return false;
             }
-          catch (SQLException e) {
+        } catch (SQLException e) {
             connection.rollback();
             System.out.println("error@ " + e.getMessage());
             e.printStackTrace();
@@ -132,131 +143,107 @@ public class SupplierPaymentsDao {
         return false;
 
     }
-    public String nextPaymentPaidId(){
+
+    public String nextPaymentPaidId() {
         Connection con = null;
         Statement stm = null;
         ResultSet rst = null;
-        int last=0;
-        String id ="";
-        
-        try
-        {           
+        int last = 0;
+        String id = "";
+
+        try {
             String sql = "select Paid_id from Supplier_payments";
             Connection connection = DBConnection.getDBConnection().getConnection();
             //stm = connection.createStatement();
             stm = connection.createStatement(
-    ResultSet.TYPE_SCROLL_INSENSITIVE, 
-    ResultSet.CONCUR_READ_ONLY);
-            rst = stm.executeQuery(sql);  
-            
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            rst = stm.executeQuery(sql);
+
             rst.last();
-            last = rst.getRow()+1;
-             id = "PD00"+last;
+            last = rst.getRow() + 1;
+            id = "PD00" + last;
             return id;
-        }
-        catch(SQLException e)
-        {
-        e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-         e.printStackTrace();  
+            e.printStackTrace();
         }
         return id;
     }
-    
-    
-    public List ViewPaymentPaid(){
-        
-     
+
+    public List ViewPaymentPaid() {
+
+        List<List<String>> ListofPaymentpaidDetailsList = new ArrayList<List<String>>();
         Connection con = null;
-        PreparedStatement  stm = null;
+        PreparedStatement stm = null;
         ResultSet rst = null;
-        int last=0;
-        
-        try
-        { 
-            
-            
-            String sql = "select Sd.Supply_id ,supplier.Supplier_name ,Pd.Total_amount, Pd.Discount,Pd.Net_amount,Pd.Paid_date "+
-                    "from Supplier_payments Pd, Supplier supplier,Supply_details Sd, Payable Pb where Sd.Supplier_id  =supplier.Supplier_id and Sd.Supply_id = Pb.Supply_details_id and Pd.Paid_id = Pb.Paid_id";
+        int last = 0;
+
+        try {
+
+            String sql = "select Sd.Supply_id ,supplier.Supplier_name ,Pd.Total_amount, Pd.Discount,Pd.Net_amount,Pd.Paid_date "
+                    + "from Supplier_payments Pd, Supplier supplier,Supply_details Sd, Payable Pb where Sd.Supplier_id  =supplier.Supplier_id and Sd.Supply_id = Pb.Supply_details_id and Pd.Paid_id = Pb.Paid_id";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
-            rst = stm.executeQuery(); 
-            
-           
-            while(rst.next())
-            {  
-                  List<String> paymentReceivedDetails = new ArrayList<String>();
-                    for (int i = 1; i < 7; i++){
-                            paymentReceivedDetails.add(rst.getString(i));
-                            
-                            
-                    }
+            rst = stm.executeQuery();
+
+            while (rst.next()) {
+                List<String> paymentReceivedDetails = new ArrayList<String>();
+                for (int i = 1; i < 7; i++) {
+                    paymentReceivedDetails.add(rst.getString(i));
+
+                }
 
                 ListofPaymentpaidDetailsList.add(paymentReceivedDetails);
-               
-               
+
             }
             return ListofPaymentpaidDetailsList;
-        }
-        catch(SQLException e)
-        {
+        } catch (SQLException e) {
             System.out.println("error@ " + e.getMessage());
-        e.printStackTrace();
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-         e.printStackTrace();  
+            e.printStackTrace();
         }
-       return ListofPaymentpaidDetailsList;
-    } 
-   public List ViewPaymentPayable(){
-        
-     
-        Connection con = null;
-        PreparedStatement  stm = null;
-        ResultSet rst = null;
-        int last=0;
-        
-        try
-        { 
-            
-            
-            String sql = "select Sd.Supply_id , supplier.Supplier_id, supplier.Supplier_name ,Pb.Payable_amount\n" +
-"                    from Supplier supplier ,Supply_details Sd, Payable Pb where Sd.Supplier_id  =supplier.Supplier_id and Sd.Supply_id = Pb.Supply_details_id";
-            Connection connection = DBConnection.getDBConnection().getConnection();
-            stm = connection.prepareStatement(sql);
-            rst = stm.executeQuery(); 
-            
-           
-            while(rst.next())
-            {  
-                  List<String> paymentReceivableDetails = new ArrayList<String>();
-                    for (int i = 1; i < 5; i++){
-                        
-                        
-                        paymentReceivableDetails.add(rst.getString(i));
-                        
-                            
-                            
-                          
-                    }
-
-                ListofPaymentPayableDetailsList.add(paymentReceivableDetails);
-               
-               
-            }
-            return ListofPaymentPayableDetailsList;
-        }
-        catch(SQLException e)
-        {
-            System.out.println("error@ " + e.getMessage());
-        e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-         e.printStackTrace();  
-        }
-       return ListofPaymentPayableDetailsList;
-    } 
-   
-
-
+        return ListofPaymentpaidDetailsList;
     }
 
+    public List ViewPaymentPayable() {
 
+        List<List<String>> ListofPaymentPayableDetailsList = new ArrayList<List<String>>();
+
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rst = null;
+        int last = 0;
+
+        try {
+
+            String sql = "select Sd.Supply_id , supplier.Supplier_id, supplier.Supplier_name ,Pb.Payable_amount\n"
+                    + "                    from Supplier supplier ,Supply_details Sd, Payable Pb where Sd.Supplier_id  =supplier.Supplier_id and Sd.Supply_id = Pb.Supply_details_id and pb.Paid_id IS NULL";
+            Connection connection = DBConnection.getDBConnection().getConnection();
+            stm = connection.prepareStatement(sql);
+            rst = stm.executeQuery();
+
+            while (rst.next()) {
+                List<String> paymentReceivableDetails = new ArrayList<String>();
+                for (int i = 1; i < 5; i++) {
+
+                    paymentReceivableDetails.add(rst.getString(i));
+
+                }
+
+                ListofPaymentPayableDetailsList.add(paymentReceivableDetails);
+
+            }
+            return ListofPaymentPayableDetailsList;
+        } catch (SQLException e) {
+            System.out.println("error@ " + e.getMessage());
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return ListofPaymentPayableDetailsList;
+    }
+
+}

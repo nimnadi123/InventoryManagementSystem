@@ -116,7 +116,7 @@ public class hold extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okbuttonActionPerformed
-        Purchasedetails h=new Purchasedetails();
+        Purchasedetails h = new Purchasedetails();
         h.setVisible(true);
     }//GEN-LAST:event_okbuttonActionPerformed
 

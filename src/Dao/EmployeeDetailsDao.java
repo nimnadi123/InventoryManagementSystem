@@ -23,7 +23,8 @@ import java.util.Date;
  * @author user
  */
 public class EmployeeDetailsDao {
-     public List<List<String>> ListofEmployeeList = new ArrayList<List<String>>();
+
+    public List<List<String>> ListofEmployeeList = new ArrayList<List<String>>();
 
     public boolean addEmployee(EmployeeDetails emp) throws SQLException, ParseException {
 
@@ -34,7 +35,7 @@ public class EmployeeDetailsDao {
 
         Date dateOfBirth = emp.getDateOfBirth();
         String Employee_Id = emp.getEmployeeId();
-        String userName =emp.getEmployeeId();
+        String userName = emp.getEmployeeId();
         int age = emp.getAge();
         String gender = emp.getGender();
         String Department = emp.getDepartment();
@@ -87,79 +88,67 @@ public class EmployeeDetailsDao {
         return true;
 
     }
-    
-   public List ViewEmployeeDetails(){
-        
-     
+
+    public List ViewEmployeeDetails() {
+
         Connection con = null;
-        PreparedStatement  stm = null;
+        PreparedStatement stm = null;
         ResultSet rst = null;
-        int last=0;
-        
-        try
-        { 
-            
-            
-            String sql = "select emp.Employee_id,emp.Employee_name,emp.Dateofbirth,emp.Personal_adress,emp.TeleNo,emp.Department,emp.Role_id,emp.Hireddate"
-      +" from Employee emp";
-           //  String sql = "select emp.Employee_id,emp.Employee_name,emp.Department,emp.Mail_address,emp.User_name,emp.Role_id,emp.TeleNo,emp.Personal_adress,emp.nic"
-     // +",emp.Gender,emp.Dateofbirth,emp.Age,emp.Hireddate from Employee emp";
+        int last = 0;
+
+        try {
+
+            String sql = "select emp.Employee_id,emp.Employee_name,emp.Dateofbirth,emp.Personal_adress,emp.TeleNo,emp.Department,emp.Hireddate"
+                    + " from Employee emp";
+            //  String sql = "select emp.Employee_id,emp.Employee_name,emp.Department,emp.Mail_address,emp.User_name,emp.Role_id,emp.TeleNo,emp.Personal_adress,emp.nic"
+            // +",emp.Gender,emp.Dateofbirth,emp.Age,emp.Hireddate from Employee emp";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
-            rst = stm.executeQuery(); 
-            
-            
-           
-            while(rst.next())
-            {  
-                  List<String> employeedetails = new ArrayList<String>();
-                    for (int i = 1; i < 9 ; i++){
-                            employeedetails.add(rst.getString(i));
-                    }
+            rst = stm.executeQuery();
+
+            while (rst.next()) {
+                List<String> employeedetails = new ArrayList<String>();
+                for (int i = 1; i < 8; i++) {
+                    employeedetails.add(rst.getString(i));
+                }
 
                 ListofEmployeeList.add(employeedetails);
-               
-               
+
             }
             return ListofEmployeeList;
-        }
-        catch(SQLException e)
-        {
+        } catch (SQLException e) {
             System.out.println("error@ " + e.getMessage());
-        e.printStackTrace();
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-         e.printStackTrace();  
+            e.printStackTrace();
         }
-       return ListofEmployeeList;
+        return ListofEmployeeList;
     }
-   
-    public String nextEmployeeId(){
+
+    public String nextEmployeeId() {
         Connection con = null;
         Statement stm = null;
         ResultSet rst = null;
-        int last=0;
-        String id ="";
-        
-        try
-        {           
+        int last = 0;
+        String id = "";
+
+        try {
             String sql = "select Employee_id from Employee";
             Connection connection = DBConnection.getDBConnection().getConnection();
             //stm = connection.createStatement();
             stm = connection.createStatement(
-    ResultSet.TYPE_SCROLL_INSENSITIVE, 
-    ResultSet.CONCUR_READ_ONLY);
-            rst = stm.executeQuery(sql);  
-            
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            rst = stm.executeQuery(sql);
+
             rst.last();
-            last = rst.getRow()+1;
-             id = "E00"+last;
+            last = rst.getRow() + 1;
+            id = "E00" + last;
             return id;
-        }
-        catch(SQLException e)
-        {
-        e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-         e.printStackTrace();  
+            e.printStackTrace();
         }
         return id;
     }

@@ -23,10 +23,13 @@ import java.util.List;
  * @author user
  */
 public class SupplierDetailsDao {
-     public List<List<String>> ListofSupplierDetailsList = new ArrayList<List<String>>();
-     public boolean addSupplier( SupplierDetails supplier) throws SQLException, ParseException {
-        String supplierId= supplier.getSupplierId();
-        String supplierName= supplier.getSupplierName();
+
+    public List<List<String>> ListofSupplierDetailsList = new ArrayList<List<String>>();
+
+    public boolean addSupplier(SupplierDetails supplier) throws SQLException, ParseException {
+        // assign peoperties in supplier to seperate variables
+        String supplierId = supplier.getSupplierId();
+        String supplierName = supplier.getSupplierName();
         int teleNo = supplier.getTelephoneNo();
         String businessPlaceAddress = supplier.getBusinessPlaceAddress();
         Date addedDate = supplier.getAddedDate();
@@ -37,8 +40,8 @@ public class SupplierDetailsDao {
 
         try {
             String sql = "insert into Supplier values(?,?,?,?,?,?)";
-            connection = DBConnection.getDBConnection().getConnection();
-            stm = connection.prepareStatement(sql);
+            connection = DBConnection.getDBConnection().getConnection(); //get connection
+            stm = connection.prepareStatement(sql); //create prepared statement with sql
 
             stm.setObject(1, supplierId);
             stm.setObject(2, supplierName);
@@ -46,8 +49,8 @@ public class SupplierDetailsDao {
             stm.setObject(4, mailAddress);
             stm.setObject(5, businessPlaceAddress);
             stm.setObject(6, addedDate);
-            
-            int res = stm.executeUpdate();
+
+            int res = stm.executeUpdate(); //excute statement and assign result to int res
 
             if (res == 1) {
                 connection.commit();
@@ -68,80 +71,66 @@ public class SupplierDetailsDao {
         return true;
 
     }
-     
-     public List ViewSupplierDetails(){
-        
-     
+
+    public List ViewSupplierDetails() {
+
         Connection con = null;
-        PreparedStatement  stm = null;
+        PreparedStatement stm = null;
         ResultSet rst = null;
-        int last=0;
-        
-        try
-        { 
-            
-            
-            String sql = "select sup.Supplier_id, sup.Supplier_name,sup.Supplier_address,sup.Email_address,sup.Telephone_no\n" +
-"  from Supplier sup";
+        int last = 0;
+
+        try {
+
+            String sql = "select sup.Supplier_id, sup.Supplier_name,sup.Supplier_address,sup.Email_address,sup.Telephone_no\n"
+                    + "  from Supplier sup";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
-            rst = stm.executeQuery(); 
-            
-           
-            while(rst.next())
-            {  
-                  List<String> supplierDetails = new ArrayList<String>();
-                    for (int i = 1; i < 6 ; i++){
-                            supplierDetails.add(rst.getString(i));
-                    }
+            rst = stm.executeQuery();
+
+            while (rst.next()) {
+                List<String> supplierDetails = new ArrayList<String>();
+                for (int i = 1; i < 6; i++) {
+                    supplierDetails.add(rst.getString(i));
+                }
 
                 ListofSupplierDetailsList.add(supplierDetails);
-               
-               
+
             }
             return ListofSupplierDetailsList;
-        }
-        catch(SQLException e)
-        {
+        } catch (SQLException e) {
             System.out.println("error@ " + e.getMessage());
-        e.printStackTrace();
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-         e.printStackTrace();  
+            e.printStackTrace();
         }
-       return ListofSupplierDetailsList;
+        return ListofSupplierDetailsList;
     }
-     public String nextSupplierId(){
+
+    public String nextSupplierId() {
         Connection con = null;
         Statement stm = null;
         ResultSet rst = null;
-        int last=0;
-        String id ="";
-        
-        try
-        {           
+        int last = 0;
+        String id = "";
+
+        try {
             String sql = "select Supplier_id from Supplier";
             Connection connection = DBConnection.getDBConnection().getConnection();
             //stm = connection.createStatement();
             stm = connection.createStatement(
-    ResultSet.TYPE_SCROLL_INSENSITIVE, 
-    ResultSet.CONCUR_READ_ONLY);
-            rst = stm.executeQuery(sql);  
-            
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            rst = stm.executeQuery(sql);
+
             rst.last();
-            last = rst.getRow()+1;
-             id = "S00"+last;
+            last = rst.getRow() + 1;
+            id = "S00" + last;
             return id;
-        }
-        catch(SQLException e)
-        {
-        e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-         e.printStackTrace();  
+            e.printStackTrace();
         }
         return id;
     }
 }
-
-     
-    
-

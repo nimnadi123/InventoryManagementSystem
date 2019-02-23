@@ -47,7 +47,7 @@ public class inventorydetails extends javax.swing.JFrame {
     public inventorydetails() {
         initComponents();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-      setBounds(0,0,screenSize.width, screenSize.height);
+        setBounds(0, 0, screenSize.width, screenSize.height);
         MakeFieldsNoteditable();
         getInventoryDetails();
         generateId();
@@ -1136,7 +1136,7 @@ public class inventorydetails extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Item Name", "Item ID", "Supplier Name", "Category Id", "Category Name", "Available Quantity", "Unit Price", "Status"
+                "Item Name", "Item ID", "Supplier Name", "Category Id", "Category Name", "Unit Price", "Available Quantity", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -1499,7 +1499,7 @@ public class inventorydetails extends javax.swing.JFrame {
     }//GEN-LAST:event_categoryIDFieldActionPerformed
 
     private void unitpriceFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unitpriceFieldActionPerformed
-            CalculateTotalPriceAddNew();   // TODO add your handling code here:
+        CalculateTotalPriceAddNew();   // TODO add your handling code here:
     }//GEN-LAST:event_unitpriceFieldActionPerformed
 
     private void supplierIDComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierIDComboActionPerformed
@@ -1508,7 +1508,7 @@ public class inventorydetails extends javax.swing.JFrame {
     }//GEN-LAST:event_supplierIDComboActionPerformed
 
     private void unitpriceField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unitpriceField1ActionPerformed
-       CalculateTotalPriceUpdateInventory();        // TODO add your handling code here:
+        CalculateTotalPriceUpdateInventory();        // TODO add your handling code here:
     }//GEN-LAST:event_unitpriceField1ActionPerformed
 
     private void supplierIDCombo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierIDCombo1ActionPerformed
@@ -1518,24 +1518,21 @@ public class inventorydetails extends javax.swing.JFrame {
 
     private void searchRadiobuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchRadiobuttonActionPerformed
         String SearchId = searchField.getText();
-        if(itemIDRadiobutton.isSelected()==true){
-        
-          
-          SearchDao empDetailSearchDao = new SearchDao();
-      
-        List<List<String>> res = empDetailSearchDao.InventorySearchByItemId(SearchId);
-        addRowToJTable(res);
-        
-      }
-       if(SupIDRadiobutton.isSelected()==true){
-           SearchDao empDetailSearchDao = new SearchDao();
-      
-        List<List<String>> res = empDetailSearchDao.InventorySearchBystatus(SearchId);
-        addRowToJTable(res);
-      }
-      
-     
-        
+        if (itemIDRadiobutton.isSelected() == true) {
+
+            SearchDao empDetailSearchDao = new SearchDao();
+
+            List<List<String>> res = empDetailSearchDao.InventorySearchByItemId(SearchId);
+            addRowToJTable(res);
+
+        }
+        if (SupIDRadiobutton.isSelected() == true) {
+            SearchDao empDetailSearchDao = new SearchDao();
+
+            List<List<String>> res = empDetailSearchDao.InventorySearchBystatus(SearchId);
+            addRowToJTable(res);
+        }
+
         // TODO add your handling code here:
     }//GEN-LAST:event_searchRadiobuttonActionPerformed
 
@@ -1544,7 +1541,7 @@ public class inventorydetails extends javax.swing.JFrame {
     }//GEN-LAST:event_searchFieldActionPerformed
 
     private void unitpriceField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unitpriceField2ActionPerformed
- CalculateTotalPriceAddExisiting();       
+        CalculateTotalPriceAddExisiting();
         // TODO add your handling code here:
     }//GEN-LAST:event_unitpriceField2ActionPerformed
 
@@ -1612,17 +1609,16 @@ public class inventorydetails extends javax.swing.JFrame {
 
     private void quantityField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityField2ActionPerformed
         // TODO add your handling code here:
-       
-       
+
+
     }//GEN-LAST:event_quantityField2ActionPerformed
 
     private void netamountField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_netamountField2ActionPerformed
-            // TODO add your handling code here:
+        // TODO add your handling code here:
     }//GEN-LAST:event_netamountField2ActionPerformed
 
     private void quantityFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityFieldActionPerformed
-        
-       
+
         // TODO add your handling code here:
     }//GEN-LAST:event_quantityFieldActionPerformed
 
@@ -1961,10 +1957,10 @@ public class inventorydetails extends javax.swing.JFrame {
 
         if (validatednull == true) {
             Date currentdate = new Date();
-            if ((netamountField.getText().matches("[0-9]+") == false)) {
-                JOptionPane.showMessageDialog(this, "Total Payment cannot be included letters ");
-                validated = false;
-            }
+//            if ((netamountField.getText().matches("[0-9]+") == false)) {
+//                JOptionPane.showMessageDialog(this, "Total Payment cannot be included letters ");
+//                validated = false;
+//            }
 
             if ((unitpriceField.getText().matches("[0-9]+") == false)) {
                 JOptionPane.showMessageDialog(this, "Unit price cannot be included letters ");
@@ -2034,8 +2030,8 @@ public class inventorydetails extends javax.swing.JFrame {
                     boolean res = inventoryDetails.addNewInventory(inventory_item, 1);
                     if (res == true) {
                         JOptionPane.showMessageDialog(this, "Inventory added sucessfully");
-                        //ClearFields();
-                        //loadInventoryDetails();
+                        ClearFields();
+                        loadInventoryDetails();
                         generateId();
                     } else {
                         JOptionPane.showMessageDialog(this, "Error occur in adding Inventory");
@@ -2064,10 +2060,10 @@ public class inventorydetails extends javax.swing.JFrame {
 
         if (validatednull == true) {
             Date currentdate = new Date();
-            if ((netamountField2.getText().matches("[0-9]+") == false)) {
-                JOptionPane.showMessageDialog(this, "Total Payment cannot be included letters ");
-                validated = false;
-            }
+//            if ((netamountField2.getText().matches("[0-9]+") == false)) {
+//                JOptionPane.showMessageDialog(this, "Total Payment cannot be included letters ");
+//                validated = false;
+//            }
 
             if ((unitpriceField2.getText().matches("[0-9]+") == false)) {
                 JOptionPane.showMessageDialog(this, "Unit price cannot be included letters ");
@@ -2137,8 +2133,8 @@ public class inventorydetails extends javax.swing.JFrame {
                     boolean res = inventoryDetails.addNewInventory(inventory_item, 2);
                     if (res == true) {
                         JOptionPane.showMessageDialog(this, "Inventory added sucessfully");
-                        //ClearFields();
-                        //loadInventoryDetails();
+                        ClearFields();
+                        loadInventoryDetails();
                         generateId();
                     } else {
                         JOptionPane.showMessageDialog(this, "Error occur in adding Inventory");
@@ -2154,7 +2150,7 @@ public class inventorydetails extends javax.swing.JFrame {
     }
 
     public void UpdateInventory() {
-         boolean validatednull = true;
+        boolean validatednull = true;
         boolean validated = true;
 
         if (quantityField1.getText().equals("")
@@ -2164,9 +2160,9 @@ public class inventorydetails extends javax.swing.JFrame {
         }
 
         if (validatednull == true) {
-         
+
             Date currentdate = new Date();
-          
+
             if ((unitpriceField1.getText().matches("[0-9]+") == false)) {
                 JOptionPane.showMessageDialog(this, "Unit price cannot be included letters ");
                 validated = false;
@@ -2206,54 +2202,50 @@ public class inventorydetails extends javax.swing.JFrame {
 
             if (validated == true) {
                 String itemName = (String) updateItemNameCombo.getSelectedItem();
-        String categoryId = (String) updateCateogryIdCombo.getSelectedItem();
-        String categoryName = (String) updateCategoryNameCombo.getSelectedItem();
-        int quantity = Integer.parseInt(quantityField1.getText());
-        Double unitPrice = Double.parseDouble(unitpriceField1.getText());
-        Date itemAddedDate = date1.getDate();
-        String supplierId = (String) supplierIDCombo1.getSelectedItem();
-        String supplierName = (String) suppliernameCombo1.getSelectedItem();
-        String inventoryId = inventoryIdField2.getText();
-        String netAmount =netamountField1.getText();
-            
-             String itemId = (String) updateItemIdCombo.getSelectedItem();
+                String categoryId = (String) updateCateogryIdCombo.getSelectedItem();
+                String categoryName = (String) updateCategoryNameCombo.getSelectedItem();
+                int quantity = Integer.parseInt(quantityField1.getText());
+                Double unitPrice = Double.parseDouble(unitpriceField1.getText());
+                Date itemAddedDate = date1.getDate();
+                String supplierId = (String) supplierIDCombo1.getSelectedItem();
+                String supplierName = (String) suppliernameCombo1.getSelectedItem();
+                String inventoryId = inventoryIdField2.getText();
+                String netAmount = netamountField1.getText();
 
-       
+                String itemId = (String) updateItemIdCombo.getSelectedItem();
 
-        InventoryAddViewDTO inventory_item = new InventoryAddViewDTO();
-        inventory_item.setItemId(itemId);
-        inventory_item.setItemName(itemName);
-        inventory_item.setCategoryId(categoryId);
-        inventory_item.setQuantity(quantity);
-        inventory_item.setUnitPrice(unitPrice);
-        inventory_item.setSupplierId(supplierId);
-        inventory_item.setSupplierName(supplierName);
-        inventory_item.setNetAmount(netAmount);
-        inventory_item.setSupplyId(inventoryId);
-        inventory_item.setCategoryId(categoryId);
-        inventory_item.setNewInventoryDate(itemAddedDate);
+                InventoryAddViewDTO inventory_item = new InventoryAddViewDTO();
+                inventory_item.setItemId(itemId);
+                inventory_item.setItemName(itemName);
+                inventory_item.setCategoryId(categoryId);
+                inventory_item.setQuantity(quantity);
+                inventory_item.setUnitPrice(unitPrice);
+                inventory_item.setSupplierId(supplierId);
+                inventory_item.setSupplierName(supplierName);
+                inventory_item.setNetAmount(netAmount);
+                inventory_item.setSupplyId(inventoryId);
+                inventory_item.setCategoryId(categoryId);
+                inventory_item.setNewInventoryDate(itemAddedDate);
 
-        try {
-            boolean res = inventoryDetails.addNewInventory(inventory_item, 3);
-            if (res == true) {
-                JOptionPane.showMessageDialog(this, "Inventory added sucessfully");
-                ClearFields();
-                loadInventoryDetails();
-                generateId();
-            } else {
-                JOptionPane.showMessageDialog(this, "Error occur in adding Inventory");
+                try {
+                    boolean res = inventoryDetails.addNewInventory(inventory_item, 3);
+                    if (res == true) {
+                        JOptionPane.showMessageDialog(this, "Inventory added sucessfully");
+                        ClearFields();
+                        loadInventoryDetails();
+                        generateId();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Error occur in adding Inventory");
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ParseException ex) {
+                    Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
+
         }
-    }
-            
-            }
-        
-        
-       
+
     }
 
     public void loadInventoryDetails() {
@@ -2314,7 +2306,7 @@ public class inventorydetails extends javax.swing.JFrame {
         inventoryIdField.setEditable(false);
 
         itemid.setEditable(false);
-        
+
         inventoryIdField1.setEditable(false);
         inventoryIdField2.setEditable(false);
 
@@ -2347,8 +2339,8 @@ public class inventorydetails extends javax.swing.JFrame {
         }
 
     }
-    
-     public void CalculateTotalPriceAddExisiting() {
+
+    public void CalculateTotalPriceAddExisiting() {
         boolean val = true;
         if (quantityField2.getText().equals("") || unitpriceField2.getText().equals("")) {
             val = false;
@@ -2375,9 +2367,8 @@ public class inventorydetails extends javax.swing.JFrame {
         }
 
     }
-     
-     
-      public void CalculateTotalPriceUpdateInventory() {
+
+    public void CalculateTotalPriceUpdateInventory() {
         boolean val = true;
         if (quantityField1.getText().equals("") || unitpriceField1.getText().equals("")) {
             val = false;

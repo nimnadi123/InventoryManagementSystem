@@ -39,7 +39,7 @@ public class customerpayment extends javax.swing.JFrame {
     public customerpayment() {
         initComponents();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-      setBounds(0,0,screenSize.width, screenSize.height);
+        setBounds(0, 0, screenSize.width, screenSize.height);
         MakeFieldsNoteditable();
         loadOrderDetails();
         generateId();
@@ -446,7 +446,7 @@ public class customerpayment extends javax.swing.JFrame {
     }//GEN-LAST:event_totalpaymentActionPerformed
 
     private void discountfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discountfieldActionPerformed
-       CalculateNetAmount();
+        CalculateNetAmount();
         // TODO add your handling code here:
     }//GEN-LAST:event_discountfieldActionPerformed
 
@@ -462,7 +462,7 @@ public class customerpayment extends javax.swing.JFrame {
     private void searchOrNoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchOrNoButtonActionPerformed
         String searchId = searchOrNoButton.getText();
         SearchDao empDetailSearchDao = new SearchDao();
-      
+
         List<List<String>> res = empDetailSearchDao.SearchPaymentReceivedbyOrderId(searchId);
         addRowToJTable(res);
 // TODO add your handling code here:
@@ -493,7 +493,7 @@ public class customerpayment extends javax.swing.JFrame {
     private void payableserchbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payableserchbuttonActionPerformed
         String searchId = payableserchField.getText();
         SearchDao empDetailSearchDao = new SearchDao();
-      
+
         List<List<String>> res = empDetailSearchDao.PaymentReceivableSearchByOrderId(searchId);
         addRowToJTableReceivable(res);
 
@@ -544,92 +544,86 @@ public class customerpayment extends javax.swing.JFrame {
     }
 
     public void submitPaymentReceivedDetails() {
-        
-           boolean validatednull = true;
-        boolean validated =true;
-        
-        
-          if(totalpayment.getText().equals("")||discountfield.getText().equals("")||netpaymentfield.getText().equals("")||Date.getDate()== null)
-              {
-              validatednull = false;
-           JOptionPane.showMessageDialog(this,"Please fill up all the Fields ");           
+
+        boolean validatednull = true;
+        boolean validated = true;
+
+        if (totalpayment.getText().equals("") || discountfield.getText().equals("") || netpaymentfield.getText().equals("") || Date.getDate() == null) {
+            validatednull = false;
+            JOptionPane.showMessageDialog(this, "Please fill up all the Fields ");
         }
-          
-          
-          
-         if( validatednull==true)
-         {
-             Date currentdate = new Date();
-             
-              if ((totalpayment.getText().matches("[0-9]+") == false)) {
-              JOptionPane.showMessageDialog(this,"Total Payment cannot be includede letters ");
+
+        if (validatednull == true) {
+            Date currentdate = new Date();
+
+            if ((totalpayment.getText().matches("[0-9]+") == false)) {
+                JOptionPane.showMessageDialog(this, "Total Payment cannot be includede letters ");
                 validated = false;
             }
-              
-               if ((discountfield.getText().matches("[0-9]+") == false)) {
-              JOptionPane.showMessageDialog(this,"Discount cannot be includede letters ");
+
+            if ((discountfield.getText().matches("[0-9]+") == false)) {
+                JOptionPane.showMessageDialog(this, "Discount cannot be includede letters ");
                 validated = false;
             }
-               
-               
+
             if (!currentdate.after(Date.getDate())) {
-               JOptionPane.showMessageDialog(this,"Payment Received date is not valid");
+                JOptionPane.showMessageDialog(this, "Payment Received date is not valid");
                 validated = false;
             }
-           
+
             if (totalpayment.getText().length() > 15) {
                 validated = false;
-               JOptionPane.showMessageDialog(this, "Maximum length exceeds, allows less than 15 characters");
+                JOptionPane.showMessageDialog(this, "Maximum length exceeds, allows less than 15 characters");
             }
-             if (discountfield.getText().length() > 6) {
+            if (discountfield.getText().length() > 6) {
                 validated = false;
-               JOptionPane.showMessageDialog(this, "Maximum length exceeds");
+                JOptionPane.showMessageDialog(this, "Maximum length exceeds");
             }
             if (-1 != discountfield.getText().indexOf(" ")) {
-                JOptionPane.showMessageDialog(this,"Discount cannot have spaces");
+                JOptionPane.showMessageDialog(this, "Discount cannot have spaces");
                 validated = false;
             }
-               if (-1 != totalpayment.getText().indexOf(" ")) {
-                 JOptionPane.showMessageDialog(this,"Total Amount cannot have spaces");
+            if (-1 != totalpayment.getText().indexOf(" ")) {
+                JOptionPane.showMessageDialog(this, "Total Amount cannot have spaces");
                 validated = false;
             }
-               
-               if(validated == true){
-                    String orderid = (String) orderNo.getSelectedItem();
-        String paymentReceivedId = paymentReceivableId.getText();
-        Date ReceivedDate = Date.getDate();
-        Double totalAmount = Double.parseDouble(totalpayment.getText());
-        Double discount = Double.parseDouble(discountfield.getText());
-        Double netAmount = Double.parseDouble(netpaymentfield.getText());
 
-        PaymentReceived PaymentReceived = new PaymentReceived();
-        PaymentReceived.setOrderId(orderid);
-        PaymentReceived.setDiscount(discount);
-        PaymentReceived.setPaymentReceivedId(paymentReceivedId);
-        PaymentReceived.setReceivedAmount(netAmount);
-        PaymentReceived.setTotalAmount(totalAmount);
-        PaymentReceived.setReceivedDate(ReceivedDate);
-        try {
-            boolean res = customerPayment.addpaymentReceived(PaymentReceived);
-            if (res == true) {
-                JOptionPane.showMessageDialog(this, "Payment Received added sucessfully");
-                ClearFields();
-                loadOrderDetails();
-                generateId();
-            } else {
-                JOptionPane.showMessageDialog(this, "Error occur in adding received payment");
+            if (validated == true) {
+                String orderid = (String) orderNo.getSelectedItem();
+                String paymentReceivedId = paymentReceivableId.getText();
+                Date ReceivedDate = Date.getDate();
+                Double totalAmount = Double.parseDouble(totalpayment.getText());
+                Double discount = Double.parseDouble(discountfield.getText());
+                Double netAmount = Double.parseDouble(netpaymentfield.getText());
+
+                PaymentReceived PaymentReceived = new PaymentReceived();
+                PaymentReceived.setOrderId(orderid);
+                PaymentReceived.setDiscount(discount);
+                PaymentReceived.setPaymentReceivedId(paymentReceivedId);
+                PaymentReceived.setReceivedAmount(netAmount);
+                PaymentReceived.setTotalAmount(totalAmount);
+                PaymentReceived.setReceivedDate(ReceivedDate);
+                try {
+                    boolean res = customerPayment.addpaymentReceived(PaymentReceived);
+                    if (res == true) {
+                        JOptionPane.showMessageDialog(this, "Payment Received added sucessfully");
+                        ClearFields();
+                        loadOrderDetails();
+                        generateId();
+                        loadPaymentReceivedDetails();
+                        loadPaymentReceiveableDetails();
+
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Error occur in adding received payment");
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
+
         }
-         
-         }
-
-               }}
-         
-        
-        
-    
+    }
 
     public void getCustomerNameAndAmountByOrderId() {
 
@@ -728,36 +722,34 @@ public class customerpayment extends javax.swing.JFrame {
         discountfield.setText(null);
         netpaymentfield.setText(null);
     }
-    
-    public void MakeFieldsNoteditable(){
+
+    public void MakeFieldsNoteditable() {
         totalpayment.setEditable(false);
         paymentReceivableId.setEditable(false);
         customernamefield.setEditable(false);
     }
-    
-    public void CalculateNetAmount()
-    {
-        boolean val =true;
-        if(discountfield.getText().equals("")){
-              val = false;
-           JOptionPane.showMessageDialog(this,"Please fill the discount Fields ");           
-            
+
+    public void CalculateNetAmount() {
+        boolean val = true;
+        if (discountfield.getText().equals("")) {
+            val = false;
+            JOptionPane.showMessageDialog(this, "Please fill the discount Fields ");
+
         }
-        
-         if ((discountfield.getText().matches("[0-9]+") == false)) {
-              JOptionPane.showMessageDialog(this,"Discount cannot be includede letters ");
-                val = false;
-            }
-         
-         if(val == true)
-         {
-              Double totalAmount = Double.parseDouble(totalpayment.getText());
-              Double discount = Double.parseDouble(discountfield.getText());
-              Double netAmount =totalAmount-discount;
-              
-              netpaymentfield.setText(netAmount.toString());
-              netpaymentfield.setEditable(false);
-         }
+
+        if ((discountfield.getText().matches("[0-9]+") == false)) {
+            JOptionPane.showMessageDialog(this, "Discount cannot be includede letters ");
+            val = false;
+        }
+
+        if (val == true) {
+            Double totalAmount = Double.parseDouble(totalpayment.getText());
+            Double discount = Double.parseDouble(discountfield.getText());
+            Double netAmount = totalAmount - discount;
+
+            netpaymentfield.setText(netAmount.toString());
+            netpaymentfield.setEditable(false);
+        }
 
     }
 

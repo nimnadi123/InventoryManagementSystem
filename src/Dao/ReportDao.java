@@ -47,41 +47,41 @@ import java.util.logging.Logger;
  * @author user
  */
 public class ReportDao {
+
     public List<List<String>> ListofsalesDetailsList = new ArrayList<List<String>>();
-      public List<List<String>> ListofoutstandingsList = new ArrayList<List<String>>();
-        public List<List<String>> ListofcollectionDetailsList = new ArrayList<List<String>>();
+    public List<List<String>> ListofoutstandingsList = new ArrayList<List<String>>();
+    public List<List<String>> ListofcollectionDetailsList = new ArrayList<List<String>>();
 
     String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
 
     public boolean CreateReport(int reportType, Date fromDate, Date toDate) {
-        boolean res =false;
+        boolean res = false;
         if (reportType == 0) {
-             res = InventoryReportGenerate();
+            res = InventoryReportGenerate();
         }
 
         if (reportType == 1) {
-             res = ProfitPdfMonthly(fromDate, toDate);
+            res = ProfitPdfMonthly(fromDate, toDate);
 
         }
         if (reportType == 2) {
-             res  =ProfitPdfYear(fromDate, toDate);
-        }
-        
-        if(reportType==3){
-           res = ProfitPdfGeneric(fromDate, toDate);
-        }
-        
-         if(reportType==4){
-           res = SalesReportGeneration(fromDate, toDate);
+            res = ProfitPdfYear(fromDate, toDate);
         }
 
-           if(reportType==5){
-           res = OutStandingReportGeneration(fromDate, toDate);
+        if (reportType == 3) {
+            res = ProfitPdfGeneric(fromDate, toDate);
         }
-            if(reportType==6){
-           res = Collectionreport(fromDate, toDate);
+
+        if (reportType == 4) {
+            res = SalesReportGeneration(fromDate, toDate);
         }
-           
+
+        if (reportType == 5) {
+            res = OutStandingReportGeneration(fromDate, toDate);
+        }
+        if (reportType == 6) {
+            res = Collectionreport(fromDate, toDate);
+        }
 
         return res;
     }
@@ -89,39 +89,39 @@ public class ReportDao {
     public boolean InventoryReportGenerate() {
         String a = "TEST 78";
 
-        DateFormat outputFormatter = new SimpleDateFormat("MM/dd/yyyy");
+        DateFormat outputFormatter = new SimpleDateFormat("MM/dd/yyyy");//current date display in this format
         InventoryDetailsDao Inventory = new InventoryDetailsDao();
-        List Details = Inventory.ViewInventoryDetails();
+        List Details = Inventory.ViewInventoryDetails(); //take the records needed
         try {
 
-            OutputStream file = new FileOutputStream(new File("D:\\InventoryReport" + timeStamp + ".pdf"));
-            Document document = new Document(PageSize.A4.rotate());
+            OutputStream file = new FileOutputStream(new File("D:\\InventoryReport" + timeStamp + ".pdf")); // create empty pdf 
+            Document document = new Document(PageSize.A4.rotate()); //page size a4, rotate to horizontal.
 
-            PdfWriter.getInstance(document, file);
+            PdfWriter.getInstance(document, file); // start pdf write start.
             Date date = new Date();
             DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
             String reportDate = df.format(date);
-Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-            document.open();
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD); //define fondd
+            document.open(); //document open
             Paragraph p = new Paragraph("UNIQUE TRADING");
             Paragraph p1 = new Paragraph("No:36,1/1A,Rathnapura Road, Horana");
             Paragraph p3 = new Paragraph("Tele:0711198540");
-            Paragraph p4 = new Paragraph("Inventory Report",boldFont);
+            Paragraph p4 = new Paragraph("Inventory Report", boldFont);
             Paragraph p2 = new Paragraph("" + reportDate);
-            p.setAlignment(Element.ALIGN_CENTER);
+            p.setAlignment(Element.ALIGN_CENTER); //set alignment in text
             p3.setAlignment(Element.ALIGN_CENTER);
             p4.setAlignment(Element.ALIGN_CENTER);
             p1.setAlignment(Element.ALIGN_CENTER);
             p2.setAlignment(Element.ALIGN_CENTER);
-            document.add(p);
+            document.add(p); // write to pdf.
             document.add(p1);
             document.add(p3);
             document.add(p4);
             document.add(p2);
-            document.add(Chunk.NEWLINE);
+            document.add(Chunk.NEWLINE); // empty line added
 
-            PdfPTable table = new PdfPTable(8);
-            table.addCell("Item Name");
+            PdfPTable table = new PdfPTable(8); //table draw
+            table.addCell("Item Name"); //table columns
             table.addCell("Item Id");
             table.addCell("Supplier Name");
             table.addCell("Category Id");
@@ -169,8 +169,8 @@ Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
         SupplierDetailsDao supplier = new SupplierDetailsDao();
         List Details = supplier.ViewSupplierDetails();
         Date date = new Date();
-            DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
-            String reportDate = df.format(date);
+        DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+        String reportDate = df.format(date);
         try {
 
             OutputStream file = new FileOutputStream(new File("D:\\SuppliDetilsReport" + timeStamp + ".pdf"));
@@ -196,7 +196,6 @@ Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
             document.add(p2);
             document.add(Chunk.NEWLINE);
 
-
             PdfPTable table = new PdfPTable(5);
             table.addCell("Supplier Name");
             table.addCell("Supplier Id");
@@ -213,7 +212,7 @@ Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
             }
 
             document.add(table);
-             Paragraph p7 = new Paragraph("Authorized Signature");
+            Paragraph p7 = new Paragraph("Authorized Signature");
             Paragraph p8 = new Paragraph("Date");
             Paragraph p5 = new Paragraph("........................");
             Paragraph p6 = new Paragraph("........................");
@@ -237,7 +236,7 @@ Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
         } catch (Exception e) {
             e.printStackTrace();
         }
-return true;
+        return true;
     }
 
     public boolean ProfitPdfGeneric(Date fromDate, Date toDate) {
@@ -248,22 +247,22 @@ return true;
         String ToDate = outputFormatter.format(toDate);
 
         List Details = ProfitDetails(FromDate, ToDate);
-Date date = new Date();
-            DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
-            String reportDate = df.format(date);
+        Date date = new Date();
+        DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+        String reportDate = df.format(date);
         try {
 
             OutputStream file = new FileOutputStream(new File("D:\\ProfitGenericReport" + timeStamp + ".pdf"));
             Document document = new Document(PageSize.A4);
 
             PdfWriter.getInstance(document, file);
-Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
             document.open();
-             Paragraph p = new Paragraph("UNIQUE TRADING");
+            Paragraph p = new Paragraph("UNIQUE TRADING");
             Paragraph p1 = new Paragraph("No:36,1/1A,Rathnapura Road, Horana");
             Paragraph p3 = new Paragraph("Tele:0711198540");
             Paragraph p4 = new Paragraph("Inventory Report", boldFont);
-            Paragraph p2 = new Paragraph("" + FromDate+"to"+ToDate);
+            Paragraph p2 = new Paragraph("" + FromDate + "to" + ToDate);
             p.setAlignment(Element.ALIGN_CENTER);
             p3.setAlignment(Element.ALIGN_CENTER);
             p4.setAlignment(Element.ALIGN_CENTER);
@@ -340,12 +339,12 @@ Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
             Document document = new Document(PageSize.A4);
 
             PdfWriter.getInstance(document, file);
-Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
             document.open();
-           Paragraph p = new Paragraph("UNIQUE TRADING");
+            Paragraph p = new Paragraph("UNIQUE TRADING");
             Paragraph p1 = new Paragraph("No:36,1/1A,Rathnapura Road, Horana");
             Paragraph p3 = new Paragraph("Tele:0711198540");
-            Paragraph p4 = new Paragraph("Yearly Profit Report",boldFont);
+            Paragraph p4 = new Paragraph("Yearly Profit Report", boldFont);
             Paragraph p2 = new Paragraph("" + year);
             p.setAlignment(Element.ALIGN_CENTER);
             p3.setAlignment(Element.ALIGN_CENTER);
@@ -406,22 +405,21 @@ Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
         }
         return false;
     }
-    
+
     public boolean ProfitPdfMonthly(Date fromDate, Date toDate) {
         DateFormat outputFormatter = new SimpleDateFormat("yyyy-MM-dd");
-       String date = outputFormatter.format(fromDate);
-       //Date date = new Date();
+        String date = outputFormatter.format(fromDate);
+        //Date date = new Date();
 
-
-       Date fdate = null;
-       String monthName =null;
-        String month =null;
+        Date fdate = null;
+        String monthName = null;
+        String month = null;
         try {
-             fdate = outputFormatter.parse(date);
-             LocalDate localDate = fdate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-              month = Integer.toString(localDate.getMonthValue());
-             DateFormat sdf = new SimpleDateFormat("MMMM");
-              monthName = sdf.format(fdate);
+            fdate = outputFormatter.parse(date);
+            LocalDate localDate = fdate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            month = Integer.toString(localDate.getMonthValue());
+            DateFormat sdf = new SimpleDateFormat("MMMM");
+            monthName = sdf.format(fdate);
         } catch (ParseException ex) {
             Logger.getLogger(ReportDao.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -434,12 +432,12 @@ Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
             Document document = new Document(PageSize.A4);
 
             PdfWriter.getInstance(document, file);
-Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
             document.open();
-           Paragraph p = new Paragraph("UNIQUE TRADING");
+            Paragraph p = new Paragraph("UNIQUE TRADING");
             Paragraph p1 = new Paragraph("No:36,1/1A,Rathnapura Road, Horana");
             Paragraph p3 = new Paragraph("Tele:0711198540");
-            Paragraph p4 = new Paragraph("Monthly Profit Report",boldFont);
+            Paragraph p4 = new Paragraph("Monthly Profit Report", boldFont);
             Paragraph p2 = new Paragraph("" + monthName);
             p.setAlignment(Element.ALIGN_CENTER);
             p3.setAlignment(Element.ALIGN_CENTER);
@@ -500,15 +498,14 @@ Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
         }
         return false;
     }
-    
+
     public boolean SalesReportGeneration(Date fromDate, Date toDate) {
-       
+
         DateFormat outputFormatter = new SimpleDateFormat("yyyy-MM-dd");
-        
 
         String FromDate = outputFormatter.format(fromDate);
         String ToDate = outputFormatter.format(toDate);
-List Details = SalesDetails(ToDate,FromDate);
+        List Details = SalesDetails(ToDate, FromDate);
         try {
 
             OutputStream file = new FileOutputStream(new File("D:\\SalesReport" + timeStamp + ".pdf"));
@@ -518,13 +515,13 @@ List Details = SalesDetails(ToDate,FromDate);
             Date date = new Date();
             DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
             String reportDate = df.format(date);
-Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
             document.open();
             Paragraph p = new Paragraph("UNIQUE TRADING");
             Paragraph p1 = new Paragraph("No:36,1/1A,Rathnapura Road, Horana");
             Paragraph p3 = new Paragraph("Tele:0711198540");
             Paragraph p4 = new Paragraph("Sales Report", boldFont);
-            Paragraph p2 = new Paragraph("" + FromDate+"to"+ToDate);
+            Paragraph p2 = new Paragraph("" + FromDate + "to" + ToDate);
             p.setAlignment(Element.ALIGN_CENTER);
             p3.setAlignment(Element.ALIGN_CENTER);
             p4.setAlignment(Element.ALIGN_CENTER);
@@ -542,7 +539,7 @@ Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
             table.addCell("Customer Name");
             table.addCell("Item Name");
             table.addCell("Receivable Amount");
-           
+
             for (int i = 0; i < Details.size(); i++) {
                 List<String> inventoryDetails = new ArrayList<String>();
                 inventoryDetails = (List<String>) Details.get(i);
@@ -578,13 +575,12 @@ Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
     }
 
     public boolean OutStandingReportGeneration(Date fromDate, Date toDate) {
-       
-       DateFormat outputFormatter = new SimpleDateFormat("yyyy-MM-dd");
-        
+
+        DateFormat outputFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
         String FromDate = outputFormatter.format(fromDate);
         String ToDate = outputFormatter.format(toDate);
-List Details = OutstandingDetails(ToDate, FromDate);
+        List Details = OutstandingDetails(ToDate, FromDate);
 
         try {
 
@@ -595,13 +591,13 @@ List Details = OutstandingDetails(ToDate, FromDate);
             Date date = new Date();
             DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
             String reportDate = df.format(date);
-Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+            Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
             document.open();
             Paragraph p = new Paragraph("UNIQUE TRADING");
             Paragraph p1 = new Paragraph("No:36,1/1A,Rathnapura Road, Horana");
             Paragraph p3 = new Paragraph("Tele:0711198540");
             Paragraph p4 = new Paragraph("Outstanding Report", boldFont);
-          Paragraph p2 = new Paragraph("" + FromDate+"to"+ToDate);
+            Paragraph p2 = new Paragraph("" + FromDate + "to" + ToDate);
             p.setAlignment(Element.ALIGN_CENTER);
             p3.setAlignment(Element.ALIGN_CENTER);
             p4.setAlignment(Element.ALIGN_CENTER);
@@ -619,8 +615,8 @@ Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
             table.addCell("Customer Name");
             table.addCell("Item Name");
             table.addCell("Receivable Amount");
-table.addCell("Due date");
-           
+            table.addCell("Due date");
+
             for (int i = 0; i < Details.size(); i++) {
                 List<String> inventoryDetails = new ArrayList<String>();
                 inventoryDetails = (List<String>) Details.get(i);
@@ -654,14 +650,14 @@ table.addCell("Due date");
         }
         return false;
     }
-    
-    public boolean Collectionreport(Date fromDate,Date toDate) {
-       
-       DateFormat outputFormatter = new SimpleDateFormat("yyyy-MM-dd");
-  
+
+    public boolean Collectionreport(Date fromDate, Date toDate) {
+
+        DateFormat outputFormatter = new SimpleDateFormat("yyyy-MM-dd");
+
         String FromDate = outputFormatter.format(fromDate);
         String ToDate = outputFormatter.format(toDate);
-List Details = CollectionReportDetails(ToDate, FromDate);
+        List Details = CollectionReportDetails(ToDate, FromDate);
 
         try {
 
@@ -678,7 +674,7 @@ List Details = CollectionReportDetails(ToDate, FromDate);
             Paragraph p1 = new Paragraph("No:36,1/1A,Rathnapura Road, Horana");
             Paragraph p3 = new Paragraph("Tele:0711198540");
             Paragraph p4 = new Paragraph("Collection Report", boldFont);
-            Paragraph p2 = new Paragraph("" + FromDate+"-"+ToDate);
+            Paragraph p2 = new Paragraph("" + FromDate + "-" + ToDate);
             p.setAlignment(Element.ALIGN_CENTER);
             p3.setAlignment(Element.ALIGN_CENTER);
             p4.setAlignment(Element.ALIGN_CENTER);
@@ -695,8 +691,8 @@ List Details = CollectionReportDetails(ToDate, FromDate);
             table.addCell("Order Id");
             table.addCell("Customer Name");
             table.addCell("Received Amount");
-table.addCell("Received Id");
-           
+            table.addCell("Received Id");
+
             for (int i = 0; i < Details.size(); i++) {
                 List<String> inventoryDetails = new ArrayList<String>();
                 inventoryDetails = (List<String>) Details.get(i);
@@ -730,8 +726,7 @@ table.addCell("Received Id");
         }
         return false;
     }
-    
-    
+
     public List ProfitDetailsYear(String year) {
         Connection con = null;
         PreparedStatement stm = null;
@@ -809,7 +804,7 @@ table.addCell("Received Id");
         }
         return PaymentDetails;
     }
-    
+
     public List ProfitDetailsMonth(String month) {
         Connection con = null;
         PreparedStatement stm = null;
@@ -886,7 +881,7 @@ table.addCell("Received Id");
         }
         return PaymentDetails;
     }
-    
+
     public List ProfitDetails(String fromDate, String toDate) {
         Connection con = null;
         PreparedStatement stm = null;
@@ -967,147 +962,124 @@ table.addCell("Received Id");
         }
         return PaymentDetails;
     }
-    
-   public List SalesDetails(String toDate, String fromDate){
-        
-     
+
+    public List SalesDetails(String toDate, String fromDate) {
+
         Connection con = null;
-        PreparedStatement  stm = null;
+        PreparedStatement stm = null;
         ResultSet rst = null;
-        int last=0;
-        
-        try
-        { 
-            
-           
-            String sql = "select o.Purchase_id, cust.Customer_name, i.item_name, pr.Receivable_amount\n" +
-"from Purchase_details o, Customer cust, Items i, Payment_receivable pr\n" +
-"where o.Purchase_id = pr.Purchase_id and o.Item_id =i.Item_id and o.Customer_id = cust.Customer_id and o.Orderd_date <? and o.Orderd_date >?";          
+        int last = 0;
+
+        try {
+
+            String sql = "select o.Purchase_id, cust.Customer_name, i.item_name, pr.Receivable_amount\n"
+                    + "from Purchase_details o, Customer cust, Items i, Payment_receivable pr\n"
+                    + "where o.Purchase_id = pr.Purchase_id and o.Item_id =i.Item_id and o.Customer_id = cust.Customer_id and o.Orderd_date <? and o.Orderd_date >?";
             Connection connection = DBConnection.getDBConnection().getConnection();
             PreparedStatement preparedStatement1 = connection.prepareStatement(sql);
             preparedStatement1.setString(1, toDate);
             preparedStatement1.setString(2, fromDate);
 
             rst = preparedStatement1.executeQuery();
-           
-            while(rst.next())
-            {  
-                  List<String> salesDetails = new ArrayList<String>();
-                
-                    for (int i = 1; i < 5; i++){
-                            salesDetails.add(rst.getString(i));
-                            
-                          
-                    }
+
+            while (rst.next()) {
+                List<String> salesDetails = new ArrayList<String>();
+
+                for (int i = 1; i < 5; i++) {
+                    salesDetails.add(rst.getString(i));
+
+                }
 
                 ListofsalesDetailsList.add(salesDetails);
-               
-               
+
             }
             return ListofsalesDetailsList;
-        }
-        catch(SQLException e)
-        {
+        } catch (SQLException e) {
             System.out.println("error@ " + e.getMessage());
-        e.printStackTrace();
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-         e.printStackTrace();  
+            e.printStackTrace();
         }
-       return ListofsalesDetailsList;
+        return ListofsalesDetailsList;
 
-   }
-public List OutstandingDetails(String toDate, String fromDate){
-        
-     
+    }
+
+    public List OutstandingDetails(String toDate, String fromDate) {
+
         Connection con = null;
-        PreparedStatement  stm = null;
+        PreparedStatement stm = null;
         ResultSet rst = null;
-        int last=0;
-        
-        try
-        { 
-            
-           
-            String sql = "select o.Purchase_id, cust.Customer_name, i.item_name, pr.Receivable_amount, pr.Due_date\n" +
-"from Purchase_details o, Customer cust, Items i, Payment_receivable pr\n" +
-"where o.Purchase_id = pr.Purchase_id and o.Item_id =i.Item_id and o.Customer_id = cust.Customer_id and pr.Isoutstanding =1 and o.Orderd_date <? and o.Orderd_date >?";          
+        int last = 0;
+
+        try {
+
+            String sql = "select o.Purchase_id, cust.Customer_name, i.item_name, pr.Receivable_amount, pr.Due_date\n"
+                    + "from Purchase_details o, Customer cust, Items i, Payment_receivable pr\n"
+                    + "where o.Purchase_id = pr.Purchase_id and o.Item_id =i.Item_id and o.Customer_id = cust.Customer_id and pr.Isoutstanding =1 and o.Orderd_date <? and o.Orderd_date >?";
             Connection connection = DBConnection.getDBConnection().getConnection();
             PreparedStatement preparedStatement1 = connection.prepareStatement(sql);
             preparedStatement1.setString(1, toDate);
             preparedStatement1.setString(2, fromDate);
 
             rst = preparedStatement1.executeQuery();
-           
-            while(rst.next())
-            {  
-                  List<String> outstandingDetails = new ArrayList<String>();
-                
-                    for (int i = 1; i < 6; i++){
-                            outstandingDetails.add(rst.getString(i));
-                            
-                          
-                    }
+
+            while (rst.next()) {
+                List<String> outstandingDetails = new ArrayList<String>();
+
+                for (int i = 1; i < 6; i++) {
+                    outstandingDetails.add(rst.getString(i));
+
+                }
 
                 ListofoutstandingsList.add(outstandingDetails);
-               
-               
+
             }
             return ListofoutstandingsList;
-        }
-        catch(SQLException e)
-        {
+        } catch (SQLException e) {
             System.out.println("error@ " + e.getMessage());
-        e.printStackTrace();
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-         e.printStackTrace();  
+            e.printStackTrace();
         }
-       return ListofoutstandingsList;
-    } 
-public List CollectionReportDetails(String toDate, String fromDate){
-        
-     
+        return ListofoutstandingsList;
+    }
+
+    public List CollectionReportDetails(String toDate, String fromDate) {
+
         Connection con = null;
-        PreparedStatement  stm = null;
+        PreparedStatement stm = null;
         ResultSet rst = null;
-        int last=0;
-        
-        try
-        { 
-            
-           
-            String sql = "select o.Purchase_id, cust.Customer_name, rd.Received_amount, rd.Payment_received_id\n" +
-"from Purchase_details o, Customer cust, Items i, Payment_receivable pr,Payment_Received rd \n" +
-"where o.Purchase_id = pr.Purchase_id and o.Customer_id = cust.Customer_id and pr.Payment_received_id=rd.Payment_received_id and o.Orderd_date <? and o.Orderd_date >?";          
+        int last = 0;
+
+        try {
+
+            String sql = "select distinct o.Purchase_id, cust.Customer_name, rd.Received_amount, rd.Payment_received_id\n"
+                    + "from Purchase_details o, Customer cust, Items i, Payment_receivable pr,Payment_Received rd \n"
+                    + "where o.Purchase_id = pr.Purchase_id and o.Customer_id = cust.Customer_id and pr.Payment_received_id=rd.Payment_received_id and o.Orderd_date <? and o.Orderd_date >?";
             Connection connection = DBConnection.getDBConnection().getConnection();
             PreparedStatement preparedStatement1 = connection.prepareStatement(sql);
             preparedStatement1.setString(1, toDate);
             preparedStatement1.setString(2, fromDate);
 
             rst = preparedStatement1.executeQuery();
-           
-            while(rst.next())
-            {  
-                  List<String> collectionDetails = new ArrayList<String>();
-                
-                    for (int i = 1; i < 5; i++){
-                            collectionDetails.add(rst.getString(i));
-                            
-                          
-                    }
+
+            while (rst.next()) {
+                List<String> collectionDetails = new ArrayList<String>();
+
+                for (int i = 1; i < 5; i++) {
+                    collectionDetails.add(rst.getString(i));
+                }
 
                 ListofcollectionDetailsList.add(collectionDetails);
-               
-               
+
             }
             return ListofcollectionDetailsList;
-        }
-        catch(SQLException e)
-        {
+        } catch (SQLException e) {
             System.out.println("error@ " + e.getMessage());
-        e.printStackTrace();
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-         e.printStackTrace();  
+            e.printStackTrace();
         }
-       return ListofcollectionDetailsList;
-    } 
+        return ListofcollectionDetailsList;
+    }
 }

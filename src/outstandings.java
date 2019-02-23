@@ -14,7 +14,6 @@ import javax.swing.table.DefaultTableModel;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author user
@@ -24,12 +23,12 @@ public class outstandings extends javax.swing.JFrame {
     /**
      * Creates new form outstandings
      */
-    
     List<List<String>> res = new ArrayList<List<String>>();
+
     public outstandings() {
         initComponents();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-      setBounds(0,0,screenSize.width, screenSize.height);
+        setBounds(0, 0, screenSize.width, screenSize.height);
         LoadPaymentstobeOutstanded();
     }
 
@@ -107,20 +106,18 @@ public class outstandings extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-              OutstandingDao outstanding = new OutstandingDao();
-              boolean result = outstanding.MakePaymentsOutstanding(res);
-              if(result==true){
-                  JOptionPane.showMessageDialog(this, "Make orders outstanding Sucessfully");
-              }
-              
-              else{
-                  JOptionPane.showMessageDialog(this, "Error in making payments outstanding");
-                  
-              }
+        OutstandingDao outstanding = new OutstandingDao();
+        boolean result = outstanding.MakePaymentsOutstanding(res);
+        if (result == true) {
+            JOptionPane.showMessageDialog(this, "Make orders outstanding Sucessfully");
+        } else {
+            JOptionPane.showMessageDialog(this, "Error in making payments outstanding");
+
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-homepage h=new homepage();
+        homepage h = new homepage();
         h.setVisible(true);
         this.setVisible(false);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -159,11 +156,10 @@ homepage h=new homepage();
             }
         });
     }
-    
-    public void LoadPaymentstobeOutstanded()
-    {
-        
-      OutstandingDao outstanding = new OutstandingDao();
+
+    public void LoadPaymentstobeOutstanded() {
+
+        OutstandingDao outstanding = new OutstandingDao();
         res = outstanding.GetOrdersToBeOutstanded();
         addRowToJTable(res);
     }
@@ -180,7 +176,6 @@ homepage h=new homepage();
             rowData[2] = innerList.get(2);
             rowData[3] = innerList.get(3);
             rowData[4] = innerList.get(4);
-            
 
             model.addRow(rowData);
 

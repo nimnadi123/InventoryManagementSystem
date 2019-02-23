@@ -42,7 +42,7 @@ public class returns extends javax.swing.JFrame {
     public returns() {
         initComponents();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-      setBounds(0,0,screenSize.width, screenSize.height);
+        setBounds(0, 0, screenSize.width, screenSize.height);
         loadOrderDetails();
 
         generateId();
@@ -599,7 +599,7 @@ public class returns extends javax.swing.JFrame {
         int paymentpaid = 0;
         int paymentpayable = 0;
 
-        if (SupplierPaymentReturnAmount.getText().equals("") || SupplierReturnedDate.getDate() == null||Quantity.getText().equals("")) {
+        if (SupplierPaymentReturnAmount.getText().equals("") || SupplierReturnedDate.getDate() == null || Quantity.getText().equals("")) {
 
             validatednull = false;
             JOptionPane.showMessageDialog(this, "Please fill up all the Fields ");
@@ -632,7 +632,7 @@ public class returns extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Payment returned date is not valid");
                 validated = false;
             }
-            
+
             if ((quantity.matches("[0-9]+") == false)) {
                 JOptionPane.showMessageDialog(this, "Returned quantity cannot be includede letters");
                 validated = false;
@@ -642,11 +642,10 @@ public class returns extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Returned quantity cannot have spaces");
                 validated = false;
             }
-            
-            
+
             if (validated == true) {
-                
-             Boolean result = PaymentPaid.getState();
+
+                Boolean result = PaymentPaid.getState();
                 if (result == true) {
                     paymentpaid = 1;
 
@@ -798,24 +797,24 @@ public class returns extends javax.swing.JFrame {
     }//GEN-LAST:event_SupplyIdActionPerformed
 
     private void payableserchbutton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payableserchbutton1ActionPerformed
-String SearchId = payableserchField1.getText();
- SearchDao empDetailSearchDao = new SearchDao();
-      
+        String SearchId = payableserchField1.getText();
+        SearchDao empDetailSearchDao = new SearchDao();
+
         List<List<String>> res = empDetailSearchDao.SearchCustomerPaymentReturnedbyOrderId(SearchId);
         addRowToJTableHold(res);
         // TODO add your handling code here:
     }//GEN-LAST:event_payableserchbutton1ActionPerformed
 
     private void payableserchbutton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payableserchbutton2ActionPerformed
-      String SearchId = payableserchbutton2.getText();
- SearchDao empDetailSearchDao = new SearchDao();
-      
+        String SearchId = payableserchbutton2.getText();
+        SearchDao empDetailSearchDao = new SearchDao();
+
         List<List<String>> res = empDetailSearchDao.SearchSupplierPaymentReturnedBySupplyId(SearchId);
         addRowToJTableSupplierPaymentReturn(res);  // TODO add your handling code here:
     }//GEN-LAST:event_payableserchbutton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-homepage h=new homepage();
+        homepage h = new homepage();
         h.setVisible(true);
         this.setVisible(false);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -859,7 +858,7 @@ homepage h=new homepage();
 
         paymentOrderDetails = customerPayment.getOrderDetails();
 
-        DefaultComboBoxModel orderIdModel = new DefaultComboBoxModel(paymentOrderDetails.orderIds.toArray());
+        DefaultComboBoxModel orderIdModel = new DefaultComboBoxModel(paymentOrderDetails.AllorderIds.toArray());
         OrderNoCombo.setModel(orderIdModel);
     }
 
@@ -874,8 +873,8 @@ homepage h=new homepage();
 
     public String FindCustomerNameByOrderId(String searchId) {
         String Name = "";
-        for (int i = 0; i < paymentOrderDetails.OrderDetails.size(); i++) {
-            List a = (List) paymentOrderDetails.OrderDetails.get(i);
+        for (int i = 0; i < paymentOrderDetails.AllOrderDetails.size(); i++) {
+            List a = (List) paymentOrderDetails.AllOrderDetails.get(i);
             String id = a.get(0).toString();
             if (searchId.equals(id)) {
                 Name = a.get(1).toString();
@@ -893,7 +892,7 @@ homepage h=new homepage();
 
         SupplyPaymentsDetails = supplierPayment.getSupplyDetails();
 
-        DefaultComboBoxModel supplierIdModel = new DefaultComboBoxModel(SupplyPaymentsDetails.supplyIds.toArray());
+        DefaultComboBoxModel supplierIdModel = new DefaultComboBoxModel(SupplyPaymentsDetails.AllsupplyIds.toArray());
         SupplyId.setModel(supplierIdModel);
     }
 
@@ -908,8 +907,8 @@ homepage h=new homepage();
 
     public String FindSupplierNameBySupplyId(String searchId) {
         String Name = "";
-        for (int i = 0; i < SupplyPaymentsDetails.supplyDetails.size(); i++) {
-            List a = (List) SupplyPaymentsDetails.supplyDetails.get(i);
+        for (int i = 0; i < SupplyPaymentsDetails.AllSupplyDetails.size(); i++) {
+            List a = (List) SupplyPaymentsDetails.AllSupplyDetails.get(i);
             String id = a.get(0).toString();
             if (searchId.equals(id)) {
                 Name = a.get(1).toString();
@@ -983,7 +982,7 @@ homepage h=new homepage();
 
         }
     }
-    
+
     public void loadSupplierPaymentReturnedDetails() {
 
         List<List<String>> res = customerReturns.ViewSupplierPaymentReturned();
@@ -1003,7 +1002,7 @@ homepage h=new homepage();
             rowData[3] = innerList.get(3);
             rowData[4] = innerList.get(4);
             rowData[5] = innerList.get(5);
-           
+
             model.addRow(rowData);
 
         }

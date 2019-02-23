@@ -36,7 +36,7 @@ public class Purchasedetails extends javax.swing.JFrame {
     public Purchasedetails() {
         initComponents();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-      setBounds(0,0,screenSize.width, screenSize.height);
+        setBounds(0, 0, screenSize.width, screenSize.height);
         getCustomerAndItemDetails();
         generateId();
         loadPurchaseDetails();
@@ -525,10 +525,10 @@ public class Purchasedetails extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-         this.setVisible(false);
+        this.setVisible(false);
         homepage h = new homepage();
         h.setVisible(true);
-        
+
     }//GEN-LAST:event_backButtonActionPerformed
 
     private void jTextField8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField8ActionPerformed
@@ -552,10 +552,12 @@ public class Purchasedetails extends javax.swing.JFrame {
     }//GEN-LAST:event_netamountFeildActionPerformed
 
     private void customerNameComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerNameComboActionPerformed
+        availableoutsCheckbox.setState(false);
         getCustomerIdByCustomerName();        // TODO add your handling code here:
     }//GEN-LAST:event_customerNameComboActionPerformed
 
     private void customerIdComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerIdComboBox1ActionPerformed
+        availableoutsCheckbox.setState(false);
         getCustomerNameByCustomerId();
         // TODO add your handling code here:
     }//GEN-LAST:event_customerIdComboBox1ActionPerformed
@@ -577,76 +579,68 @@ public class Purchasedetails extends javax.swing.JFrame {
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         ClearFields();
         loadPurchaseDetails();
-                generateId();
+        generateId();
 // TODO add your handling code here:
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void quantityFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityFieldActionPerformed
-       CalculateTotalPrice(); // TODO add your handling code here:
+        CalculateTotalPrice(); // TODO add your handling code here:
     }//GEN-LAST:event_quantityFieldActionPerformed
 
     private void searchButtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtnActionPerformed
- String SearchId = searchField.getText();
-        if(custIDradButton.isSelected()==true){
-        
-         
-          SearchDao empDetailSearchDao = new SearchDao();
-      
-        List<List<String>> res = empDetailSearchDao.SearchPurchaseDetailsByCustomerId(SearchId);
-        addRowToJTable(res);}
-        
-        if(ordnoRadbutton.isSelected()==true){
-        
-         
-          SearchDao empDetailSearchDao = new SearchDao();
-      
-        List<List<String>> res = empDetailSearchDao.SearchPurchaseDetailsByOrderId(SearchId);
-        addRowToJTable(res);}
-        if(dateRadbutton.isSelected()==true){
-        
-         
-          SearchDao empDetailSearchDao = new SearchDao();
-      
-        List<List<String>> res = empDetailSearchDao.SearchPurchaseDetailsByorderedDate(SearchId);
-        addRowToJTable(res);}
-        
-        
-        
-        
-        
-      
+        String SearchId = searchField.getText();
+        if (custIDradButton.isSelected() == true) {
 
+            SearchDao empDetailSearchDao = new SearchDao();
+
+            List<List<String>> res = empDetailSearchDao.SearchPurchaseDetailsByCustomerId(SearchId);
+            addRowToJTable(res);
+        }
+
+        if (ordnoRadbutton.isSelected() == true) {
+
+            SearchDao empDetailSearchDao = new SearchDao();
+
+            List<List<String>> res = empDetailSearchDao.SearchPurchaseDetailsByOrderId(SearchId);
+            addRowToJTable(res);
+        }
+        if (dateRadbutton.isSelected() == true) {
+
+            SearchDao empDetailSearchDao = new SearchDao();
+
+            List<List<String>> res = empDetailSearchDao.SearchPurchaseDetailsByorderedDate(SearchId);
+            addRowToJTable(res);
+        }
 
         // TODO add your handling code here:
     }//GEN-LAST:event_searchButtnActionPerformed
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-    String SearchId = searchField.getText();
-        if(custIDradbutton.isSelected()==true){
-        
-         
-          SearchDao empDetailSearchDao = new SearchDao();
-      
-        List<List<String>> res = empDetailSearchDao.SearchHoldPurchaseDetailsByCustomerId(SearchId);
-        addRowToJTableHold(res);}
-        
-        if(ordnoRAdBut.isSelected()==true){
-        
-         
-          SearchDao empDetailSearchDao = new SearchDao();
-      
-        List<List<String>> res = empDetailSearchDao.SearchHoldPurchaseDetailsByOrderId(SearchId);
-        addRowToJTableHold(res);}
-        if(dateradioButton.isSelected()==true){
-        
-         
-          SearchDao empDetailSearchDao = new SearchDao();
-      
-        List<List<String>> res = empDetailSearchDao.SearchHoldPurchaseDetailsByOrderedDate(SearchId);
-        addRowToJTableHold(res);}
-        
-        
-            // TODO add your handling code here:
+        String SearchId = searchField.getText();
+        if (custIDradbutton.isSelected() == true) {
+
+            SearchDao empDetailSearchDao = new SearchDao();
+
+            List<List<String>> res = empDetailSearchDao.SearchHoldPurchaseDetailsByCustomerId(SearchId);
+            addRowToJTableHold(res);
+        }
+
+        if (ordnoRAdBut.isSelected() == true) {
+
+            SearchDao empDetailSearchDao = new SearchDao();
+
+            List<List<String>> res = empDetailSearchDao.SearchHoldPurchaseDetailsByOrderId(SearchId);
+            addRowToJTableHold(res);
+        }
+        if (dateradioButton.isSelected() == true) {
+
+            SearchDao empDetailSearchDao = new SearchDao();
+
+            List<List<String>> res = empDetailSearchDao.SearchHoldPurchaseDetailsByOrderedDate(SearchId);
+            addRowToJTableHold(res);
+        }
+
+        // TODO add your handling code here:
     }//GEN-LAST:event_searchButtonActionPerformed
 
     /**
@@ -699,16 +693,15 @@ public class Purchasedetails extends javax.swing.JFrame {
         DefaultComboBoxModel itemNameModel = new DefaultComboBoxModel(purchase.itemDetails.itemNames.toArray());
         itemNameCombo.setModel(itemNameModel);
     }
-    
-    public void IsPaymentOutstanding(String customerId ) {
-        Boolean IsOutstanding = purchaseDetails.IsPaymentOutstanding(customerId);
-        if(IsOutstanding){
+
+    public void IsPaymentOutstanding(String customerId) {
+        boolean IsOutstanding = false;
+        IsOutstanding = purchaseDetails.IsPaymentOutstanding(customerId);
+        if (IsOutstanding) {
             availableoutsCheckbox.setState(true);
-        
+
+        }
     }
-    }
-    
-    
 
     public void getItemNameByItemId() {
 
@@ -774,8 +767,9 @@ public class Purchasedetails extends javax.swing.JFrame {
             if (searchId.equals(id)) {
                 Name = a.get(1).toString();
             }
-            IsPaymentOutstanding(searchId);
+
         }
+        IsPaymentOutstanding(searchId);
         return Name;
     }
 
@@ -787,8 +781,9 @@ public class Purchasedetails extends javax.swing.JFrame {
             if (searchName.equals(name)) {
                 Id = a.get(0).toString();
             }
-             IsPaymentOutstanding(Id);
+
         }
+        IsPaymentOutstanding(Id);
         return Id;
     }
 
@@ -800,117 +795,103 @@ public class Purchasedetails extends javax.swing.JFrame {
 
     public void SubmitPurchaseDetailAdd() {
         int isOutStanding = 0;
-        int isHold =0;
+        int isHold = 0;
         boolean validatednull = true;
-        boolean validated =true;
-        
-        
-          if(duedate.getDate()== null||unitpriceField.getText().equals("")||quantityField.getText().equals("")||dateField.getDate()==null||netamountFeild.getText().equals("")
-              ){
-              validatednull = false;
-           JOptionPane.showMessageDialog(this,"Please fill up all the Fields ");           
-        }
-          
-         
-         if( validatednull==true && validated== true)
-         {
-             
-             String customerId = (String) customerIdComboBox1.getSelectedItem();
+        boolean validated = true;
 
-        String customerName = (String) customerNameCombo.getSelectedItem();
-        Date orderedDate = dateField.getDate();
-
-        Boolean result = availableoutsCheckbox.getState();
-        if (result == true) {
-            isHold = 1;
+        if (duedate.getDate() == null || unitpriceField.getText().equals("") || quantityField.getText().equals("") || dateField.getDate() == null || netamountFeild.getText().equals("")) {
+            validatednull = false;
+            JOptionPane.showMessageDialog(this, "Please fill up all the Fields ");
         }
-               Date date = new Date();
-       
-                  if ((quantityField.getText().matches("[0-9]+") == false)) {
-               JOptionPane.showMessageDialog(this, "Returned quantity cannot be includede letters");
+
+        if (validatednull == true && validated == true) {
+
+            String customerId = (String) customerIdComboBox1.getSelectedItem();
+
+            String customerName = (String) customerNameCombo.getSelectedItem();
+            Date orderedDate = dateField.getDate();
+
+            Boolean result = availableoutsCheckbox.getState();
+            if (result == true) {
+                isHold = 1;
+            }
+            Date date = new Date();
+
+            if ((quantityField.getText().matches("[0-9]+") == false)) {
+                JOptionPane.showMessageDialog(this, "Returned quantity cannot be includede letters");
                 validated = false;
             }
-        
-           if ((netamountFeild.getText().matches("[0-9]+") == false)) {
-              JOptionPane.showMessageDialog(this,"Amount cannot be includede letters ");
-                validated = false;
-            }
-          
+
+//           if ((netamountFeild.getText().matches("[0-9]+") == false)) {
+//              JOptionPane.showMessageDialog(this,"Amount cannot be includede letters ");
+//                validated = false;
+//            }
             if (!date.after(orderedDate)) {
-               JOptionPane.showMessageDialog(this,"Payment Ordered date is not valid");
+                JOptionPane.showMessageDialog(this, "Payment Ordered date is not valid");
                 validated = false;
             }
-           
+
             if (netamountFeild.getText().length() > 15) {
                 validated = false;
-               JOptionPane.showMessageDialog(this, "Maximum length exceeds allows less than 15 characters");
+                JOptionPane.showMessageDialog(this, "Maximum length exceeds allows less than 15 characters");
             }
             if (-1 != netamountFeild.getText().indexOf(" ")) {
-                JOptionPane.showMessageDialog(this,"Amount cannot have spaces");
+                JOptionPane.showMessageDialog(this, "Amount cannot have spaces");
                 validated = false;
             }
-               if (-1 != quantityField.getText().indexOf(" ")) {
-                 JOptionPane.showMessageDialog(this,"Returned quantity cannot have spaces");
-                validated = false;
-            }
-  
-            
-          
-        
-          if (!date.before(duedate.getDate())) {
-               JOptionPane.showMessageDialog(this,"Payment due date is not valid");
+            if (-1 != quantityField.getText().indexOf(" ")) {
+                JOptionPane.showMessageDialog(this, "Returned quantity cannot have spaces");
                 validated = false;
             }
 
-
-
-         
-        
-        if(validated ==true){
-               int quantity = Integer.parseInt(quantityField.getText());
-        Double unitPrice = Double.parseDouble(unitpriceField.getText());
-        Date itemAddedDate = duedate.getDate();
-        String itemId = (String) itemIdCombo.getSelectedItem();
-        String itemName = (String) itemNameCombo.getSelectedItem();
-        String purchaseId = ordernoField.getText();
-        Double paymentReceivable = Double.parseDouble(netamountFeild.getText());
-        
-              PurchaseAddViewDTO purchaseItem = new PurchaseAddViewDTO();
-        purchaseItem.setPurchaseId(purchaseId);
-        purchaseItem.setCustomerId(customerId);
-        purchaseItem.setDueDate(orderedDate);
-        purchaseItem.setIsOutStanding(isOutStanding);
-        purchaseItem.setItemId(itemId);
-        purchaseItem.setOrderedDate(orderedDate);
-        purchaseItem.setReceivableAmount(paymentReceivable);
-        purchaseItem.setSoldQuantity(quantity);
-        purchaseItem.setUnitValue(unitPrice);
-        purchaseItem.setCustomerName(customerName);
-        purchaseItem.setItemName(itemName);
-        purchaseItem.setIsHold(isHold);
-
-        try {
-            boolean res = purchaseDetails.addNewInventory(purchaseItem);
-            if (res == true) {
-                JOptionPane.showMessageDialog(this, "Order added sucessfully");
-                ClearFields();
-                loadPurchaseDetails();
-                generateId();
-            } else {
-                JOptionPane.showMessageDialog(this, "Error occur in adding Order");
+            if (!date.before(duedate.getDate())) {
+                JOptionPane.showMessageDialog(this, "Payment due date is not valid");
+                validated = false;
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
+
+            if (validated == true) {
+                int quantity = Integer.parseInt(quantityField.getText());
+                Double unitPrice = Double.parseDouble(unitpriceField.getText());
+                Date itemAddedDate = duedate.getDate();
+                String itemId = (String) itemIdCombo.getSelectedItem();
+                String itemName = (String) itemNameCombo.getSelectedItem();
+                String purchaseId = ordernoField.getText();
+                Double paymentReceivable = Double.parseDouble(netamountFeild.getText());
+
+                PurchaseAddViewDTO purchaseItem = new PurchaseAddViewDTO();
+                purchaseItem.setPurchaseId(purchaseId);
+                purchaseItem.setCustomerId(customerId);
+                purchaseItem.setDueDate(orderedDate);
+                purchaseItem.setIsOutStanding(isOutStanding);
+                purchaseItem.setItemId(itemId);
+                purchaseItem.setOrderedDate(orderedDate);
+                purchaseItem.setReceivableAmount(paymentReceivable);
+                purchaseItem.setSoldQuantity(quantity);
+                purchaseItem.setUnitValue(unitPrice);
+                purchaseItem.setCustomerName(customerName);
+                purchaseItem.setItemName(itemName);
+                purchaseItem.setIsHold(isHold);
+
+                try {
+                    boolean res = purchaseDetails.addNewInventory(purchaseItem);
+                    if (res == true) {
+                        JOptionPane.showMessageDialog(this, "Order added sucessfully");
+                        ClearFields();
+                        loadPurchaseDetails();
+                        generateId();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Error occur in adding Order");
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ParseException ex) {
+                    Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+
         }
-        
-       
-        }
-        
-     
-         }
-        
+
     }
 
     public void loadPurchaseDetails() {
@@ -936,14 +917,13 @@ public class Purchasedetails extends javax.swing.JFrame {
             rowData[7] = innerList.get(7);
             rowData[8] = innerList.get(8);
             rowData[9] = innerList.get(9);
-            
 
             model.addRow(rowData);
 
         }
     }
-    
-     public void loadHoldPurchaseDetails() {
+
+    public void loadHoldPurchaseDetails() {
 
         List<List<String>> res = purchaseDetails.ViewHoldPurchaseDetails();
         addRowToJTableHold(res);
@@ -965,13 +945,13 @@ public class Purchasedetails extends javax.swing.JFrame {
             rowData[6] = innerList.get(6);
             rowData[7] = innerList.get(7);
             rowData[8] = innerList.get(8);
-           
 
             model.addRow(rowData);
 
         }
     }
-private void ClearFields() {
+
+    private void ClearFields() {
         quantityField.setText(null);
         unitpriceField.setText(null);
         duedate.setDate(null);
@@ -984,35 +964,31 @@ private void ClearFields() {
         availableoutsCheckbox.setState(false);
     }
 
+    public void CalculateTotalPrice() {
+        boolean val = true;
+        if (quantityField.getText().equals("") || unitpriceField.getText().equals("")) {
+            val = false;
+            JOptionPane.showMessageDialog(this, "Please fill the Quantity and unit price field ");
 
-public void CalculateTotalPrice()
-    {
-        boolean val =true;
-        if(quantityField.getText().equals("")||unitpriceField.getText().equals("")){
-              val = false;
-           JOptionPane.showMessageDialog(this,"Please fill the Quantity and unit price field ");           
-            
         }
-        
-         if ((unitpriceField.getText().matches("[0-9]+") == false)) {
-              JOptionPane.showMessageDialog(this,"unitpriceField cannot be included letters ");
-                val = false;
-            }
-          if ((quantityField.getText().matches("[0-9]+") == false)) {
-              JOptionPane.showMessageDialog(this,"Quantity cannot be included letters ");
-                val = false;
-            }
-         
-         
-         if(val == true)
-         {
-              Double UnitPrice = Double.parseDouble(unitpriceField.getText());
-              int Quantity = Integer.parseInt(quantityField.getText());
-              Double netAmount =UnitPrice*Quantity;
-              
-              netamountFeild.setText(netAmount.toString());
-              netamountFeild.setEditable(false);
-         }
+
+        if ((unitpriceField.getText().matches("[0-9]+") == false)) {
+            JOptionPane.showMessageDialog(this, "unitpriceField cannot be included letters ");
+            val = false;
+        }
+        if ((quantityField.getText().matches("[0-9]+") == false)) {
+            JOptionPane.showMessageDialog(this, "Quantity cannot be included letters ");
+            val = false;
+        }
+
+        if (val == true) {
+            Double UnitPrice = Double.parseDouble(unitpriceField.getText());
+            int Quantity = Integer.parseInt(quantityField.getText());
+            Double netAmount = UnitPrice * Quantity;
+
+            netamountFeild.setText(netAmount.toString());
+            netamountFeild.setEditable(false);
+        }
 
     }
 

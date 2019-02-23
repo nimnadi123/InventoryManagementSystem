@@ -19,7 +19,6 @@ import javax.swing.table.DefaultTableModel;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author user
@@ -32,7 +31,7 @@ public class supplierdetails extends javax.swing.JFrame {
     public supplierdetails() {
         initComponents();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-      setBounds(0,0,screenSize.width, screenSize.height);
+        setBounds(0, 0, screenSize.width, screenSize.height);
         loadSupplierDetails();
         generateId();
     }
@@ -306,113 +305,111 @@ public class supplierdetails extends javax.swing.JFrame {
     }//GEN-LAST:event_emailfieldActionPerformed
 
     private void resetbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetbuttonActionPerformed
-     ClearFields();
-     loadSupplierDetails();
+        ClearFields();
+        loadSupplierDetails();
         generateId();
         // TODO add your handling code here:
     }//GEN-LAST:event_resetbuttonActionPerformed
 
     private void backbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backbuttonActionPerformed
         this.setVisible(false);
-        homepage h=new homepage();
+        homepage h = new homepage();
         h.setVisible(true);
     }//GEN-LAST:event_backbuttonActionPerformed
 
     private void submitbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitbuttonActionPerformed
-   boolean validatednull = true;
-        boolean validated =true;
-        
-        
-          if(suppnameField.getText().equals("")||telenofield.getText().equals("")||busplaceField.getText().equals("")||emailfield.getText().equals("")||
-              date.getDate()== null)
-              {
-              validatednull = false;
-           JOptionPane.showMessageDialog(this,"Please fill up all the Fields ");           
+        boolean validatednull = true; // validatednull is a variable which tracks whether we have null fields(empty fields) or not.
+        boolean validated = true;//
+
+        if (suppnameField.getText().equals("") || telenofield.getText().equals("") || busplaceField.getText().equals("") || emailfield.getText().equals("")
+                || date.getDate() == null) // equals("")- check empty ||-or
+        {
+            validatednull = false;
+            JOptionPane.showMessageDialog(this, "Please fill up all the Fields ");//show the error msg           
         }
-          
-          
-          
-          
-         
-         if( validatednull==true)
-         {
-             Date currentdate = new Date();  
-               if ( suppnameField.getText().length() > 60 ||busplaceField.getText().length() > 60|| telenofield.getText().length() > 60 ||
-                       emailfield.getText().length() > 60) {
+
+        if (validatednull == true) // if only data filled
+        {
+            Date currentdate = new Date();  // new Date() assigns today date to variable current date
+            // check the lenghth of the values
+            if (suppnameField.getText().length() > 60 || busplaceField.getText().length() > 60 || telenofield.getText().length() > 60
+                    || emailfield.getText().length() > 60) {
                 validated = false;
-              JOptionPane.showMessageDialog(this, "Maximum length exceeds allows less than 60 characters");
-         }
-         
-             
-              if((telenofield.getText().matches("[0-9]+")==false)|| (telenofield.getText().length()!=10)){
-                 JOptionPane.showMessageDialog(this,"Telephone Number should be numbers without spaces and should have at least 10 numbers");
-                validated = false;
-                 }
-              
-                
-               
-                                
-                if((-1!=emailfield.getText().indexOf(" "))||(-1==emailfield.getText().indexOf("@"))){
-                JOptionPane.showMessageDialog(this,"Enter a valid email address without spaces");
+                JOptionPane.showMessageDialog(this, "Maximum length exceeds allows less than 60 characters");
+            }
+
+            // check whether Telephoneno field value matches only with numbers and length equals 10
+            if ((telenofield.getText().matches("[0-9]+") == false) || (telenofield.getText().length() != 10)) {
+                JOptionPane.showMessageDialog(this, "Telephone Number should be numbers without spaces and should have at least 10 numbers");
                 validated = false;
             }
-    
-                if(!currentdate.after(date.getDate())  ){
-                JOptionPane.showMessageDialog(this,"Supplier added date is not valid");
+
+            //a c@gmail.com index 1 is empty(having space).
+            //check whether any index has empty value(spce),
+            //check wheter any index has@
+            if ((-1 != emailfield.getText().indexOf(" ")) || (-1 == emailfield.getText().indexOf("@"))) {
+                JOptionPane.showMessageDialog(this, "Enter a valid email address without spaces");
                 validated = false;
             }
-                
-                if(validated ==true)
-                {
-                       String supplierId= supIDfield.getText();
-        String supplierName= suppnameField.getText();
-        int teleNo = Integer.parseInt(telenofield.getText());
-        String businessPlaceAddress = busplaceField.getText();        
-        Date addedDate = date.getDate();     
-        String mailAddress = emailfield.getText();
-        
-        SupplierDetails supplier = new SupplierDetails();
-        supplier.setSupplierId(supplierId);
-        supplier.setSupplierName(supplierName);
-        supplier.setBusinessPlaceAddress(businessPlaceAddress);
-        supplier.setTelephoneNo(teleNo);
-        supplier.setAddedDate(addedDate);
-        supplier.setMailAddress(mailAddress);
-        
-        SupplierDetailsDao supplierDetail = new SupplierDetailsDao();
-         try {
-            boolean res = supplierDetail.addSupplier(supplier);
-              if(res == true){
-                JOptionPane.showMessageDialog(this, "Supplier added sucessfully");
-                ClearFields();
-               loadSupplierDetails();
-               generateId();
+
+            //date.getDate() -take entered date. check whether date is not after date of current date
+            if (!currentdate.after(date.getDate())) {
+                JOptionPane.showMessageDialog(this, "Supplier added date is not valid");
+                validated = false;
             }
-            else{
-                JOptionPane.showMessageDialog(this, "Error occur in adding Supplier");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+            if (validated == true) {
+                String supplierId = supIDfield.getText(); //getText()-take string(value entered in the supplier id field) and assign it into
+                // variable supplierId
+                String supplierName = suppnameField.getText();
+                int teleNo = Integer.parseInt(telenofield.getText()); // taken value is string. have to convert it into int using Integer.parseINt
+                String businessPlaceAddress = busplaceField.getText();
+                Date addedDate = date.getDate();  // becoz it is a date    
+                String mailAddress = emailfield.getText();
+
+                SupplierDetails supplier = new SupplierDetails(); // create SupplierDetails type object , its name supplier
+                // assign values taken to supplier object
+
+                // set above taken values to supplier
+                supplier.setSupplierId(supplierId);
+                supplier.setSupplierName(supplierName);
+                supplier.setBusinessPlaceAddress(businessPlaceAddress);
+                supplier.setTelephoneNo(teleNo);
+                supplier.setAddedDate(addedDate);
+                supplier.setMailAddress(mailAddress);
+
+                SupplierDetailsDao supplierDetail = new SupplierDetailsDao();
+                try {
+                    boolean res = supplierDetail.addSupplier(supplier);
+                    if (res == true) {
+                        JOptionPane.showMessageDialog(this, "Supplier added sucessfully");
+                        ClearFields();//clear fields field
+                        loadSupplierDetails();
+                        generateId();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Error occur in adding Supplier");
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ParseException ex) {
+                    Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
                 }
-     
-         }
+            }
+
+        }
 // TODO add your handling code here:
-     
-    
-        
+
+
     }//GEN-LAST:event_submitbuttonActionPerformed
 
-    private void ClearFields(){
-   supIDfield.setText(null);
-       suppnameField.setText(null);
+    private void ClearFields() {
+        supIDfield.setText(null); //make field empty
+        suppnameField.setText(null);
         telenofield.setText(null);
-       busplaceField.setText(null);        
-       date.setDate(null);     
+        busplaceField.setText(null);
+        date.setDate(null);
         emailfield.setText(null);
-    
+
     }
     private void busplaceFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_busplaceFieldActionPerformed
         // TODO add your handling code here:
@@ -423,7 +420,7 @@ public class supplierdetails extends javax.swing.JFrame {
     }//GEN-LAST:event_serachfieldActionPerformed
 
     private void searchbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchbuttonActionPerformed
-SearchDao empDetailSearchDao = new SearchDao();
+        SearchDao empDetailSearchDao = new SearchDao();
         String supplierid = serachfield.getText();
         List<List<String>> res = empDetailSearchDao.SupplierSearch(supplierid);
         addRowToJTable(res);        // TODO add your handling code here:
@@ -462,15 +459,16 @@ SearchDao empDetailSearchDao = new SearchDao();
                 new supplierdetails().setVisible(true);
             }
         });
-        
+
     }
-    public void loadSupplierDetails(){
+
+    public void loadSupplierDetails() {
         SupplierDetailsDao empDao = new SupplierDetailsDao();
         List<List<String>> res = empDao.ViewSupplierDetails();
         addRowToJTable(res);
     }
-     public void addRowToJTable(List res)
-    {
+
+    public void addRowToJTable(List res) {
         suptable.setShowGrid(true);
         DefaultTableModel model = (DefaultTableModel) suptable.getModel();
         model.setRowCount(0);
@@ -482,19 +480,16 @@ SearchDao empDetailSearchDao = new SearchDao();
             rowData[2] = innerList.get(2);
             rowData[3] = innerList.get(3);
             rowData[4] = innerList.get(4);
-           
-            
-            
-           
-           
+
             model.addRow(rowData);
-        
+
         }
     }
-     public void generateId(){
-          SupplierDetailsDao supplierDetail = new SupplierDetailsDao();
-          String id =supplierDetail.nextSupplierId();
-          supIDfield.setText(id);
+
+    public void generateId() {
+        SupplierDetailsDao supplierDetail = new SupplierDetailsDao();
+        String id = supplierDetail.nextSupplierId();
+        supIDfield.setText(id); //display in jtextfield
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

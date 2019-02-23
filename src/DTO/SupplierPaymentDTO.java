@@ -16,6 +16,7 @@ public class SupplierPaymentDTO {
         
 public List supplyDetails;
 public List<String> supplyIds;
-
+ public List AllSupplyDetails;
+    public List<String> AllsupplyIds;
    
 }

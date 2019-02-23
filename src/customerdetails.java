@@ -20,7 +20,6 @@ import javax.swing.table.DefaultTableModel;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author user
@@ -33,7 +32,7 @@ public class customerdetails extends javax.swing.JFrame {
     public customerdetails() {
         initComponents();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-      setBounds(0,0,screenSize.width, screenSize.height);
+        setBounds(0, 0, screenSize.width, screenSize.height);
         loadCustomerDetails();
         generateId();
     }
@@ -361,130 +360,110 @@ public class customerdetails extends javax.swing.JFrame {
         // TODO add your handling code here:
         ClearFields();
         loadCustomerDetails();
-               generateId();
+        generateId();
     }//GEN-LAST:event_resetbuttonActionPerformed
 
     private void backbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backbuttonActionPerformed
-         this.setVisible(false);
-        homepage h=new homepage();
+        this.setVisible(false);
+        homepage h = new homepage();
         h.setVisible(true);
     }//GEN-LAST:event_backbuttonActionPerformed
 
     private void submitbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitbuttonActionPerformed
-    
-         boolean validatednull = true;
-        boolean validated =true;
-        
-        
-          if(customnameField.getText().equals("")||nicField.getText().equals("")||busplaceField.getText().equals("")||busregField.getText().equals("")||
-              personaladdField.getText().equals("")||emailField.getText().equals("")||telenoField.getText().equals("")||date.getDate()== null)
-              {
-              validatednull = false;
-           JOptionPane.showMessageDialog(this,"Please fill up all the Fields ");           
-        }
-          
-          
-          
-          
-         
-         if( validatednull==true)
-         {
-             Date currentdate = new Date();
-             
-               if ( customnameField.getText().length() > 60 ||busplaceField.getText().length() > 60|| busregField.getText().length() > 60 ||  personaladdField.getText().length() > 60||
-                       emailField.getText().length() > 60) {
-                validated = false;
-              JOptionPane.showMessageDialog(this, "Maximum length exceeds allows less than 60 characters");
-         }
-         
-             
-              if((telenoField.getText().matches("[0-9]+")==false)|| (telenoField.getText().length()!=10)){
-                 JOptionPane.showMessageDialog(this,"Telephone Number should be numbers without spaces and should have at least 10 numbers");
-                validated = false;
-                 }
-              
-                if((nicField.getText().length()!=12|| nicField.getText().length()!=10)){
-                 JOptionPane.showMessageDialog(this,"nic should have at least 10 numbers");
-                validated = false;
-                 }
-               
-                                
-                if((-1!=emailField.getText().indexOf(" "))||(-1==emailField.getText().indexOf("@"))){
-                JOptionPane.showMessageDialog(this,"Enter a valid email address without spaces");
-                validated = false;
-            }
-    
-                if(!currentdate.after(date.getDate())  ){
-                JOptionPane.showMessageDialog(this,"Customer added date is not valid");
-                validated = false;
-            }
-                
-                if(validated ==true)
-                {
-                      String customerId = customerID.getText();
-     String customerName= customnameField.getText();
-     String customerNic= nicField.getText();
-     String customerBusinessPlace= busplaceField.getText();
-     String customerRegNo= busregField.getText();
-     String customerPersonalAddress= personaladdField.getText();
-     String customerEmail = emailField.getText();
-     int customerTelephoneNo = Integer.parseInt(telenoField.getText());
-     Date customerAddedDate= date.getDate();
-        
-        
-        CustomerDetails customer = new CustomerDetails();
-        customer.setCustomerId(customerId);
-        customer.setCustomerName(customerName);
-        customer.setCustomerNic(customerNic);
-      customer.setCustomerPersonalAddress(customerPersonalAddress);
-      customer.setCustomerRegNo(customerRegNo);
-      customer.setCustomerEmail(customerEmail);
-      customer.setCustomerBusinessPlace(customerBusinessPlace);
-      customer.setCustomerAddedDate(customerAddedDate);
-       CustomerDetailsDao customerDetail = new CustomerDetailsDao();
-        try {
-            boolean res = customerDetail.addCustomer(customer);
-            if(res == true){
-                JOptionPane.showMessageDialog(this, "Customer added sucessfully");
-                ClearFields();
-               loadCustomerDetails();
-               generateId();
-            }
-            else{
-                JOptionPane.showMessageDialog(this, "Error occur in adding Customer");
-            }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
-        }
-                }
-           
-         }
 
-        
-        
-        
-        
-        
-        
-        
-        
-                      // TODO add your handling code here:
+        boolean validatednull = true;
+        boolean validated = true;
+
+        if (customnameField.getText().equals("") || nicField.getText().equals("") || busplaceField.getText().equals("") || busregField.getText().equals("")
+                || personaladdField.getText().equals("") || emailField.getText().equals("") || telenoField.getText().equals("") || date.getDate() == null) {
+            validatednull = false;
+            JOptionPane.showMessageDialog(this, "Please fill up all the Fields ");
+        }
+
+        if (validatednull == true) {
+            Date currentdate = new Date();
+
+            if (customnameField.getText().length() > 60 || busplaceField.getText().length() > 60 || busregField.getText().length() > 60 || personaladdField.getText().length() > 60
+                    || emailField.getText().length() > 60) {
+                validated = false;
+                JOptionPane.showMessageDialog(this, "Maximum length exceeds allows less than 60 characters");
+            }
+
+            if ((telenoField.getText().matches("[0-9]+") == false) || (telenoField.getText().length() != 10)) {
+                JOptionPane.showMessageDialog(this, "Telephone Number should be numbers without spaces and should have at least 10 numbers");
+                validated = false;
+            }
+
+            if ((nicField.getText().length() != 10)) {
+                JOptionPane.showMessageDialog(this, "nic should have at least 10 numbers");
+                validated = false;
+            }
+
+            if ((-1 != emailField.getText().indexOf(" ")) || (-1 == emailField.getText().indexOf("@"))) {
+                JOptionPane.showMessageDialog(this, "Enter a valid email address without spaces");
+                validated = false;
+            }
+
+            if (!currentdate.after(date.getDate())) {
+                JOptionPane.showMessageDialog(this, "Customer added date is not valid");
+                validated = false;
+            }
+
+            if (validated == true) {
+                String customerId = customerID.getText();
+                String customerName = customnameField.getText();
+                String customerNic = nicField.getText();
+                String customerBusinessPlace = busplaceField.getText();
+                String customerRegNo = busregField.getText();
+                String customerPersonalAddress = personaladdField.getText();
+                String customerEmail = emailField.getText();
+                int customerTelephoneNo = Integer.parseInt(telenoField.getText());
+                Date customerAddedDate = date.getDate();
+
+                CustomerDetails customer = new CustomerDetails();
+                customer.setCustomerId(customerId);
+                customer.setCustomerName(customerName);
+                customer.setCustomerNic(customerNic);
+                customer.setCustomerPersonalAddress(customerPersonalAddress);
+                customer.setCustomerRegNo(customerRegNo);
+                customer.setCustomerEmail(customerEmail);
+                customer.setCustomerBusinessPlace(customerBusinessPlace);
+                customer.setCustomerAddedDate(customerAddedDate);
+                customer.setCustomerTelephoneNo(customerTelephoneNo);
+                CustomerDetailsDao customerDetail = new CustomerDetailsDao();
+                try {
+                    boolean res = customerDetail.addCustomer(customer);
+                    if (res == true) {
+                        JOptionPane.showMessageDialog(this, "Customer added sucessfully");
+                        ClearFields();
+                        loadCustomerDetails();
+                        generateId();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Error occur in adding Customer");
+                    }
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ParseException ex) {
+                    Logger.getLogger(Employeedetails.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+        }
+
+        // TODO add your handling code here:
     }//GEN-LAST:event_submitbuttonActionPerformed
 
-    private void ClearFields()
-    {
+    private void ClearFields() {
         customerID.setText(null);
-     customnameField.setText(null);
-     nicField.setText(null);
-     busplaceField.setText(null);
-     busregField.setText(null);
-    personaladdField.setText(null);
-  emailField.setText(null);
-    telenoField.setText(null);
-    date.setDate(null);
+        customnameField.setText(null);
+        nicField.setText(null);
+        busplaceField.setText(null);
+        busregField.setText(null);
+        personaladdField.setText(null);
+        emailField.setText(null);
+        telenoField.setText(null);
+        date.setDate(null);
     }
     private void personaladdFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_personaladdFieldActionPerformed
         // TODO add your handling code here:
@@ -496,9 +475,9 @@ public class customerdetails extends javax.swing.JFrame {
 
     private void searchbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchbuttonActionPerformed
         // TODO add your handling code here:
-        String customerId =searchField.getText();
-         SearchDao empDetailSearchDao = new SearchDao();
-      
+        String customerId = searchField.getText();
+        SearchDao empDetailSearchDao = new SearchDao();
+
         List<List<String>> res = empDetailSearchDao.CustomerSearch(customerId);
         addRowToJTable(res);
     }//GEN-LAST:event_searchbuttonActionPerformed
@@ -537,14 +516,14 @@ public class customerdetails extends javax.swing.JFrame {
             }
         });
     }
-    
-     public void loadCustomerDetails(){
+
+    public void loadCustomerDetails() {
         CustomerDetailsDao customerDao = new CustomerDetailsDao();
         List<List<String>> res = customerDao.ViewCustomerDetails();
         addRowToJTable(res);
     }
-     public void addRowToJTable(List res)
-    {
+
+    public void addRowToJTable(List res) {
         customerdetailsTable.setShowGrid(true);
         DefaultTableModel model = (DefaultTableModel) customerdetailsTable.getModel();
         model.setRowCount(0);
@@ -559,20 +538,16 @@ public class customerdetails extends javax.swing.JFrame {
             rowData[5] = innerList.get(5);
             rowData[6] = innerList.get(6);
             rowData[7] = innerList.get(7);
-           
-            
-            
-           
-           
+
             model.addRow(rowData);
-        
+
         }
     }
-     
-     public void generateId(){
-          CustomerDetailsDao customer = new CustomerDetailsDao();
-          String id =customer.nextCustomerId();
-          customerID.setText(id);
+
+    public void generateId() {
+        CustomerDetailsDao customer = new CustomerDetailsDao();
+        String id = customer.nextCustomerId();
+        customerID.setText(id);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

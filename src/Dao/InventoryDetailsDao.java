@@ -242,7 +242,7 @@ public class InventoryDetailsDao {
         return id;
     }
 
-     public String nextPayableId() {
+    public String nextPayableId() {
         Connection con = null;
         Statement stm = null;
         ResultSet rst = null;
@@ -293,42 +293,39 @@ public class InventoryDetailsDao {
 
             String sqlitem = "insert into Items values(?,?,?)";
             PreparedStatement stmitem = connection.prepareStatement(sqlitem);
-            
-            
 
             stmitem.setObject(1, itemId);
             stmitem.setObject(2, itemName);
             stmitem.setObject(3, categoryId);
 
-           String sqlSupplier = "insert into Supply_details values(?,?,?,?,?,?,?)";
-          PreparedStatement stmSupplier = connection.prepareStatement(sqlSupplier);
+            String sqlSupplier = "insert into Supply_details values(?,?,?,?,?,?)";
+            PreparedStatement stmSupplier = connection.prepareStatement(sqlSupplier);
             stmSupplier.setObject(1, supplyId);
             stmSupplier.setObject(2, itemId);
             stmSupplier.setObject(3, supplierId);
             stmSupplier.setObject(4, unitPrice);
             stmSupplier.setObject(5, quantity);
             stmSupplier.setObject(6, newInventoryDate);
-            stmSupplier.setObject(7, null);
 
             String sqlCategory = "insert into Category values(?,?)";
-           PreparedStatement stmCategory = connection.prepareStatement(sqlCategory);
+            PreparedStatement stmCategory = connection.prepareStatement(sqlCategory);
             stmCategory.setObject(1, categoryId);
             stmCategory.setObject(2, categoryName);
-            
+
             String sqlPayable = "insert into Payable values(?,?,?,?)";
-             PreparedStatement stmPayable = connection.prepareStatement(sqlPayable);
+            PreparedStatement stmPayable = connection.prepareStatement(sqlPayable);
             stmPayable.setObject(1, payableId);
             stmPayable.setObject(2, netAmount);
             stmPayable.setObject(3, supplyId);
-             stmPayable.setObject(4, null);
-            
+            stmPayable.setObject(4, null);
+
             if (val == 1) {
                 int res = stmCategory.executeUpdate();
-                int resSupplier = stmSupplier.executeUpdate();
                 int resItem = stmitem.executeUpdate();
+                int resSupplier = stmSupplier.executeUpdate();
                 int resPayable = stmPayable.executeUpdate();
 
-                if (res == 1 && resItem == 1 && resSupplier == 1 && resPayable==1) {
+                if (res == 1 && resItem == 1 && resSupplier == 1 && resPayable == 1) {
                     connection.commit();
                     return true;
                 } else {
@@ -338,11 +335,12 @@ public class InventoryDetailsDao {
             }
 
             if (val == 2) {
-                int resSupplier = stmSupplier.executeUpdate();
+
                 int resItem = stmitem.executeUpdate();
+                int resSupplier = stmSupplier.executeUpdate();
                 int resPayable = stmPayable.executeUpdate();
 
-                if (resItem == 1 && resSupplier == 1&& resPayable==1) {
+                if (resItem == 1 && resSupplier == 1 && resPayable == 1) {
                     connection.commit();
                     return true;
                 } else {
@@ -354,7 +352,7 @@ public class InventoryDetailsDao {
             if (val == 3) {
                 int resSupplier = stmSupplier.executeUpdate();
                 int resPayable = stmPayable.executeUpdate();
-                if (resSupplier == 1&& resPayable==1) {
+                if (resSupplier == 1 && resPayable == 1) {
                     connection.commit();
                     return true;
                 } else {
@@ -375,55 +373,68 @@ public class InventoryDetailsDao {
         return false;
 
     }
-    
-    public List ViewInventoryDetails(){
-        
-     
+
+    public List ViewInventoryDetails() {
+
         Connection con = null;
-        PreparedStatement  stm = null;
+        PreparedStatement stm = null;
+        PreparedStatement stm1 = null;
         ResultSet rst = null;
-        int last=0;
-        
-        try
-        { 
-            
-            
-            String sql = "select i.item_name,i.Item_id,sup.Supplier_name, c.Category_id,c.Category_name, s.Unit_price,Sum(s.Quantity)-Sum(o.Quantity) from Items i, Category c, Supply_details s, Supplier sup, Purchase_details o where i.Item_id = s.Item_id and i.Category_id =c.Category_id and sup.Supplier_id = s.Supplier_id and o.Item_id = i.Item_id group by i.Item_id,"
-                    +"sup.Supplier_name,c.Category_id,c.Category_name, s.Unit_price,i.item_name,s.Supplier_id";          
+        ResultSet rst1 = null;
+
+        int last = 0;
+
+        try {
+
+            String sql = "select i.item_name,i.Item_id,sup.Supplier_name, c.Category_id,c.Category_name, s.Unit_price,Sum(s.Quantity) from Items i, Category c, Supply_details s, Supplier sup, Purchase_details o where i.Item_id = s.Item_id and i.Category_id =c.Category_id and sup.Supplier_id = s.Supplier_id group by i.Item_id,"
+                    + "sup.Supplier_name,c.Category_id,c.Category_name, s.Unit_price,i.item_name,s.Supplier_id";
             Connection connection = DBConnection.getDBConnection().getConnection();
             stm = connection.prepareStatement(sql);
-            rst = stm.executeQuery(); 
-            
-           
-            while(rst.next())
-            {  
-                  List<String> inventoryDetails = new ArrayList<String>();
-                  String status ="Sufficient";
-                    for (int i = 1; i < 8; i++){
-                            inventoryDetails.add(rst.getString(i));
-                            
-                            if(i==7 && rst.getString(7)!= null){
-                            if(Integer.parseInt(rst.getString(7))<100){
-                            status ="Low";
-                            }
-                            inventoryDetails.add(status);
-                            }
+            rst = stm.executeQuery();
+
+            while (rst.next()) {
+                int suuplyquantity = 0;
+                int orderedquantity = 0;
+                int availablequantity = 0;
+
+                String sql1 = "select Sum(o.Quantity) from Purchase_details o where o.Item_id = ? group by o.Item_id";
+
+                Connection connection1 = DBConnection.getDBConnection().getConnection();
+                stm1 = connection.prepareStatement(sql1);
+                stm1.setObject(1, rst.getString(2));
+                rst1 = stm1.executeQuery();
+                suuplyquantity = Integer.parseInt(rst.getString(7));
+                if (rst1.next()) {
+                    orderedquantity = Integer.parseInt(rst1.getString(1));
+
+                }
+
+                availablequantity = suuplyquantity - orderedquantity;
+                List<String> inventoryDetails = new ArrayList<String>();
+                String status = "Sufficient";
+                for (int i = 1; i < 8; i++) {
+                    if (i == 7 && rst.getString(7) != null) {
+                        inventoryDetails.add(Integer.toString(availablequantity));
+                        if (availablequantity < 100) {
+                            status = "Low";
+                        }
+                        inventoryDetails.add(status);
+                    } else {
+                        inventoryDetails.add(rst.getString(i));
                     }
+                }
 
                 ListofInventoryDetailsList.add(inventoryDetails);
-               
-               
+
             }
             return ListofInventoryDetailsList;
-        }
-        catch(SQLException e)
-        {
+        } catch (SQLException e) {
             System.out.println("error@ " + e.getMessage());
-        e.printStackTrace();
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-         e.printStackTrace();  
+            e.printStackTrace();
         }
-       return ListofInventoryDetailsList;
-    } 
-    
+        return ListofInventoryDetailsList;
+    }
+
 }

@@ -7,7 +7,6 @@ import java.awt.Toolkit;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author user
@@ -20,7 +19,7 @@ public class homepage extends javax.swing.JFrame {
     public homepage() {
         initComponents();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-      setBounds(0,0,screenSize.width, screenSize.height);
+        setBounds(0, 0, screenSize.width, screenSize.height);
     }
 
     /**
@@ -239,73 +238,73 @@ public class homepage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void customdetailsbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customdetailsbuttonActionPerformed
-        customerdetails h=new customerdetails();
+        customerdetails h = new customerdetails();
         h.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_customdetailsbuttonActionPerformed
 
     private void invevtorybuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_invevtorybuttonActionPerformed
-        inventorydetails h=new inventorydetails();
+        inventorydetails h = new inventorydetails();
         h.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_invevtorybuttonActionPerformed
 
     private void orderdetailsbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderdetailsbuttonActionPerformed
-        Purchasedetails h=new Purchasedetails();
+        Purchasedetails h = new Purchasedetails();
         h.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_orderdetailsbuttonActionPerformed
 
     private void paymentbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paymentbuttonActionPerformed
-        customerpayment h=new customerpayment();
+        customerpayment h = new customerpayment();
         h.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_paymentbuttonActionPerformed
 
     private void employeesbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeesbuttonActionPerformed
-        Employeedetails h=new Employeedetails();
+        Employeedetails h = new Employeedetails();
         h.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_employeesbuttonActionPerformed
 
     private void suppliersbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_suppliersbuttonActionPerformed
-        supplierdetails h=new supplierdetails();
+        supplierdetails h = new supplierdetails();
         h.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_suppliersbuttonActionPerformed
 
     private void reportsbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportsbuttonActionPerformed
-        Reports h=new Reports();
+        Reports h = new Reports();
         h.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_reportsbuttonActionPerformed
 
     private void logoutbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutbuttonActionPerformed
-        login h=new login();
+        login h = new login();
         h.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_logoutbuttonActionPerformed
 
     private void userregbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userregbuttonActionPerformed
-        Employeedetails h=new Employeedetails();
+        Employeedetails h = new Employeedetails();
         h.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_userregbuttonActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-supplierpayment h=new supplierpayment();
+        supplierpayment h = new supplierpayment();
         h.setVisible(true);
         this.setVisible(false);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-returns h=new returns();
+        returns h = new returns();
         h.setVisible(true);
         this.setVisible(false);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-outstandings h=new outstandings();
+        outstandings h = new outstandings();
         h.setVisible(true);
         this.setVisible(false);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed

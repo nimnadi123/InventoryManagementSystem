@@ -12,7 +12,6 @@ import javax.swing.JPasswordField;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author user
@@ -24,9 +23,9 @@ public class login extends javax.swing.JFrame {
      */
     public login() {
         initComponents();
-         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-      setBounds(0,0,screenSize.width, screenSize.height);
-      //setVisible(true);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        setBounds(0, 0, screenSize.width, screenSize.height);
+        //setVisible(true);
 
         passwordField.setText("");
     }
@@ -154,37 +153,34 @@ public class login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        
+
         String username = userNameField.getText(); //getting the username from text field
         // getting the password from password field
         String password = new String((passwordField.getPassword()));
         LoginCredentials logincredentials = new LoginCredentials();
         logincredentials.setUserName(username);
         logincredentials.setPassWord(password);
-        
+
         LoginDao login = new LoginDao();
-         Boolean result = login.AuthenticateUser(logincredentials);
-         if(result == true){
-         this.setVisible(false); // hide the login menu when click on the login button.
-         homepage HomePage=new homepage(); //create welcomePage  object       
-         HomePage.setVisible(true); // make the homepage visible.
-         
-         }
-         else{
-             JOptionPane.showMessageDialog(this, "you have entered wrong username or password");
-         }
-        
-         
-         
-         //this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-        
+        Boolean result = login.AuthenticateUser(logincredentials);
+        if (result == true) {
+            this.setVisible(false); // hide the login menu when click on the login button.
+            homepage HomePage = new homepage(); //create welcomePage  object       
+            HomePage.setVisible(true); // make the homepage visible.
+
+        } else {
+            JOptionPane.showMessageDialog(this, "you have entered wrong username or password");
+        }
+
+        //this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        
+
         userNameField.setText("");
         passwordField.setText("");
-        
+
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void passwordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordFieldActionPerformed

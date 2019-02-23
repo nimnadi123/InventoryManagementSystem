@@ -15,4 +15,6 @@ import java.util.List;
 public class CustomerPaymentDTO {
    public List OrderDetails;
     public List<String> orderIds;
+    public List AllOrderDetails;
+    public List<String> AllorderIds;
 }
